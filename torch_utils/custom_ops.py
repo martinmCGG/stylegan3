@@ -12,6 +12,7 @@ import importlib
 import os
 import re
 import shutil
+import subprocess
 import uuid
 
 import torch
@@ -50,6 +51,16 @@ def _get_mangled_gpu_name():
         else:
             out.append('-')
     return ''.join(out)
+
+ori_subprocess_run = subprocess.run
+def hooked_subprocess_run(command, **kwargs):
+    print('hooked_subprocess_run', command, kwargs)
+    if command == ['ninja', '-v']:
+        print('MATCHED!!!!!!!!!!!!!!!!!!!')
+        ori_subprocess_run(['bash', '-c', 'ninja -t compdb > compile_commands.json'], **kwargs)
+        print('CHECK THE BUILD DIR FOR compile_commands.json:', kwargs['cwd'])
+    return ori_subprocess_run(command, **kwargs)
+subprocess.run = hooked_subprocess_run
 
 #----------------------------------------------------------------------------
 # Main entry point for compiling and loading C++/CUDA plugins.
@@ -133,6 +144,8 @@ def get_plugin(module_name, sources, headers=None, source_dir=None, **build_kwar
 
             # Compile.
             cached_sources = [os.path.join(cached_build_dir, os.path.basename(fname)) for fname in sources]
+
+            #subprocess.run(command, stdout=stdout_fileno if verbose else subprocess.PIPE, stderr=subprocess.STDOUT, cwd=build_directory, check=True, env=env)
             torch.utils.cpp_extension.load(name=module_name, build_directory=cached_build_dir,
                 verbose=verbose_build, sources=cached_sources, **build_kwargs)
         else:
