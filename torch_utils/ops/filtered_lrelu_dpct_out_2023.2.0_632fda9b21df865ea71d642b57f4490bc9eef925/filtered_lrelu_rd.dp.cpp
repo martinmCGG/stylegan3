@@ -1,0 +1,29 @@
+// Copyright (c) 2021, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
+//
+// NVIDIA CORPORATION and its licensors retain all intellectual property
+// and proprietary rights in and to this software, related documentation
+// and any modifications thereto.  Any use, reproduction, disclosure or
+// distribution of this software and related documentation without an express
+// license agreement from NVIDIA CORPORATION is strictly prohibited.
+
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
+#include "filtered_lrelu.dp.cpp"
+
+// Template/kernel specializations for sign read mode.
+
+// Full op, 32-bit indexing.
+template filtered_lrelu_kernel_spec choose_filtered_lrelu_kernel<c10::Half, int32_t, false, true>(const filtered_lrelu_kernel_params& p, int sharedKB);
+template filtered_lrelu_kernel_spec choose_filtered_lrelu_kernel<float,     int32_t, false, true>(const filtered_lrelu_kernel_params& p, int sharedKB);
+
+// Full op, 64-bit indexing.
+template filtered_lrelu_kernel_spec choose_filtered_lrelu_kernel<c10::Half, int64_t, false, true>(const filtered_lrelu_kernel_params& p, int sharedKB);
+template filtered_lrelu_kernel_spec choose_filtered_lrelu_kernel<float,     int64_t, false, true>(const filtered_lrelu_kernel_params& p, int sharedKB);
+
+// Activation/signs only for generic variant. 64-bit indexing.
+template void* choose_filtered_lrelu_act_kernel<c10::Half, false, true>(void);
+template void* choose_filtered_lrelu_act_kernel<float,     false, true>(void);
+template void* choose_filtered_lrelu_act_kernel<double,    false, true>(void);
+
+// Copy filters to constant memory.
+template dpct::err0 copy_filters<false, true>(dpct::queue_ptr stream);

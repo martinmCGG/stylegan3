@@ -1,0 +1,249 @@
+---
+MainSourceFile:  MainSrcFiles_placehold
+Replacements:
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cpp'
+    Offset:          447
+    Length:          0
+    ReplacementText: "#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cpp'
+    Offset:          4032
+    Length:          0
+    ReplacementText: "    /*\n    DPCT1007:0: Migration of cudaLaunchKernel is not supported.\n    */\n    /*\n    DPCT1010:4: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.\n    */\n    /*\n    DPCT1009:5: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.\n    */\n    /*\n    DPCT1001:2: The statement could not be removed.\n    */\n    /*\n    DPCT1000:3: Error handling if-stmt was detected but could not be rewritten.\n    */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cpp'
+    Offset:          4036
+    Length:          103
+    ReplacementText: '"cudaGetErrorString is not supported"/*cudaGetErrorString(AT_CUDA_CHECK(cudaLaunchKernel(kernel, gridSize, blockSize, args, 0, at::cuda::getCurrentCUDAStream())))*/'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          447
+    Length:          0
+    ReplacementText: "#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          966
+    Length:          11
+    ReplacementText: "/*\nDPCT1110:1: The total declared local variable size in device function bias_act_kernel exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.\n*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          1022
+    Length:          0
+    ReplacementText: ', const sycl::nd_item<3> &item_ct1'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          1612
+    Length:          10
+    ReplacementText: 'item_ct1.get_group(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          1635
+    Length:          10
+    ReplacementText: 'item_ct1.get_local_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          1648
+    Length:          11
+    ReplacementText: 'item_ct1.get_local_id(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          1739
+    Length:          10
+    ReplacementText: 'item_ct1.get_local_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          2784
+    Length:          6
+    ReplacementText: 'sycl::exp(x)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          3116
+    Length:          7
+    ReplacementText: 'sycl::exp(-x)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          3348
+    Length:          6
+    ReplacementText: 'sycl::exp(x)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          3621
+    Length:          6
+    ReplacementText: 'sycl::exp(x)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          3914
+    Length:          17
+    ReplacementText: 'sycl::log(sycl::exp(x) + one)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          3972
+    Length:          8
+    ReplacementText: 'sycl::exp(-yy)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          4022
+    Length:          8
+    ReplacementText: 'sycl::exp(-yy)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          4186
+    Length:          7
+    ReplacementText: 'sycl::exp(-x)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          4262
+    Length:          9
+    ReplacementText: 'sycl::exp(xref)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Offset:          4602
+    Length:          10
+    ReplacementText: 'sycl::exp(-xref)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+MainSourceFilesDigest:
+  - MainSourceFile:  '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cpp'
+    Digest:          cf453f336f9df7e6809ba59caf6d8028
+  - MainSourceFile:  '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu'
+    Digest:          1dac8c2bedb96c381912f8e3e76113fb
+DpctVersion:     17.0.0
+MainHelperFileName: ''
+USMLevel:        ''
+FeatureMap:      {}
+CompileTargets:  {}
+OptionMap:
+  AnalysisScopePath:
+    Value:           '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000'
+    Specified:       false
+  AsyncHandler:
+    Value:           'false'
+    Specified:       false
+  CommentsEnabled:
+    Value:           'false'
+    Specified:       false
+  CompilationsDir:
+    Value:           '/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000'
+    Specified:       true
+  CtadEnabled:
+    Value:           'false'
+    Specified:       false
+  EnablepProfiling:
+    Value:           'false'
+    Specified:       false
+  ExperimentalFlag:
+    Value:           '0'
+    Specified:       false
+  ExplicitClNamespace:
+    Value:           'false'
+    Specified:       false
+  ExplicitNamespace:
+    Value:           '20'
+    Specified:       false
+  ExtensionDDFlag:
+    Value:           '0'
+    Specified:       false
+  ExtensionDEFlag:
+    Value:           '4294967295'
+    Specified:       false
+  NDRangeDim:
+    Value:           '3'
+    Specified:       false
+  NoDRYPattern:
+    Value:           'false'
+    Specified:       false
+  OptimizeMigration:
+    Value:           'false'
+    Specified:       false
+  ProcessAll:
+    Value:           'false'
+    Specified:       false
+  RuleFile:
+    Value:           ''
+    Specified:       false
+  SyclNamedLambda:
+    Value:           'false'
+    Specified:       false
+  UsmLevel:
+    Value:           '1'
+    Specified:       false
+...
