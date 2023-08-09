@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This script migrates native PyTorch extenstions written in CUDA to SYCL.
-# It uses compilation database (compile_commands.json in the build directory of each extension) - these must be generated before running this script.
+# It uses `c2s` a.k.a. `dpct` (DPC++ Compatibility Tool) and compilation database files (compile_commands.json in the build directory of each extension) - these must be generated before running this script.
 
 # Usage:
 # enter the environment with StyleGAN dependencies
@@ -11,7 +11,7 @@
 #   # Note: --gamma should be different for single-GPU training, but we just want to compile the modules, then kill the training with Ctrl+C
 # Finally run one of the following commands (depending on wheter c2s from Base Toolkit or SYCLomatic should be used) in the current directory:
 #   ( . /opt/intel/oneapi/setvars.sh && ./migrate.sh )
-#   ( export PATH=~/intel_hackathon/SYCLomatic_2023-07-31/bin:"$PATH" && ./migrate.sh )
+#   ( export PATH=~/intel_hackathon/SYCLomatic_2023-08-09/bin:"$PATH" && ./migrate.sh )
 # the migrated source code will appear in torch_utils/ops as individual directories named as the module + c2s version
 
 # where the modules and their compilation databases are located (the paths are printed by this patched StyleGAN when the modules is built)
