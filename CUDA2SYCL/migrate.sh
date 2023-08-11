@@ -26,6 +26,7 @@ migrate() {
     fi
     module_name=$(ls | grep .h$ | sed 's/\.h$//') # assuming the build directory contains a single header named as the module (good enough for SytleGAN3)
     module_outdir="$outdir"/"${module_name}"_dpct_out_"$c2s_version"
+    ret=0
     c2s --gen-helper-function --out-root "$module_outdir" -p .  >migrate.stdout.log 2>migrate.stderr.log || ret=$?
     if [ $ret -ne 0 ]; then
         cat migrate.stdout.log migrate.stderr.log
