@@ -1,5 +1,5 @@
 ---
-MainSourceFile:  '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/dpct_out_17.0.0_1891524972fb7952168737026604684ec172fa66/filtered_lrelu.h'
+MainSourceFile:  '/home/martin/intel_hackathon/stylegan3/torch_utils/ops/filtered_lrelu_dpct_out_17.0.0_1891524972fb7952168737026604684ec172fa66/filtered_lrelu.h'
 Replacements:
   - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          447

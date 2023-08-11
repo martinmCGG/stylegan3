@@ -1,0 +1,568 @@
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:149:12: warning: constexpr if is a C++17 extension [-Wc++17-extensions]
+        if constexpr (sizeof(scalar_t) <= 4) // Exclude doubles. constexpr prevents template instantiation.
+           ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:149:12: warning: constexpr if is a C++17 extension [-Wc++17-extensions]
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:149:12: warning: constexpr if is a C++17 extension [-Wc++17-extensions]
+error: unsupported option '--expt-relaxed-constexpr'
+error: unsupported option '--compiler-options'
+error: unsupported option '--use_fast_math'
+error: unsupported option '--allow-unsupported-compiler'
+error: unknown argument: '-gencode=arch=compute_86,code=compute_86'
+error: unknown argument: '-gencode=arch=compute_86,code=sm_86'
+In file included from /home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu_rd.cu:9:
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:111:42: error: static declaration of 'copy_filters' follows non-static declaration
+template <bool, bool> static cudaError_t copy_filters(cudaStream_t stream)
+                                         ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h:88:54: note: previous declaration is here
+template <bool signWrite, bool signRead> cudaError_t copy_filters(cudaStream_t stream);
+                                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu_rd.cu:27:22: error: explicit instantiation of undefined function template 'copy_filters'
+template cudaError_t copy_filters<false, true>(cudaStream_t stream);
+                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h:88:54: note: explicit instantiation refers here
+template <bool signWrite, bool signRead> cudaError_t copy_filters(cudaStream_t stream);
+                                                     ^
+warning: /home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.o: 'linker' input unused [-Wunused-command-line-argument]
+warning: filtered_lrelu_wr.cuda.o: 'linker' input unused [-Wunused-command-line-argument]
+warning: filtered_lrelu_rd.cuda.o: 'linker' input unused [-Wunused-command-line-argument]
+warning: filtered_lrelu_ns.cuda.o: 'linker' input unused [-Wunused-command-line-argument]
+warning: -lc10: 'linker' input unused [-Wunused-command-line-argument]
+warning: -lc10_cuda: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch_cpu: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch_cuda_cu: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch_cuda_cpp: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch_python: 'linker' input unused [-Wunused-command-line-argument]
+warning: -lcudart: 'linker' input unused [-Wunused-command-line-argument]
+warning: argument unused during migration: '-Xclang -fcuda-allow-variadic-functions' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-D __NVCC__' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-D __CUDACC_VER_MINOR__=0' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-D __CUDACC_VER_MAJOR__=12' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-nocudalib' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-I /usr/local/cuda-12.0/targets/x86_64-linux/include' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-shared' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-L/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/lib' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-L/usr/local/cuda-12.0/lib64' [-Wunused-command-line-argument]
+error: unable to handle migration, expected exactly one migration job in ''
+error: unsupported option '--expt-relaxed-constexpr'
+error: unsupported option '--compiler-options'
+error: unsupported option '--use_fast_math'
+error: unsupported option '--allow-unsupported-compiler'
+error: unknown argument: '-gencode=arch=compute_86,code=compute_86'
+error: unknown argument: '-gencode=arch=compute_86,code=sm_86'
+In file included from /home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu_ns.cu:9:
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:111:42: error: static declaration of 'copy_filters' follows non-static declaration
+template <bool, bool> static cudaError_t copy_filters(cudaStream_t stream)
+                                         ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h:88:54: note: previous declaration is here
+template <bool signWrite, bool signRead> cudaError_t copy_filters(cudaStream_t stream);
+                                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu_ns.cu:27:22: error: explicit instantiation of undefined function template 'copy_filters'
+template cudaError_t copy_filters<false, false>(cudaStream_t stream);
+                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h:88:54: note: explicit instantiation refers here
+template <bool signWrite, bool signRead> cudaError_t copy_filters(cudaStream_t stream);
+                                                     ^
+error: unsupported option '--expt-relaxed-constexpr'
+error: unsupported option '--compiler-options'
+error: unsupported option '--use_fast_math'
+error: unsupported option '--allow-unsupported-compiler'
+error: unknown argument: '-gencode=arch=compute_86,code=compute_86'
+error: unknown argument: '-gencode=arch=compute_86,code=sm_86'
+In file included from /home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu_wr.cu:9:
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:111:42: error: static declaration of 'copy_filters' follows non-static declaration
+template <bool, bool> static cudaError_t copy_filters(cudaStream_t stream)
+                                         ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h:88:54: note: previous declaration is here
+template <bool signWrite, bool signRead> cudaError_t copy_filters(cudaStream_t stream);
+                                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu_wr.cu:27:22: error: explicit instantiation of undefined function template 'copy_filters'
+template cudaError_t copy_filters<true, false>(cudaStream_t stream);
+                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h:88:54: note: explicit instantiation refers here
+template <bool signWrite, bool signRead> cudaError_t copy_filters(cudaStream_t stream);
+                                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:185:19: warning: DPCT1007:0: Migration of cudaLaunchKernel is not supported.
+    AT_CUDA_CHECK(cudaLaunchKernel(spec.setup, 1, 1024, args, 0, at::cuda::getCurrentCUDAStream()));
+                  ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:204:23: warning: DPCT1007:1: Migration of cudaLaunchKernel is not supported.
+        AT_CUDA_CHECK(cudaLaunchKernel(spec.exec, dim3(gx, gy, subGz), bx, args, spec.dynamicSharedKB << 10, at::cuda::getCurrentCUDAStream()));
+                      ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:288:19: warning: DPCT1007:2: Migration of cudaLaunchKernel is not supported.
+    AT_CUDA_CHECK(cudaLaunchKernel(func, dim3(gx, gy, gz), bx, args, 0, at::cuda::getCurrentCUDAStream()));
+                  ^
+In file included from /home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu_rd.cu:9:
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:140:1: warning: DPCT1110:3: The total declared local variable size in device function filtered_lrelu_kernel exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.
+static __global__ void filtered_lrelu_kernel(filtered_lrelu_kernel_params p)
+^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:273:13: warning: DPCT1065:4: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+            __syncthreads();
+            ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:302:13: warning: DPCT1065:5: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+            __syncthreads();
+            ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:407:13: warning: DPCT1065:6: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+            __syncthreads();
+            ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:512:38: warning: DPCT1023:7: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+                                s |= __shfl_xor_sync(groupMask, s, 1);
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:513:38: warning: DPCT1023:8: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+                                s |= __shfl_xor_sync(groupMask, s, 2);
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:543:38: warning: DPCT1023:9: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+                                s |= __shfl_xor_sync(groupMask, s, 1);
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:544:38: warning: DPCT1023:10: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+                                s |= __shfl_xor_sync(groupMask, s, 2);
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:650:38: warning: DPCT1023:11: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+                                s |= __shfl_xor_sync(groupMask, s, 1);
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:651:38: warning: DPCT1023:12: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+                                s |= __shfl_xor_sync(groupMask, s, 2);
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:673:38: warning: DPCT1023:13: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+                                s |= __shfl_xor_sync(groupMask, s, 1);
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:674:38: warning: DPCT1023:14: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+                                s |= __shfl_xor_sync(groupMask, s, 2);
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:730:17: warning: DPCT1065:15: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+                __syncthreads();
+                ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:862:17: warning: DPCT1065:16: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+                __syncthreads();
+                ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:899:38: warning: DPCT1023:17: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+                                s += __shfl_xor_sync(groupMask, s, 1);  // Coalesce.
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:900:38: warning: DPCT1023:18: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+                                s += __shfl_xor_sync(groupMask, s, 2);  // Coalesce.
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:921:38: warning: DPCT1023:19: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+                                s += __shfl_xor_sync(groupMask, s, 1);  // Coalesce.
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:922:38: warning: DPCT1023:20: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+                                s += __shfl_xor_sync(groupMask, s, 2);  // Coalesce.
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:962:13: warning: DPCT1065:21: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+            __syncthreads();
+            ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:1025:13: warning: DPCT1065:22: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+            __syncthreads();
+            ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:1050:17: warning: DPCT1065:23: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+                __syncthreads();
+                ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:1081:17: warning: DPCT1065:24: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+                __syncthreads();
+                ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:1153:18: warning: DPCT1023:25: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+            s |= __shfl_xor_sync(m, s, 1); // Distribute.
+                 ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:1154:18: warning: DPCT1023:26: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+            s |= __shfl_xor_sync(m, s, 2);
+                 ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:1155:18: warning: DPCT1023:27: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+            s |= __shfl_xor_sync(m, s, 4);
+                 ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:1156:18: warning: DPCT1023:28: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+            s |= __shfl_xor_sync(m, s, 8);
+                 ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:1106:1: warning: DPCT1110:29: The total declared local variable size in device function filtered_lrelu_act_kernel exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.
+static __global__ void filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params p)
+^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:42:5: warning: DPCT1001:30: The statement could not be removed.
+    AT_CUDA_CHECK(cudaDeviceGetAttribute(&maxSharedBytes, cudaDevAttrMaxSharedMemoryPerBlockOptin, x.device().index()));
+    ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+      throw c10::CUDAError(                                         \
+      ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:42:5: warning: DPCT1000:31: Error handling if-stmt was detected but could not be rewritten.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+    if (__err != cudaSuccess) {                                     \
+    ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:42:5: warning: DPCT1010:32: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+      auto error_unused C10_UNUSED = cudaGetLastError();            \
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:42:5: warning: DPCT1009:33: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:185:5: warning: DPCT1001:34: The statement could not be removed.
+    AT_CUDA_CHECK(cudaLaunchKernel(spec.setup, 1, 1024, args, 0, at::cuda::getCurrentCUDAStream()));
+    ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+      throw c10::CUDAError(                                         \
+      ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:185:5: warning: DPCT1000:35: Error handling if-stmt was detected but could not be rewritten.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+    if (__err != cudaSuccess) {                                     \
+    ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:185:5: warning: DPCT1010:36: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+      auto error_unused C10_UNUSED = cudaGetLastError();            \
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:185:5: warning: DPCT1009:37: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:185:5: warning: DPCT1064:38: Migrated cudaGetErrorString call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:188:41: warning: DPCT1001:39: The statement could not be removed.
+    if      ( writeSigns && !readSigns) AT_CUDA_CHECK((copy_filters<true,  false>(at::cuda::getCurrentCUDAStream())));
+                                        ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+      throw c10::CUDAError(                                         \
+      ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:188:41: warning: DPCT1000:40: Error handling if-stmt was detected but could not be rewritten.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+    if (__err != cudaSuccess) {                                     \
+    ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:188:41: warning: DPCT1010:41: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+      auto error_unused C10_UNUSED = cudaGetLastError();            \
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:188:41: warning: DPCT1009:42: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:188:41: warning: DPCT1064:43: Migrated cudaGetErrorString call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:189:41: warning: DPCT1001:44: The statement could not be removed.
+    else if (!writeSigns &&  readSigns) AT_CUDA_CHECK((copy_filters<false, true >(at::cuda::getCurrentCUDAStream())));
+                                        ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+      throw c10::CUDAError(                                         \
+      ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:189:41: warning: DPCT1000:45: Error handling if-stmt was detected but could not be rewritten.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+    if (__err != cudaSuccess) {                                     \
+    ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:189:41: warning: DPCT1010:46: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+      auto error_unused C10_UNUSED = cudaGetLastError();            \
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:189:41: warning: DPCT1009:47: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:189:41: warning: DPCT1064:48: Migrated cudaGetErrorString call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:190:41: warning: DPCT1001:49: The statement could not be removed.
+    else if (!writeSigns && !readSigns) AT_CUDA_CHECK((copy_filters<false, false>(at::cuda::getCurrentCUDAStream())));
+                                        ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+      throw c10::CUDAError(                                         \
+      ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:190:41: warning: DPCT1000:50: Error handling if-stmt was detected but could not be rewritten.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+    if (__err != cudaSuccess) {                                     \
+    ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:190:41: warning: DPCT1010:51: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+      auto error_unused C10_UNUSED = cudaGetLastError();            \
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:190:41: warning: DPCT1009:52: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:190:41: warning: DPCT1064:53: Migrated cudaGetErrorString call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:193:5: warning: DPCT1001:54: The statement could not be removed.
+    AT_CUDA_CHECK(cudaFuncSetCacheConfig(spec.exec, cudaFuncCachePreferShared));
+    ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+      throw c10::CUDAError(                                         \
+      ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:193:5: warning: DPCT1000:55: Error handling if-stmt was detected but could not be rewritten.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+    if (__err != cudaSuccess) {                                     \
+    ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:193:19: warning: DPCT1027:56: The call to cudaFuncSetCacheConfig was replaced with 0 because SYCL currently does not support configuring shared memory on devices.
+    AT_CUDA_CHECK(cudaFuncSetCacheConfig(spec.exec, cudaFuncCachePreferShared));
+                  ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:193:5: warning: DPCT1010:57: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+    AT_CUDA_CHECK(cudaFuncSetCacheConfig(spec.exec, cudaFuncCachePreferShared));
+    ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+      auto error_unused C10_UNUSED = cudaGetLastError();            \
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:193:5: warning: DPCT1009:58: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:193:5: warning: DPCT1064:59: Migrated cudaGetErrorString call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:195:9: warning: DPCT1001:60: The statement could not be removed.
+        AT_CUDA_CHECK(cudaFuncSetAttribute(spec.exec, cudaFuncAttributeMaxDynamicSharedMemorySize, spec.dynamicSharedKB << 10));
+        ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+      throw c10::CUDAError(                                         \
+      ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:195:9: warning: DPCT1000:61: Error handling if-stmt was detected but could not be rewritten.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+    if (__err != cudaSuccess) {                                     \
+    ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:195:23: warning: DPCT1007:62: Migration of cudaFuncSetAttribute is not supported.
+        AT_CUDA_CHECK(cudaFuncSetAttribute(spec.exec, cudaFuncAttributeMaxDynamicSharedMemorySize, spec.dynamicSharedKB << 10));
+                      ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:195:9: warning: DPCT1010:63: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+        AT_CUDA_CHECK(cudaFuncSetAttribute(spec.exec, cudaFuncAttributeMaxDynamicSharedMemorySize, spec.dynamicSharedKB << 10));
+        ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+      auto error_unused C10_UNUSED = cudaGetLastError();            \
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:195:9: warning: DPCT1009:64: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:195:9: warning: DPCT1064:65: Migrated cudaGetErrorString call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:196:5: warning: DPCT1001:66: The statement could not be removed.
+    AT_CUDA_CHECK(cudaFuncSetSharedMemConfig(spec.exec, cudaSharedMemBankSizeFourByte));
+    ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+      throw c10::CUDAError(                                         \
+      ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:196:5: warning: DPCT1000:67: Error handling if-stmt was detected but could not be rewritten.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+    if (__err != cudaSuccess) {                                     \
+    ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:196:19: warning: DPCT1027:68: The call to cudaFuncSetSharedMemConfig was replaced with 0 because SYCL currently does not support configuring shared memory on devices.
+    AT_CUDA_CHECK(cudaFuncSetSharedMemConfig(spec.exec, cudaSharedMemBankSizeFourByte));
+                  ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:196:5: warning: DPCT1010:69: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+    AT_CUDA_CHECK(cudaFuncSetSharedMemConfig(spec.exec, cudaSharedMemBankSizeFourByte));
+    ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+      auto error_unused C10_UNUSED = cudaGetLastError();            \
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:196:5: warning: DPCT1009:70: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:196:5: warning: DPCT1064:71: Migrated cudaGetErrorString call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:204:9: warning: DPCT1001:72: The statement could not be removed.
+        AT_CUDA_CHECK(cudaLaunchKernel(spec.exec, dim3(gx, gy, subGz), bx, args, spec.dynamicSharedKB << 10, at::cuda::getCurrentCUDAStream()));
+        ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+      throw c10::CUDAError(                                         \
+      ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:204:9: warning: DPCT1000:73: Error handling if-stmt was detected but could not be rewritten.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+    if (__err != cudaSuccess) {                                     \
+    ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:204:9: warning: DPCT1010:74: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+      auto error_unused C10_UNUSED = cudaGetLastError();            \
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:204:9: warning: DPCT1009:75: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:204:9: warning: DPCT1064:76: Migrated cudaGetErrorString call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:288:5: warning: DPCT1001:77: The statement could not be removed.
+    AT_CUDA_CHECK(cudaLaunchKernel(func, dim3(gx, gy, gz), bx, args, 0, at::cuda::getCurrentCUDAStream()));
+    ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+      throw c10::CUDAError(                                         \
+      ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:288:5: warning: DPCT1000:78: Error handling if-stmt was detected but could not be rewritten.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+    if (__err != cudaSuccess) {                                     \
+    ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:288:5: warning: DPCT1010:79: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+      auto error_unused C10_UNUSED = cudaGetLastError();            \
+                                     ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:288:5: warning: DPCT1009:80: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cpp:288:5: warning: DPCT1064:81: Migrated cudaGetErrorString call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+                            ^
+/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+              cudaGetErrorString(__err),                            \
+              ^
+In file included from /home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu_rd.cu:9:
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:115:14: warning: DPCT1001:82: The statement could not be removed.
+    if (err) return err;
+             ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:115:5: warning: DPCT1000:83: Error handling if-stmt was detected but could not be rewritten.
+    if (err) return err;
+    ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:1141:21: warning: DPCT1064:84: Migrated fabsf call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.
+                if (fabsf(v) > p.clamp)
+                    ^
+/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.cu:1205:21: warning: DPCT1064:85: Migrated fabsf call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.
+                if (fabsf(v) > p.clamp)
+                    ^
+Saved new version of /home/martin/intel_hackathon/stylegan3/torch_utils/ops/filtered_lrelu_dpct_out_2023.2.0_632fda9b21df865ea71d642b57f4490bc9eef925/filtered_lrelu.h.yaml file
+

@@ -1,5 +1,5 @@
 ---
-MainSourceFile:  '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/dpct_out_17.0.0_1891524972fb7952168737026604684ec172fa66/upfirdn2d.h'
+MainSourceFile:  '/home/martin/intel_hackathon/stylegan3/torch_utils/ops/upfirdn2d_dpct_out_17.0.0_1891524972fb7952168737026604684ec172fa66/upfirdn2d.h'
 Replacements:
   - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.h'
     Offset:          447

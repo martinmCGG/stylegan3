@@ -1,0 +1,10 @@
+Parsing: /home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cpp
+Parsing: /home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu
+Analyzing: /home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cpp
+Analyzing: /home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu
+Migrating: /home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cpp
+Migrating: /home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu
+Processed 2 file(s) in -in-root folder "/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000"
+
+See Diagnostics Reference to resolve warnings and complete the migration:
+https://software.intel.com/content/www/us/en/develop/documentation/intel-dpcpp-compatibility-tool-user-guide/top/diagnostics-reference.html
