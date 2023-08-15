@@ -1,4 +1,4 @@
-warning: /home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.o: 'linker' input unused [-Wunused-command-line-argument]
+warning: /home/martin/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-rtx-a6000/bias_act.o: 'linker' input unused [-Wunused-command-line-argument]
 warning: bias_act.cuda.o: 'linker' input unused [-Wunused-command-line-argument]
 warning: -lc10: 'linker' input unused [-Wunused-command-line-argument]
 warning: -lc10_cuda: 'linker' input unused [-Wunused-command-line-argument]
@@ -24,40 +24,17 @@ error: unsupported option '--use_fast_math'
 error: unsupported option '--allow-unsupported-compiler'
 error: unknown argument: '-gencode=arch=compute_86,code=compute_86'
 error: unknown argument: '-gencode=arch=compute_86,code=sm_86'
-/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cpp:88:19: warning: DPCT1007:0: Migration of cudaLaunchKernel is not supported.
-    AT_CUDA_CHECK(cudaLaunchKernel(kernel, gridSize, blockSize, args, 0, at::cuda::getCurrentCUDAStream()));
-                  ^
-/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cu:24:1: warning: DPCT1110:1: The total declared local variable size in device function bias_act_kernel exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.
-__global__ void bias_act_kernel(bias_act_kernel_params p)
+/home/martin/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-rtx-a6000/bias_act.cu:24:1: warning: DPCT1110:0: The total declared local variable size in device function bias_act_kernel exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.
+__device__ void bias_act_kernel(bias_act_kernel_params p)
 ^
-/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cpp:88:5: warning: DPCT1001:2: The statement could not be removed.
-    AT_CUDA_CHECK(cudaLaunchKernel(kernel, gridSize, blockSize, args, 0, at::cuda::getCurrentCUDAStream()));
-    ^
-/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
-#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
-                            ^
-/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
-      throw c10::CUDAError(                                         \
-      ^
-/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cpp:88:5: warning: DPCT1000:3: Error handling if-stmt was detected but could not be rewritten.
-/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
-#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
-                            ^
-/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
-    if (__err != cudaSuccess) {                                     \
-    ^
-/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cpp:88:5: warning: DPCT1010:4: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
-/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
-#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
-                            ^
-/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
-      auto error_unused C10_UNUSED = cudaGetLastError();            \
-                                     ^
-/home/martin/.cache/torch_extensions/bias_act_plugin/3cb576a0039689487cfba59279dd6d46-nvidia-rtx-a6000/bias_act.cpp:88:5: warning: DPCT1009:5: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.
-/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
-#define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
-                            ^
-/home/martin/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
-              cudaGetErrorString(__err),                            \
-              ^
+/home/martin/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-rtx-a6000/bias_act.cpp:89:9: warning: DPCT1049:1: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.
+        cudaLaunchKernel((void*)&bias_act_kernel_half, gridSize, blockSize, args, 0, at::cuda::getCurrentCUDAStream());
+        ^
+/home/martin/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-rtx-a6000/bias_act.cpp:91:9: warning: DPCT1049:2: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.
+        cudaLaunchKernel((void*)&bias_act_kernel_float, gridSize, blockSize, args, 0, at::cuda::getCurrentCUDAStream());
+        ^
+/home/martin/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-rtx-a6000/bias_act.cpp:93:9: warning: DPCT1049:3: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.
+        cudaLaunchKernel((void*)&bias_act_kernel_double, gridSize, blockSize, args, 0, at::cuda::getCurrentCUDAStream());
+        ^
+Saved new version of /home/martin/intel_hackathon/stylegan3/torch_utils/ops/bias_act_dpct_out_2023.2.0_632fda9b21df865ea71d642b57f4490bc9eef925/bias_act.h.yaml file
 

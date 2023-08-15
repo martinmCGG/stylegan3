@@ -1,3 +1,5 @@
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 // Copyright (c) 2021, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
 //
 // NVIDIA CORPORATION and its licensors retain all intellectual property
@@ -33,6 +35,16 @@ struct bias_act_kernel_params
 //------------------------------------------------------------------------
 // CUDA kernel selection.
 
-template <class T> void* choose_bias_act_kernel(const bias_act_kernel_params& p);
+//template <class T> void* choose_bias_act_kernel(const bias_act_kernel_params& p);
+//template <class T, int A> __global__ void bias_act_kernel(bias_act_kernel_params p);
+//template <class T> __global__ void bias_act_kernel(bias_act_kernel_params p);
+//__global__ void bias_act_kernel(bias_act_kernel_params p);
+
+void bias_act_kernel_half(bias_act_kernel_params p,
+                          const sycl::nd_item<3> &item_ct1);
+void bias_act_kernel_float(bias_act_kernel_params p,
+                           const sycl::nd_item<3> &item_ct1);
+void bias_act_kernel_double(bias_act_kernel_params p,
+                            const sycl::nd_item<3> &item_ct1);
 
 //------------------------------------------------------------------------

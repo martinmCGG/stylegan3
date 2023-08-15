@@ -75,40 +75,59 @@ static torch::Tensor bias_act(torch::Tensor x, torch::Tensor b, torch::Tensor xr
     p.stepB = (b.numel()) ? (int)x.stride(dim) : 1;
 
     // Choose CUDA kernel.
-    void* kernel;
-    AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "upfirdn2d_cuda", [&]
-    {
-        kernel = choose_bias_act_kernel<scalar_t>(p);
-    });
-    TORCH_CHECK(kernel, "no CUDA kernel found for the specified activation func");
+    // void* kernel;
+    // AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "upfirdn2d_cuda", [&]
+    // {
+    //     kernel = choose_bias_act_kernel<scalar_t>(p);
+    // });
+    // TORCH_CHECK(kernel, "no CUDA kernel found for the specified activation func");
 
     // Launch CUDA kernel.
     p.loopX = 4;
     int blockSize = 4 * 32;
     int gridSize = (p.sizeX - 1) / (p.loopX * blockSize) + 1;
     void* args[] = {&p};
-    /*
-    DPCT1007:0: Migration of cudaLaunchKernel is not supported.
-    */
-    /*
-    DPCT1010:4: SYCL uses exceptions to report errors and does not use the error
-    codes. The call was replaced with 0. You need to rewrite this code.
-    */
-    /*
-    DPCT1009:5: SYCL uses exceptions to report errors and does not use the error
-    codes. The original code was commented out and a warning string was
-    inserted. You need to rewrite this code.
-    */
-    /*
-    DPCT1001:2: The statement could not be removed.
-    */
-    /*
-    DPCT1000:3: Error handling if-stmt was detected but could not be rewritten.
-    */
-    "cudaGetErrorString is not supported" /*cudaGetErrorString(AT_CUDA_CHECK(cudaLaunchKernel(kernel,
-                                             gridSize, blockSize, args, 0,
-                                             at::cuda::getCurrentCUDAStream())))*/
-        ;
+    if (x.scalar_type() == at::ScalarType::Half) {
+        /*
+        DPCT1049:1: The work-group size passed to the SYCL kernel may exceed the
+        limit. To get the device limit, query info::device::max_work_group_size.
+        Adjust the work-group size if needed.
+        */
+    ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))
+        ->parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, gridSize) *
+                                             sycl::range<3>(1, 1, blockSize),
+                                         sycl::range<3>(1, 1, blockSize)),
+                       [=](sycl::nd_item<3> item_ct1) {
+                         bias_act_kernel_half();
+                       });
+    } else if (x.scalar_type() == at::ScalarType::Float) {
+        /*
+        DPCT1049:2: The work-group size passed to the SYCL kernel may exceed the
+        limit. To get the device limit, query info::device::max_work_group_size.
+        Adjust the work-group size if needed.
+        */
+    ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))
+        ->parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, gridSize) *
+                                             sycl::range<3>(1, 1, blockSize),
+                                         sycl::range<3>(1, 1, blockSize)),
+                       [=](sycl::nd_item<3> item_ct1) {
+                         bias_act_kernel_float();
+                       });
+    } else if (x.scalar_type() == at::ScalarType::Double) {
+        /*
+        DPCT1049:3: The work-group size passed to the SYCL kernel may exceed the
+        limit. To get the device limit, query info::device::max_work_group_size.
+        Adjust the work-group size if needed.
+        */
+    ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))
+        ->parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, gridSize) *
+                                             sycl::range<3>(1, 1, blockSize),
+                                         sycl::range<3>(1, 1, blockSize)),
+                       [=](sycl::nd_item<3> item_ct1) {
+                         bias_act_kernel_double();
+                       });
+    }
+
     return y;
 }
 
