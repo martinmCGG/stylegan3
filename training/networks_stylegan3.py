@@ -15,6 +15,10 @@ import scipy.optimize
 import torch
 from torch_utils import misc
 from torch_utils import persistence
+
+impl='ref'
+print('networks_stylegan3: native modules will use impl:', impl)
+
 from torch_utils.ops import conv2d_gradfix
 from torch_utils.ops import filtered_lrelu
 from torch_utils.ops import bias_act
@@ -97,7 +101,7 @@ class FullyConnectedLayer(torch.nn.Module):
             x = torch.addmm(b.unsqueeze(0), x, w.t())
         else:
             x = x.matmul(w.t())
-            x = bias_act.bias_act(x, b, act=self.activation)
+            x = bias_act.bias_act(x, b, act=self.activation, impl=impl)
         return x
 
     def extra_repr(self):
@@ -353,7 +357,7 @@ class SynthesisLayer(torch.nn.Module):
         gain = 1 if self.is_torgb else np.sqrt(2)
         slope = 1 if self.is_torgb else 0.2
         x = filtered_lrelu.filtered_lrelu(x=x, fu=self.up_filter, fd=self.down_filter, b=self.bias.to(x.dtype),
-            up=self.up_factor, down=self.down_factor, padding=self.padding, gain=gain, slope=slope, clamp=self.conv_clamp)
+            up=self.up_factor, down=self.down_factor, padding=self.padding, gain=gain, slope=slope, clamp=self.conv_clamp, impl=impl)
 
         # Ensure correct shape and dtype.
         misc.assert_shape(x, [None, self.out_channels, int(self.out_size[1]), int(self.out_size[0])])

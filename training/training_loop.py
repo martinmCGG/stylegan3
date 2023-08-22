@@ -26,6 +26,8 @@ from torch_utils.ops import grid_sample_gradfix
 import legacy
 from metrics import metric_main
 
+import nuda
+
 #----------------------------------------------------------------------------
 
 def setup_snapshot_image_grid(training_set, random_seed=0):
@@ -123,7 +125,7 @@ def training_loop(
 ):
     # Initialize.
     start_time = time.time()
-    device = torch.device('cuda', rank)
+    device = torch.device('cpu', rank)
     np.random.seed(random_seed * num_gpus + rank)
     torch.manual_seed(random_seed * num_gpus + rank)
     torch.backends.cudnn.benchmark = cudnn_benchmark    # Improves training speed.
