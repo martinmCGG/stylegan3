@@ -17,6 +17,7 @@ import dnnlib
 import numpy as np
 import PIL.Image
 import torch
+import intel_extension_for_pytorch
 
 import legacy
 
@@ -103,7 +104,8 @@ def generate_images(
     """
 
     print('Loading networks from "%s"...' % network_pkl)
-    device = torch.device('cpu')
+    device = torch.device('xpu')
+    f = torch.zeros((1,2,3)).to(device)
     with dnnlib.util.open_url(network_pkl) as f:
         G = legacy.load_network_pkl(f)['G_ema'].to(device) # type: ignore
 

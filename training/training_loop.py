@@ -17,6 +17,7 @@ import psutil
 import PIL.Image
 import numpy as np
 import torch
+import intel_extension_for_pytorch as ipex
 import dnnlib
 from torch_utils import misc
 from torch_utils import training_stats
@@ -125,7 +126,7 @@ def training_loop(
 ):
     # Initialize.
     start_time = time.time()
-    device = torch.device('cpu', rank)
+    device = torch.device('xpu', rank)
     np.random.seed(random_seed * num_gpus + rank)
     torch.manual_seed(random_seed * num_gpus + rank)
     torch.backends.cudnn.benchmark = cudnn_benchmark    # Improves training speed.
