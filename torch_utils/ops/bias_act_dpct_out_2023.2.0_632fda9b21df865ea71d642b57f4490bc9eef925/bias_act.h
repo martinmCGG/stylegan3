@@ -13,6 +13,7 @@
 
 struct bias_act_kernel_params
 {
+    c10::ScalarType dtype = c10::ScalarType::Undefined;
     const void* x;      // [sizeX]
     const void* b;      // [sizeB] or NULL
     const void* xref;   // [sizeX] or NULL
@@ -46,5 +47,7 @@ void bias_act_kernel_float(bias_act_kernel_params p,
                            const sycl::nd_item<3> &item_ct1);
 void bias_act_kernel_double(bias_act_kernel_params p,
                             const sycl::nd_item<3> &item_ct1);
+
+void bias_act_kernel_launch(bias_act_kernel_params p);
 
 //------------------------------------------------------------------------

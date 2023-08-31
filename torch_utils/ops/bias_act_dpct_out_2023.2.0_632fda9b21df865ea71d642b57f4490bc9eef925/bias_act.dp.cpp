@@ -8,6 +8,7 @@
 
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
+#include <torch/extension.h>
 #include <c10/util/Half.h>
 #include "bias_act.h"
 
@@ -192,6 +193,51 @@ void bias_act_kernel_float(bias_act_kernel_params p,
 void bias_act_kernel_double(bias_act_kernel_params p,
                             const sycl::nd_item<3> &item_ct1) {
     bias_act_kernel<double>(p, item_ct1);
+}
+
+void bias_act_kernel_launch(bias_act_kernel_params p) {
+    int blockSize = 4 * 32;
+    int gridSize = (p.sizeX - 1) / (p.loopX * blockSize) + 1;
+    //void* args[] = {&p};
+    sycl::queue queue = dpct::get_current_device().default_queue();
+    
+    if (p.dtype == c10::ScalarType::Half) {
+        /*
+        DPCT1049:1: The work-group size passed to the SYCL kernel may exceed the
+        limit. To get the device limit, query info::device::max_work_group_size.
+        Adjust the work-group size if needed.
+        */
+        queue.parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, gridSize) *
+                                             sycl::range<3>(1, 1, blockSize),
+                                         sycl::range<3>(1, 1, blockSize)),
+                       [=](sycl::nd_item<3> item_ct1) {
+                         bias_act_kernel_half(p, item_ct1);
+                       });
+    } else if (p.dtype == c10::ScalarType::Float) {
+        /*
+        DPCT1049:2: The work-group size passed to the SYCL kernel may exceed the
+        limit. To get the device limit, query info::device::max_work_group_size.
+        Adjust the work-group size if needed.
+        */
+        queue.parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, gridSize) *
+                                             sycl::range<3>(1, 1, blockSize),
+                                         sycl::range<3>(1, 1, blockSize)),
+                       [=](sycl::nd_item<3> item_ct1) {
+                         bias_act_kernel_float(p, item_ct1);
+                       });
+    } else if (p.dtype == c10::ScalarType::Double) {
+        /*
+        DPCT1049:3: The work-group size passed to the SYCL kernel may exceed the
+        limit. To get the device limit, query info::device::max_work_group_size.
+        Adjust the work-group size if needed.
+        */
+        queue.parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, gridSize) *
+                                             sycl::range<3>(1, 1, blockSize),
+                                         sycl::range<3>(1, 1, blockSize)),
+                       [=](sycl::nd_item<3> item_ct1) {
+                         bias_act_kernel_double(p, item_ct1);
+                       });
+    }
 }
 
 //------------------------------------------------------------------------
