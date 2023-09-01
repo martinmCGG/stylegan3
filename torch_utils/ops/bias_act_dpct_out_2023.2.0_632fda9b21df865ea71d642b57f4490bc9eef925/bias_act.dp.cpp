@@ -47,6 +47,11 @@ void bias_act_kernel(bias_act_kernel_params p, const sycl::nd_item<3> &item_ct1)
     // Loop over elements.
     int xi = item_ct1.get_group(2) * p.loopX * item_ct1.get_local_range(2) +
              item_ct1.get_local_id(2);
+    //((T*)p.y)[xi] = 420;
+    //((T*)p.y)[0] = 40;
+    //((T*)p.y)[1] = 41;
+    //((T*)p.y)[2] = 42;
+    //return;
     for (int loopIdx = 0; loopIdx < p.loopX && xi < p.sizeX;
          loopIdx++, xi += item_ct1.get_local_range(2))
     {
@@ -168,6 +173,12 @@ void bias_act_kernel(bias_act_kernel_params p, const sycl::nd_item<3> &item_ct1)
 
 template <class T>
 void bias_act_kernel(bias_act_kernel_params p, const sycl::nd_item<3> &item_ct1) {
+    //out << "SYCL throw test" << sycl::endl;
+
+    // !!!!!!! removed activation function dispatch for debugging - TODO revert
+    //bias_act_kernel<T, 1>(p, item_ct1);
+    //return;
+
     if (p.act == 1) bias_act_kernel<T, 1>(p, item_ct1);
     else if (p.act == 2) bias_act_kernel<T, 2>(p, item_ct1);
     else if (p.act == 3) bias_act_kernel<T, 3>(p, item_ct1);
@@ -200,44 +211,51 @@ void bias_act_kernel_launch(bias_act_kernel_params p) {
     int gridSize = (p.sizeX - 1) / (p.loopX * blockSize) + 1;
     //void* args[] = {&p};
     sycl::queue queue = dpct::get_current_device().default_queue();
-    
-    if (p.dtype == c10::ScalarType::Half) {
-        /*
-        DPCT1049:1: The work-group size passed to the SYCL kernel may exceed the
-        limit. To get the device limit, query info::device::max_work_group_size.
-        Adjust the work-group size if needed.
-        */
-        queue.parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, gridSize) *
-                                             sycl::range<3>(1, 1, blockSize),
-                                         sycl::range<3>(1, 1, blockSize)),
-                       [=](sycl::nd_item<3> item_ct1) {
-                         bias_act_kernel_half(p, item_ct1);
-                       });
-    } else if (p.dtype == c10::ScalarType::Float) {
-        /*
-        DPCT1049:2: The work-group size passed to the SYCL kernel may exceed the
-        limit. To get the device limit, query info::device::max_work_group_size.
-        Adjust the work-group size if needed.
-        */
-        queue.parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, gridSize) *
-                                             sycl::range<3>(1, 1, blockSize),
-                                         sycl::range<3>(1, 1, blockSize)),
-                       [=](sycl::nd_item<3> item_ct1) {
-                         bias_act_kernel_float(p, item_ct1);
-                       });
-    } else if (p.dtype == c10::ScalarType::Double) {
-        /*
-        DPCT1049:3: The work-group size passed to the SYCL kernel may exceed the
-        limit. To get the device limit, query info::device::max_work_group_size.
-        Adjust the work-group size if needed.
-        */
-        queue.parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, gridSize) *
-                                             sycl::range<3>(1, 1, blockSize),
-                                         sycl::range<3>(1, 1, blockSize)),
-                       [=](sycl::nd_item<3> item_ct1) {
-                         bias_act_kernel_double(p, item_ct1);
-                       });
-    }
+    //sleep(1);
+    queue.submit([&] (sycl::handler& cgh) {
+        
+        /*if (p.dtype == c10::ScalarType::Half) {
+            printf("bias_act_kernel_launch half\n");
+
+            queue.parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, gridSize) *
+                                                sycl::range<3>(1, 1, blockSize),
+                                            sycl::range<3>(1, 1, blockSize)),
+                        [=,&cgh](sycl::nd_item<3> item_ct1) {
+                            sycl::stream out(1024, 256, cgh);
+                            bias_act_kernel_half(p, item_ct1, out);
+                        });
+        } else*/ if (p.dtype == c10::ScalarType::Float) {
+            printf("bias_act_kernel_launch float\n");
+            /*
+            DPCT1049:2: The work-group size passed to the SYCL kernel may exceed the
+            limit. To get the device limit, query info::device::max_work_group_size.
+            Adjust the work-group size if needed.
+            */
+
+                cgh.parallel_for(
+                    sycl::nd_range<3>(
+                        sycl::range<3>(1, 1, gridSize) * sycl::range<3>(1, 1, blockSize),
+                        sycl::range<3>(1, 1, blockSize)),
+                    [=](sycl::nd_item<3> item_ct1) {
+                        //sycl::stream out(1024, 256, cgh);
+                        //out << "bias_act_kernel_float" << sycl::endl;
+                        bias_act_kernel_float(p, item_ct1);
+                    });
+            printf("bias_act_kernel_launch float parallel_for finished\n");
+
+        }/* else if (p.dtype == c10::ScalarType::Double) {
+            printf("bias_act_kernel_launch double\n");
+            queue.parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, gridSize) *
+                                                sycl::range<3>(1, 1, blockSize),
+                                            sycl::range<3>(1, 1, blockSize)),
+                        [=,&cgh](sycl::nd_item<3> item_ct1) {
+                            sycl::stream out(1024, 256, cgh);
+                            bias_act_kernel_double(p, item_ct1, out);
+                        });
+        }*/
+    });
+    //sleep(1);
+    queue.wait();
 }
 
 //------------------------------------------------------------------------

@@ -54,7 +54,10 @@ static torch::Tensor bias_act(torch::Tensor x, torch::Tensor b, torch::Tensor xr
 
     // Create output tensor.
     //const at::cuda::OptionalCUDAGuard device_guard(device_of(x)); // TODO might be necessary for multi-GPU
-    torch::Tensor y = torch::empty_like(x);
+    //torch::Tensor y = torch::empty_like(x);
+    //torch::Tensor y = torch::zeros_like(x); // gen_images.py gives constant gray
+    torch::Tensor y = torch::ones_like(x); // gives slightly lighter gray
+    // TODO revert to empty_like(x) after debugging
     TORCH_CHECK(has_same_layout(y, x), "y must have the same layout as x");
 
     // Initialize CUDA kernel parameters.
