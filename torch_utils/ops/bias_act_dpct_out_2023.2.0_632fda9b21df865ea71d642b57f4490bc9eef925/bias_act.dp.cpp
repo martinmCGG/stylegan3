@@ -214,45 +214,19 @@ void bias_act_kernel_launch(bias_act_kernel_params p) {
     //sleep(1);
     queue.submit([&] (sycl::handler& cgh) {
         
-        /*if (p.dtype == c10::ScalarType::Half) {
-            printf("bias_act_kernel_launch half\n");
-
-            queue.parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, gridSize) *
-                                                sycl::range<3>(1, 1, blockSize),
-                                            sycl::range<3>(1, 1, blockSize)),
-                        [=,&cgh](sycl::nd_item<3> item_ct1) {
-                            sycl::stream out(1024, 256, cgh);
-                            bias_act_kernel_half(p, item_ct1, out);
-                        });
-        } else*/ if (p.dtype == c10::ScalarType::Float) {
-            printf("bias_act_kernel_launch float\n");
-            /*
-            DPCT1049:2: The work-group size passed to the SYCL kernel may exceed the
-            limit. To get the device limit, query info::device::max_work_group_size.
-            Adjust the work-group size if needed.
-            */
-
-                cgh.parallel_for(
+        AT_DISPATCH_FLOATING_TYPES_AND_HALF(p.dtype, "bias_act_xpu", [&]
+        {
+            cgh.parallel_for(
                     sycl::nd_range<3>(
                         sycl::range<3>(1, 1, gridSize) * sycl::range<3>(1, 1, blockSize),
-                        sycl::range<3>(1, 1, blockSize)),
+                                            sycl::range<3>(1, 1, blockSize)),
                     [=](sycl::nd_item<3> item_ct1) {
                         //sycl::stream out(1024, 256, cgh);
                         //out << "bias_act_kernel_float" << sycl::endl;
-                        bias_act_kernel_float(p, item_ct1);
+                        bias_act_kernel<scalar_t>(p, item_ct1);
                     });
-            printf("bias_act_kernel_launch float parallel_for finished\n");
-
-        }/* else if (p.dtype == c10::ScalarType::Double) {
-            printf("bias_act_kernel_launch double\n");
-            queue.parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, gridSize) *
-                                                sycl::range<3>(1, 1, blockSize),
-                                            sycl::range<3>(1, 1, blockSize)),
-                        [=,&cgh](sycl::nd_item<3> item_ct1) {
-                            sycl::stream out(1024, 256, cgh);
-                            bias_act_kernel_double(p, item_ct1, out);
                         });
-        }*/
+
     });
     //sleep(1);
     queue.wait();
