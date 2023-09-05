@@ -89,8 +89,15 @@ static torch::Tensor bias_act(torch::Tensor x, torch::Tensor b, torch::Tensor xr
     // Launch CUDA kernel.
     p.loopX = 4;
 
-    
+    float ori_mean = torch::mean(y.flatten()).item<float>();
+//std::cout << "mean1 " << ori_mean << " " << y.dtype() << std::endl;
+
     bias_act_kernel_launch(p);
+
+    //float new_mean = torch::mean(y.flatten()).item<float>();
+//std::cout << "mean2 " << new_mean << " " << y.dtype() << std::endl;
+//std::cout << "means " << ori_mean << " " << new_mean << std::endl;
+    //TORCH_CHECK(ori_mean != new_mean, "y must change");
 
     return y;
 }
