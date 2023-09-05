@@ -47,11 +47,7 @@ void bias_act_kernel(bias_act_kernel_params p, const sycl::nd_item<3> &item_ct1)
     // Loop over elements.
     int xi = item_ct1.get_group(2) * p.loopX * item_ct1.get_local_range(2) +
              item_ct1.get_local_id(2);
-    //((T*)p.y)[xi] = 420;
-    //((T*)p.y)[0] = 40;
-    //((T*)p.y)[1] = 41;
-    //((T*)p.y)[2] = 42;
-    //return;
+
     for (int loopIdx = 0; loopIdx < p.loopX && xi < p.sizeX;
          loopIdx++, xi += item_ct1.get_local_range(2))
     {
@@ -173,12 +169,6 @@ void bias_act_kernel(bias_act_kernel_params p, const sycl::nd_item<3> &item_ct1)
 
 template <class T>
 void bias_act_kernel(bias_act_kernel_params p, const sycl::nd_item<3> &item_ct1) {
-    //out << "SYCL throw test" << sycl::endl;
-
-    // !!!!!!! removed activation function dispatch for debugging - TODO revert
-    //bias_act_kernel<T, 1>(p, item_ct1);
-    //return;
-
     if (p.act == 1) bias_act_kernel<T, 1>(p, item_ct1);
     else if (p.act == 2) bias_act_kernel<T, 2>(p, item_ct1);
     else if (p.act == 3) bias_act_kernel<T, 3>(p, item_ct1);
@@ -188,30 +178,12 @@ void bias_act_kernel(bias_act_kernel_params p, const sycl::nd_item<3> &item_ct1)
     else if (p.act == 7) bias_act_kernel<T, 7>(p, item_ct1);
     else if (p.act == 8) bias_act_kernel<T, 8>(p, item_ct1);
     else if (p.act == 9) bias_act_kernel<T, 9>(p, item_ct1);
-    //else TODO fail
-}
-
-void bias_act_kernel_half(bias_act_kernel_params p,
-                          const sycl::nd_item<3> &item_ct1) {
-    bias_act_kernel<c10::Half>(p, item_ct1);
-}
-
-void bias_act_kernel_float(bias_act_kernel_params p,
-                           const sycl::nd_item<3> &item_ct1) {
-    bias_act_kernel<float>(p, item_ct1);
-}
-
-void bias_act_kernel_double(bias_act_kernel_params p,
-                            const sycl::nd_item<3> &item_ct1) {
-    bias_act_kernel<double>(p, item_ct1);
 }
 
 void bias_act_kernel_launch(bias_act_kernel_params p) {
-    int blockSize = 4 * 32;
+    int blockSize = 4 * 32; // TODO tune, or rather remove and let the runtime choose its favorite work unit size
     int gridSize = (p.sizeX - 1) / (p.loopX * blockSize) + 1;
-    //void* args[] = {&p};
     sycl::queue queue = dpct::get_current_device().default_queue();
-    //sleep(1);
     queue.submit([&] (sycl::handler& cgh) {
         
         AT_DISPATCH_FLOATING_TYPES_AND_HALF(p.dtype, "bias_act_xpu", [&]
@@ -219,60 +191,11 @@ void bias_act_kernel_launch(bias_act_kernel_params p) {
             cgh.parallel_for(
                     sycl::nd_range<3>(
                         sycl::range<3>(1, 1, gridSize) * sycl::range<3>(1, 1, blockSize),
-                                            sycl::range<3>(1, 1, blockSize)),
+                        sycl::range<3>(1, 1, blockSize)),
                     [=](sycl::nd_item<3> item_ct1) {
-                        //sycl::stream out(1024, 256, cgh);
-                        //out << "bias_act_kernel_float" << sycl::endl;
                         bias_act_kernel<scalar_t>(p, item_ct1);
                     });
-                        });
-
+        });
     });
-    //sleep(1);
     queue.wait();
 }
-
-//------------------------------------------------------------------------
-// CUDA kernel selection.
-
-// template <class T> void* choose_bias_act_kernel(const bias_act_kernel_params& p)
-// {
-//     if (p.act == 1) return (void*)bias_act_kernel<T, 1>;
-//     if (p.act == 2) return (void*)bias_act_kernel<T, 2>;
-//     if (p.act == 3) return (void*)bias_act_kernel<T, 3>;
-//     if (p.act == 4) return (void*)bias_act_kernel<T, 4>;
-//     if (p.act == 5) return (void*)bias_act_kernel<T, 5>;
-//     if (p.act == 6) return (void*)bias_act_kernel<T, 6>;
-//     if (p.act == 7) return (void*)bias_act_kernel<T, 7>;
-//     if (p.act == 8) return (void*)bias_act_kernel<T, 8>;
-//     if (p.act == 9) return (void*)bias_act_kernel<T, 9>;
-//     return NULL;
-// }
-
-//------------------------------------------------------------------------
-// Template specializations.
-
-// template void* choose_bias_act_kernel<double>       (const bias_act_kernel_params& p);
-// template void* choose_bias_act_kernel<float>        (const bias_act_kernel_params& p);
-// template void* choose_bias_act_kernel<c10::Half>    (const bias_act_kernel_params& p);
-/*
-#define SPECIALIZE_FOR_1to9(kernel_name, T) \
-template __global__ void kernel_name<T, 1> (bias_act_kernel_params p); \
-template __global__ void kernel_name<T, 2> (bias_act_kernel_params p); \
-template __global__ void kernel_name<T, 3> (bias_act_kernel_params p); \
-template __global__ void kernel_name<T, 4> (bias_act_kernel_params p); \
-template __global__ void kernel_name<T, 5> (bias_act_kernel_params p); \
-template __global__ void kernel_name<T, 6> (bias_act_kernel_params p); \
-template __global__ void kernel_name<T, 7> (bias_act_kernel_params p); \
-template __global__ void kernel_name<T, 8> (bias_act_kernel_params p); \
-template __global__ void kernel_name<T, 9> (bias_act_kernel_params p);
-
-SPECIALIZE_FOR_1to9(bias_act_kernel, c10::Half)
-SPECIALIZE_FOR_1to9(bias_act_kernel, float)
-SPECIALIZE_FOR_1to9(bias_act_kernel, double)
-*/
-//template __global__ void bias_act_kernel<c10::Half> (bias_act_kernel_params p);
-//template __global__ void bias_act_kernel<float> (bias_act_kernel_params p);
-//template __global__ void bias_act_kernel<double> (bias_act_kernel_params p);
-
-//------------------------------------------------------------------------

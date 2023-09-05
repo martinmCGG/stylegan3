@@ -7,10 +7,7 @@
 // license agreement from NVIDIA CORPORATION is strictly prohibited.
 
 #include <sycl/sycl.hpp>
-//#include <dpct/dpct.hpp>
 #include <torch/extension.h>
-//#include <ATen/cuda/CUDAContext.h>
-//#include <c10/cuda/CUDAGuard.h>
 #include "bias_act.h"
 
 //------------------------------------------------------------------------
@@ -44,6 +41,7 @@ static torch::Tensor bias_act(torch::Tensor x, torch::Tensor b, torch::Tensor xr
     TORCH_CHECK(b.numel() == 0 || (dim >= 0 && dim < x.dim()), "dim is out of bounds");
     TORCH_CHECK(b.numel() == 0 || b.numel() == x.size(dim), "b has wrong number of elements");
     TORCH_CHECK(grad >= 0, "grad must be non-negative");
+    TORCH_CHECK(act >= 1 && act <= 9, "act must be between 1 and 9");
 
     // Validate layout.
     TORCH_CHECK(x.is_non_overlapping_and_dense(), "x must be non-overlapping and dense");
@@ -54,10 +52,9 @@ static torch::Tensor bias_act(torch::Tensor x, torch::Tensor b, torch::Tensor xr
 
     // Create output tensor.
     //const at::cuda::OptionalCUDAGuard device_guard(device_of(x)); // TODO might be necessary for multi-GPU
-    //torch::Tensor y = torch::empty_like(x);
-    //torch::Tensor y = torch::zeros_like(x); // gen_images.py gives constant gray
-    torch::Tensor y = torch::ones_like(x); // gives slightly lighter gray
-    // TODO revert to empty_like(x) after debugging
+    torch::Tensor y = torch::empty_like(x);
+    //torch::Tensor y = torch::zeros_like(x); // gen_images.py gives constant gray (if not overwritten by the kernel)
+    //torch::Tensor y = torch::ones_like(x); // gives slightly lighter gray
     TORCH_CHECK(has_same_layout(y, x), "y must have the same layout as x");
 
     // Initialize CUDA kernel parameters.
@@ -78,25 +75,17 @@ static torch::Tensor bias_act(torch::Tensor x, torch::Tensor b, torch::Tensor xr
     p.sizeB = (int)b.numel();
     p.stepB = (b.numel()) ? (int)x.stride(dim) : 1;
 
-    // Choose CUDA kernel.
-    // void* kernel;
-    // AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "upfirdn2d_cuda", [&]
-    // {
-    //     kernel = choose_bias_act_kernel<scalar_t>(p);
-    // });
-    // TORCH_CHECK(kernel, "no CUDA kernel found for the specified activation func");
-
     // Launch CUDA kernel.
     p.loopX = 4;
 
-    float ori_mean = torch::mean(y.flatten()).item<float>();
-//std::cout << "mean1 " << ori_mean << " " << y.dtype() << std::endl;
+    float ori_mean = torch::mean(y.flatten()).item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel was not changing the output from the value it was initialized to (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run); TODO investigate the root cause
+    //std::cout << "mean1 " << ori_mean << " " << y.dtype() << std::endl;
 
     bias_act_kernel_launch(p);
 
     //float new_mean = torch::mean(y.flatten()).item<float>();
-//std::cout << "mean2 " << new_mean << " " << y.dtype() << std::endl;
-//std::cout << "means " << ori_mean << " " << new_mean << std::endl;
+    //std::cout << "mean2 " << new_mean << " " << y.dtype() << std::endl;
+    //std::cout << "means " << ori_mean << " " << new_mean << std::endl;
     //TORCH_CHECK(ori_mean != new_mean, "y must change");
 
     return y;
