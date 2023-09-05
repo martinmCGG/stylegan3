@@ -44,7 +44,7 @@ def _init():
             sources=[plugin_dir + 'bias_act.cpp.dp.cpp', plugin_dir + 'bias_act.dp.cpp'],
             headers=[plugin_dir + 'bias_act.h'],
             source_dir=os.path.dirname(__file__),
-            #extra_cuda_cflags=['--use_fast_math', '--allow-unsupported-compiler'],
+            extra_cflags=['-ffast-math', '-cl-fast-relaxed-math', '-O3'],
         )
     return True
 
