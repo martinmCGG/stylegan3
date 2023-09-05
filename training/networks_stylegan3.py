@@ -16,7 +16,7 @@ import torch
 from torch_utils import misc
 from torch_utils import persistence
 
-impl='ref'
+impl='xpu'
 print('networks_stylegan3: native modules will use impl:', impl)
 
 from torch_utils.ops import conv2d_gradfix

@@ -6,6 +6,8 @@ import time
 class Event:
     def __init__(self, enable_timing=False) -> None:
         self.enable_timing = enable_timing
+        self.starttime = 0
+        self.endtime = 0
 
     def record(self, stream):
         self.starttime = time.process_time()

@@ -13,13 +13,22 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import uuid
 
 import torch
-import intel_extension_for_pytorch as ipex
-
 import torch.utils.cpp_extension
 from torch.utils.file_baton import FileBaton
+
+try:
+    import intel_extension_for_pytorch as ipex
+    cpp_extension = torch.xpu.cpp_extension
+    torch_device_specific = ipex.xpu
+except:
+    print('Warning: intel_extension_for_pytorch not loaded')
+    cpp_extension = torch.utils.cpp_extension
+    torch_device_specific = torch.cuda
+
 
 #----------------------------------------------------------------------------
 # Global options.
@@ -45,7 +54,7 @@ def _find_compiler_bindir():
 #----------------------------------------------------------------------------
 
 def _get_mangled_gpu_name():
-    name = ipex.xpu.get_device_name(0).lower()
+    name = torch_device_specific.get_device_name(0).lower()
     out = []
     for c in name:
         if re.match('[a-z0-9_-]+', c):
@@ -123,7 +132,7 @@ def get_plugin(module_name, sources, headers=None, source_dir=None, **build_kwar
 
             # Select cached build directory name.
             source_digest = hash_md5.hexdigest()
-            build_top_dir = torch.xpu.cpp_extension._get_build_directory(module_name, verbose=verbose_build) # pylint: disable=protected-access
+            build_top_dir = cpp_extension._get_build_directory(module_name, verbose=verbose_build) # pylint: disable=protected-access
             cached_build_dir = os.path.join(build_top_dir, f'{source_digest}-{_get_mangled_gpu_name()}')
 
             if not os.path.isdir(cached_build_dir):
@@ -142,10 +151,10 @@ def get_plugin(module_name, sources, headers=None, source_dir=None, **build_kwar
             cached_sources = [os.path.join(cached_build_dir, os.path.basename(fname)) for fname in sources]
 
             #subprocess.run(command, stdout=stdout_fileno if verbose else subprocess.PIPE, stderr=subprocess.STDOUT, cwd=build_directory, check=True, env=env)
-            torch.xpu.cpp_extension.load(name=module_name, build_directory=cached_build_dir,
+            cpp_extension.load(name=module_name, build_directory=cached_build_dir,
                 verbose=verbose_build, sources=cached_sources, **build_kwargs)
         else:
-            torch.xpu.cpp_extension.load(name=module_name, verbose=verbose_build, sources=sources, **build_kwargs)
+            cpp_extension.load(name=module_name, verbose=verbose_build, sources=sources, **build_kwargs)
 
         # Load.
         module = importlib.import_module(module_name)
