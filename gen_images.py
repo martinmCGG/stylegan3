@@ -17,7 +17,15 @@ import dnnlib
 import numpy as np
 import PIL.Image
 import torch
-import intel_extension_for_pytorch as ipex
+try:
+    import intel_extension_for_pytorch as ipex
+    try_ipex_optimize = ipex.optimize
+    device_str = 'xpu'
+except:
+    print('Warning: intel_extension_for_pytorch not loaded')
+    def try_ipex_optimize(module):
+        return module
+    device_str = 'cuda'
 
 import legacy
 
@@ -104,12 +112,12 @@ def generate_images(
     """
 
     print('Loading networks from "%s"...' % network_pkl)
-    device = torch.device('xpu')
+    device = torch.device(device_str)
     f = torch.zeros((1,2,3)).to(device)
     with dnnlib.util.open_url(network_pkl) as f:
         G = legacy.load_network_pkl(f)['G_ema'].to(device) # type: ignore
 
-    G = ipex.optimize(G)
+    G = try_ipex_optimize(G)
 
     os.makedirs(outdir, exist_ok=True)
 
