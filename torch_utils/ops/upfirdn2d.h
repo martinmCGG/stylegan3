@@ -40,20 +40,12 @@ struct upfirdn2d_kernel_params
 };
 
 //------------------------------------------------------------------------
-// CUDA kernel specialization.
-
-struct upfirdn2d_kernel_spec
-{
-    void*   kernel;
-    int     tileOutW;
-    int     tileOutH;
-    int     loopMinor;
-    int     loopX;
-};
-
-//------------------------------------------------------------------------
 // CUDA kernel selection.
 
-template <class T> upfirdn2d_kernel_spec choose_upfirdn2d_kernel(const upfirdn2d_kernel_params& p);
+template <class T>
+__global__ void upfirdn2d_kernel_large(upfirdn2d_kernel_params p);
+
+template <class T, int upx, int upy, int downx, int downy, int filterW, int filterH, int tileOutW, int tileOutH, int loopMinor>
+__global__ void upfirdn2d_kernel_small(upfirdn2d_kernel_params p);
 
 //------------------------------------------------------------------------
