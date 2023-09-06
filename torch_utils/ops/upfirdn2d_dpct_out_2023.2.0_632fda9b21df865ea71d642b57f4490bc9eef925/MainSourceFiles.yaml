@@ -1,7 +1,7 @@
 ---
 MainSourceFile:  MainSrcFiles_placehold
 Replacements:
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
     Offset:          447
     Length:          0
     ReplacementText: "#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
@@ -10,143 +10,17 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          2697
-    Length:          19
-    ReplacementText: 'sycl::int2(upx, upy)'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          1372
+    Length:          11
+    ReplacementText: ''
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          2740
-    Length:          23
-    ReplacementText: 'sycl::int2(downx, downy)'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          2787
-    Length:          23
-    ReplacementText: 'sycl::int2(padx0, pady0)'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          2900
-    Length:          73
-    ReplacementText: 'sycl::int4((int)x.size(3), (int)x.size(2), (int)x.size(1), (int)x.size(0))'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          2997
-    Length:          81
-    ReplacementText: 'sycl::int4((int)x.stride(3), (int)x.stride(2), (int)x.stride(1), (int)x.stride(0))'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          3102
-    Length:          41
-    ReplacementText: 'sycl::int2((int)f.size(1), (int)f.size(0))'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          3167
-    Length:          45
-    ReplacementText: 'sycl::int2((int)f.stride(1), (int)f.stride(0))'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          3236
-    Length:          73
-    ReplacementText: 'sycl::int4((int)y.size(3), (int)y.size(2), (int)y.size(1), (int)y.size(0))'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          3333
-    Length:          81
-    ReplacementText: 'sycl::int4((int)y.stride(3), (int)y.stride(2), (int)y.stride(1), (int)y.stride(0))'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          3439
-    Length:          12
-    ReplacementText: 'p.inStride.z()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          3460
-    Length:          10
-    ReplacementText: 'p.inSize.w()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          3473
-    Length:          10
-    ReplacementText: 'p.inSize.w()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          3486
-    Length:          10
-    ReplacementText: 'p.inSize.z()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          3521
-    Length:          12
-    ReplacementText: 'p.inStride.z()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          3542
-    Length:          10
-    ReplacementText: 'p.inSize.z()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          4067
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          1534
     Length:          4
     ReplacementText: 'sycl::range<3>'
     ConstantFlag:    ''
@@ -154,79 +28,727 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          4081
-    Length:          0
-    ReplacementText: '(1, 1, 1)'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          1551
+    Length:          4
+    ReplacementText: 'sycl::range<3>'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          4091
-    Length:          0
-    ReplacementText: '(1, 1, 1)'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          1556
+    Length:          9
+    ReplacementText: 1, 1, 256
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          4155
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          1572
+    Length:          4
+    ReplacementText: 'sycl::range<3>'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          1588
+    Length:          4
+    ReplacementText: 'sycl::range<3>'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          1593
+    Length:          136
+    ReplacementText: 'p.launchMajor, (p.outSize.x() - 1) / (tileOutW * p.loopX) + 1, ((p.outSize.y() - 1) / tileOutH + 1) * p.launchMinor'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          1762
+    Length:          0
+    ReplacementText: "    /*\n    DPCT1007:0: Migration of cudaLaunchKernel is not supported.\n    */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          1985
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          2205
+    Length:          4
+    ReplacementText: 'sycl::range<3>'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          2222
+    Length:          4
+    ReplacementText: 'sycl::range<3>'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          2227
+    Length:          8
+    ReplacementText: 1, 32, 4
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          2242
+    Length:          4
+    ReplacementText: 'sycl::range<3>'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          2258
+    Length:          4
+    ReplacementText: 'sycl::range<3>'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          2263
+    Length:          142
+    ReplacementText: 'p.launchMajor, (p.outSize.x() - 1) / (blockSize[1] * p.loopX) + 1, ((p.outSize.y() - 1) / blockSize[2] + 1) * p.launchMinor'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          2438
+    Length:          0
+    ReplacementText: "    /*\n    DPCT1007:1: Migration of cudaLaunchKernel is not supported.\n    */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          4089
+    Length:          12
+    ReplacementText: 'p.inStride.z()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          4108
     Length:          14
-    ReplacementText: 'sycl::range<3>(1, 32, 4)'
+    ReplacementText: 'p.filterSize.x()'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          4190
-    Length:          160
-    ReplacementText: 'sycl::range<3>(p.launchMajor, (p.outSize.x() - 1) / (blockSize[1] * p.loopX) + 1, ((p.outSize.y() - 1) / blockSize[2] + 1) * p.launchMinor)'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          4129
+    Length:          14
+    ReplacementText: 'p.filterSize.y()'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          4402
-    Length:          15
-    ReplacementText: 'sycl::range<3>(1, 1, 256)'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          4243
+    Length:          6
+    ReplacementText: 'p.up.x()'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          4438
-    Length:          164
-    ReplacementText: 'sycl::range<3>(p.launchMajor, (p.outSize.x() - 1) / (spec.tileOutW * p.loopX) + 1, ((p.outSize.y() - 1) / spec.tileOutH + 1) * p.launchMinor)'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          4258
+    Length:          6
+    ReplacementText: 'p.up.y()'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          4663
-    Length:          0
-    ReplacementText: "    /*\n    DPCT1007:3: Migration of cudaLaunchKernel is not supported.\n    */\n    /*\n    DPCT1010:6: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.\n    */\n    /*\n    DPCT1009:7: SYCL uses exceptions to report errors and does not use the error codes. The original code was commented out and a warning string was inserted. You need to rewrite this code.\n    */\n    /*\n    DPCT1001:4: The statement could not be removed.\n    */\n    /*\n    DPCT1000:5: Error handling if-stmt was detected but could not be rewritten.\n    */\n"
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          4273
+    Length:          8
+    ReplacementText: 'p.down.x()'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Offset:          4667
-    Length:          108
-    ReplacementText: '"cudaGetErrorString is not supported"/*cudaGetErrorString(AT_CUDA_CHECK(cudaLaunchKernel(spec.kernel, gridSize, blockSize, args, 0, at::cuda::getCurrentCUDAStream())))*/'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          4290
+    Length:          8
+    ReplacementText: 'p.down.y()'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          4869
+    Length:          6
+    ReplacementText: 'p.up.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          4884
+    Length:          6
+    ReplacementText: 'p.up.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          4899
+    Length:          8
+    ReplacementText: 'p.down.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          4916
+    Length:          8
+    ReplacementText: 'p.down.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          5516
+    Length:          6
+    ReplacementText: 'p.up.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          5531
+    Length:          6
+    ReplacementText: 'p.up.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          5546
+    Length:          8
+    ReplacementText: 'p.down.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          5563
+    Length:          8
+    ReplacementText: 'p.down.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          6146
+    Length:          6
+    ReplacementText: 'p.up.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          6161
+    Length:          6
+    ReplacementText: 'p.up.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          6176
+    Length:          8
+    ReplacementText: 'p.down.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          6193
+    Length:          8
+    ReplacementText: 'p.down.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          6776
+    Length:          6
+    ReplacementText: 'p.up.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          6791
+    Length:          6
+    ReplacementText: 'p.up.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          6806
+    Length:          8
+    ReplacementText: 'p.down.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          6823
+    Length:          8
+    ReplacementText: 'p.down.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          7437
+    Length:          6
+    ReplacementText: 'p.up.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          7452
+    Length:          6
+    ReplacementText: 'p.up.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          7467
+    Length:          8
+    ReplacementText: 'p.down.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          7484
+    Length:          8
+    ReplacementText: 'p.down.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          8279
+    Length:          6
+    ReplacementText: 'p.up.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          8294
+    Length:          6
+    ReplacementText: 'p.up.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          8309
+    Length:          8
+    ReplacementText: 'p.down.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          8326
+    Length:          8
+    ReplacementText: 'p.down.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          9115
+    Length:          6
+    ReplacementText: 'p.up.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          9130
+    Length:          6
+    ReplacementText: 'p.up.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          9145
+    Length:          8
+    ReplacementText: 'p.down.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          9162
+    Length:          8
+    ReplacementText: 'p.down.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          10634
+    Length:          6
+    ReplacementText: 'p.up.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          10649
+    Length:          6
+    ReplacementText: 'p.up.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          10664
+    Length:          8
+    ReplacementText: 'p.down.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          10681
+    Length:          8
+    ReplacementText: 'p.down.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          11479
+    Length:          6
+    ReplacementText: 'p.up.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          11494
+    Length:          6
+    ReplacementText: 'p.up.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          11509
+    Length:          8
+    ReplacementText: 'p.down.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          11526
+    Length:          8
+    ReplacementText: 'p.down.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          12324
+    Length:          6
+    ReplacementText: 'p.up.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          12339
+    Length:          6
+    ReplacementText: 'p.up.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          12354
+    Length:          8
+    ReplacementText: 'p.down.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          12371
+    Length:          8
+    ReplacementText: 'p.down.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          13860
+    Length:          6
+    ReplacementText: 'p.up.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          13875
+    Length:          6
+    ReplacementText: 'p.up.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          13890
+    Length:          8
+    ReplacementText: 'p.down.x()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          13907
+    Length:          8
+    ReplacementText: 'p.down.y()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19135
+    Length:          19
+    ReplacementText: 'sycl::int2(upx, upy)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19178
+    Length:          23
+    ReplacementText: 'sycl::int2(downx, downy)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19225
+    Length:          23
+    ReplacementText: 'sycl::int2(padx0, pady0)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19338
+    Length:          73
+    ReplacementText: 'sycl::int4((int)x.size(3), (int)x.size(2), (int)x.size(1), (int)x.size(0))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19435
+    Length:          81
+    ReplacementText: 'sycl::int4((int)x.stride(3), (int)x.stride(2), (int)x.stride(1), (int)x.stride(0))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19540
+    Length:          41
+    ReplacementText: 'sycl::int2((int)f.size(1), (int)f.size(0))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19605
+    Length:          45
+    ReplacementText: 'sycl::int2((int)f.stride(1), (int)f.stride(0))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19674
+    Length:          73
+    ReplacementText: 'sycl::int4((int)y.size(3), (int)y.size(2), (int)y.size(1), (int)y.size(0))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19771
+    Length:          81
+    ReplacementText: 'sycl::int4((int)y.stride(3), (int)y.stride(2), (int)y.stride(1), (int)y.stride(0))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19877
+    Length:          12
+    ReplacementText: 'p.inStride.z()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19898
+    Length:          10
+    ReplacementText: 'p.inSize.w()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19911
+    Length:          10
+    ReplacementText: 'p.inSize.w()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19924
+    Length:          10
+    ReplacementText: 'p.inSize.z()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19959
+    Length:          12
+    ReplacementText: 'p.inStride.z()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Offset:          19980
+    Length:          10
+    ReplacementText: 'p.inSize.z()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
     Offset:          447
     Length:          0
     ReplacementText: "#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
@@ -235,7 +757,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
     Offset:          856
     Length:          11
     ReplacementText: ''
@@ -244,7 +766,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
     Offset:          867
     Length:          15
     ReplacementText: __dpct_inline__
@@ -253,8 +775,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1123
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1116
     Length:          11
     ReplacementText: ''
     ConstantFlag:    ''
@@ -262,17 +784,17 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1187
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1180
     Length:          0
-    ReplacementText: ",\n                                                      const sycl::nd_item<3> &item_ct1"
+    ReplacementText: ",\n                                               const sycl::nd_item<3> &item_ct1"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1300
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1293
     Length:          10
     ReplacementText: 'item_ct1.get_group(2)'
     ConstantFlag:    ''
@@ -280,8 +802,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1313
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1306
     Length:          10
     ReplacementText: 'item_ct1.get_local_range(2)'
     ConstantFlag:    ''
@@ -289,8 +811,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1326
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1319
     Length:          11
     ReplacementText: 'item_ct1.get_local_id(2)'
     ConstantFlag:    ''
@@ -298,8 +820,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1439
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1432
     Length:          10
     ReplacementText: 'item_ct1.get_group(1)'
     ConstantFlag:    ''
@@ -307,8 +829,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1462
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1455
     Length:          10
     ReplacementText: 'item_ct1.get_local_range(1)'
     ConstantFlag:    ''
@@ -316,8 +838,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1475
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1468
     Length:          11
     ReplacementText: 'item_ct1.get_local_id(1)'
     ConstantFlag:    ''
@@ -325,8 +847,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1508
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1501
     Length:          10
     ReplacementText: 'item_ct1.get_group(0)'
     ConstantFlag:    ''
@@ -334,8 +856,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1554
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1547
     Length:          11
     ReplacementText: 'p.outSize.x()'
     ConstantFlag:    ''
@@ -343,8 +865,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1576
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1569
     Length:          11
     ReplacementText: 'p.outSize.y()'
     ConstantFlag:    ''
@@ -352,8 +874,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1687
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1680
     Length:          8
     ReplacementText: 'p.down.y()'
     ConstantFlag:    ''
@@ -361,8 +883,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1698
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1691
     Length:          6
     ReplacementText: 'p.up.y()'
     ConstantFlag:    ''
@@ -370,8 +892,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1711
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1704
     Length:          8
     ReplacementText: 'p.pad0.y()'
     ConstantFlag:    ''
@@ -379,8 +901,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1735
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1728
     Length:          48
     ReplacementText: 'sycl::min(sycl::max(floor_div(midY, p.up.y()), 0), p.inSize.y())'
     ConstantFlag:    ''
@@ -388,8 +910,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1797
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1790
     Length:          65
     ReplacementText: 'sycl::min(sycl::max(floor_div(midY + p.filterSize.y(), p.up.y()), 0), p.inSize.y())'
     ConstantFlag:    ''
@@ -397,8 +919,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1895
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1888
     Length:          14
     ReplacementText: 'p.filterSize.y()'
     ConstantFlag:    ''
@@ -406,8 +928,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1924
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1917
     Length:          6
     ReplacementText: 'p.up.y()'
     ConstantFlag:    ''
@@ -415,8 +937,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          1966
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          1959
     Length:          14
     ReplacementText: 'p.filterSize.y()'
     ConstantFlag:    ''
@@ -424,8 +946,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          2349
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          2342
     Length:          10
     ReplacementText: 'p.inSize.z()'
     ConstantFlag:    ''
@@ -433,8 +955,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          2386
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          2379
     Length:          10
     ReplacementText: 'p.inSize.z()'
     ConstantFlag:    ''
@@ -442,8 +964,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          2468
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          2461
     Length:          11
     ReplacementText: 'p.outSize.x()'
     ConstantFlag:    ''
@@ -451,8 +973,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          2498
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          2491
     Length:          10
     ReplacementText: 'item_ct1.get_local_range(1)'
     ConstantFlag:    ''
@@ -460,8 +982,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          2590
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          2583
     Length:          8
     ReplacementText: 'p.down.x()'
     ConstantFlag:    ''
@@ -469,8 +991,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          2601
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          2594
     Length:          6
     ReplacementText: 'p.up.x()'
     ConstantFlag:    ''
@@ -478,8 +1000,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          2614
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          2607
     Length:          8
     ReplacementText: 'p.pad0.x()'
     ConstantFlag:    ''
@@ -487,8 +1009,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          2646
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          2639
     Length:          48
     ReplacementText: 'sycl::min(sycl::max(floor_div(midX, p.up.x()), 0), p.inSize.x())'
     ConstantFlag:    ''
@@ -496,8 +1018,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          2716
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          2709
     Length:          65
     ReplacementText: 'sycl::min(sycl::max(floor_div(midX + p.filterSize.x(), p.up.x()), 0), p.inSize.x())'
     ConstantFlag:    ''
@@ -505,8 +1027,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          2822
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          2815
     Length:          14
     ReplacementText: 'p.filterSize.x()'
     ConstantFlag:    ''
@@ -514,8 +1036,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          2851
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          2844
     Length:          6
     ReplacementText: 'p.up.x()'
     ConstantFlag:    ''
@@ -523,8 +1045,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          2909
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          2902
     Length:          14
     ReplacementText: 'p.filterSize.x()'
     ConstantFlag:    ''
@@ -532,8 +1054,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3025
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3018
     Length:          12
     ReplacementText: 'p.inStride.x()'
     ConstantFlag:    ''
@@ -541,8 +1063,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3046
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3039
     Length:          12
     ReplacementText: 'p.inStride.y()'
     ConstantFlag:    ''
@@ -550,8 +1072,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3065
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3058
     Length:          12
     ReplacementText: 'p.inStride.z()'
     ConstantFlag:    ''
@@ -559,8 +1081,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3084
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3077
     Length:          12
     ReplacementText: 'p.inStride.w()'
     ConstantFlag:    ''
@@ -568,8 +1090,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3144
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3137
     Length:          16
     ReplacementText: 'p.filterStride.x()'
     ConstantFlag:    ''
@@ -577,8 +1099,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3173
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3166
     Length:          16
     ReplacementText: 'p.filterStride.y()'
     ConstantFlag:    ''
@@ -586,8 +1108,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3234
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3227
     Length:          6
     ReplacementText: 'p.up.x()'
     ConstantFlag:    ''
@@ -595,8 +1117,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3244
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3237
     Length:          6
     ReplacementText: 'p.up.x()'
     ConstantFlag:    ''
@@ -604,8 +1126,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3254
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3247
     Length:          16
     ReplacementText: 'p.filterStride.x()'
     ConstantFlag:    ''
@@ -613,8 +1135,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3314
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3307
     Length:          6
     ReplacementText: 'p.up.y()'
     ConstantFlag:    ''
@@ -622,8 +1144,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3324
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3317
     Length:          6
     ReplacementText: 'p.up.y()'
     ConstantFlag:    ''
@@ -631,8 +1153,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3334
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3327
     Length:          16
     ReplacementText: 'p.filterStride.y()'
     ConstantFlag:    ''
@@ -640,8 +1162,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3610
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3603
     Length:          12
     ReplacementText: 'p.inStride.x()'
     ConstantFlag:    ''
@@ -649,8 +1171,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3703
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3696
     Length:          12
     ReplacementText: 'p.inStride.y()'
     ConstantFlag:    ''
@@ -658,8 +1180,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3722
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3715
     Length:          12
     ReplacementText: 'p.inStride.x()'
     ConstantFlag:    ''
@@ -667,8 +1189,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3887
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3880
     Length:          13
     ReplacementText: 'p.outStride.x()'
     ConstantFlag:    ''
@@ -676,8 +1198,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3910
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3903
     Length:          13
     ReplacementText: 'p.outStride.y()'
     ConstantFlag:    ''
@@ -685,8 +1207,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3930
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3923
     Length:          13
     ReplacementText: 'p.outStride.z()'
     ConstantFlag:    ''
@@ -694,8 +1216,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          3950
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          3943
     Length:          13
     ReplacementText: 'p.outStride.w()'
     ConstantFlag:    ''
@@ -703,35 +1225,26 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          4250
-    Length:          0
-    ReplacementText: "/*\nDPCT1110:0: The total declared local variable size in device function upfirdn2d_kernel_small exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.\n*/\n"
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          4257
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          4243
     Length:          11
-    ReplacementText: ''
+    ReplacementText: "/*\nDPCT1110:2: The total declared local variable size in device function upfirdn2d_kernel_small exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.\n*/\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          4321
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          4307
     Length:          0
-    ReplacementText: ",\n                                   const sycl::nd_item<3> &item_ct1,\n                                   sycl::local_accessor<volatile scalar_t, 2> sf,\n                                   sycl::local_accessor<volatile scalar_t, 3> sx"
+    ReplacementText: ",\n                            const sycl::nd_item<3> &item_ct1,\n                            sycl::local_accessor<volatile scalar_t, 2> sf,\n                            sycl::local_accessor<volatile scalar_t, 3> sx"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          4534
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          4520
     Length:          50
     ReplacementText: ''
     ConstantFlag:    ''
@@ -739,8 +1252,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          4589
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          4575
     Length:          61
     ReplacementText: ''
     ConstantFlag:    ''
@@ -748,8 +1261,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          4701
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          4687
     Length:          10
     ReplacementText: 'item_ct1.get_group(2)'
     ConstantFlag:    ''
@@ -757,8 +1270,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          4879
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          4865
     Length:          10
     ReplacementText: 'item_ct1.get_group(1)'
     ConstantFlag:    ''
@@ -766,8 +1279,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          4932
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          4918
     Length:          10
     ReplacementText: 'item_ct1.get_group(0)'
     ConstantFlag:    ''
@@ -775,8 +1288,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          4982
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          4968
     Length:          11
     ReplacementText: 'p.outSize.x()'
     ConstantFlag:    ''
@@ -784,8 +1297,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          5008
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          4994
     Length:          11
     ReplacementText: 'p.outSize.y()'
     ConstantFlag:    ''
@@ -793,8 +1306,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          5117
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          5103
     Length:          11
     ReplacementText: 'item_ct1.get_local_id(2)'
     ConstantFlag:    ''
@@ -802,8 +1315,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          5168
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          5154
     Length:          10
     ReplacementText: 'item_ct1.get_local_range(2)'
     ConstantFlag:    ''
@@ -811,8 +1324,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          5302
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          5288
     Length:          14
     ReplacementText: 'p.filterSize.x()'
     ConstantFlag:    ''
@@ -820,8 +1333,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          5324
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          5310
     Length:          14
     ReplacementText: 'p.filterSize.y()'
     ConstantFlag:    ''
@@ -829,8 +1342,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          5388
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          5374
     Length:          14
     ReplacementText: 'p.filterSize.x()'
     ConstantFlag:    ''
@@ -838,8 +1351,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          5451
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          5437
     Length:          14
     ReplacementText: 'p.filterSize.y()'
     ConstantFlag:    ''
@@ -847,8 +1360,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          5512
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          5498
     Length:          16
     ReplacementText: 'p.filterStride.x()'
     ConstantFlag:    ''
@@ -856,8 +1369,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          5537
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          5523
     Length:          16
     ReplacementText: 'p.filterStride.y()'
     ConstantFlag:    ''
@@ -865,8 +1378,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          5825
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          5811
     Length:          10
     ReplacementText: 'p.inSize.z()'
     ConstantFlag:    ''
@@ -874,8 +1387,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          5870
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          5856
     Length:          10
     ReplacementText: 'p.inSize.z()'
     ConstantFlag:    ''
@@ -883,8 +1396,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          5964
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          5950
     Length:          11
     ReplacementText: 'p.outSize.x()'
     ConstantFlag:    ''
@@ -892,8 +1405,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          6108
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          6094
     Length:          8
     ReplacementText: 'p.pad0.x()'
     ConstantFlag:    ''
@@ -901,8 +1414,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          6174
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          6160
     Length:          8
     ReplacementText: 'p.pad0.y()'
     ConstantFlag:    ''
@@ -910,17 +1423,17 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          6300
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          6286
     Length:          15
-    ReplacementText: "/*\n            DPCT1065:1: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.\n            */\n            item_ct1.barrier()"
+    ReplacementText: "/*\n            DPCT1065:3: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.\n            */\n            item_ct1.barrier()"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          6346
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          6332
     Length:          11
     ReplacementText: 'item_ct1.get_local_id(2)'
     ConstantFlag:    ''
@@ -928,8 +1441,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          6407
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          6393
     Length:          10
     ReplacementText: 'item_ct1.get_local_range(2)'
     ConstantFlag:    ''
@@ -937,8 +1450,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          6855
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          6841
     Length:          10
     ReplacementText: 'p.inSize.x()'
     ConstantFlag:    ''
@@ -946,8 +1459,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          6874
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          6860
     Length:          10
     ReplacementText: 'p.inSize.y()'
     ConstantFlag:    ''
@@ -955,8 +1468,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          6891
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          6877
     Length:          10
     ReplacementText: 'p.inSize.z()'
     ConstantFlag:    ''
@@ -964,8 +1477,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          6959
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          6945
     Length:          12
     ReplacementText: 'p.inStride.x()'
     ConstantFlag:    ''
@@ -973,8 +1486,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          6980
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          6966
     Length:          12
     ReplacementText: 'p.inStride.y()'
     ConstantFlag:    ''
@@ -982,8 +1495,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          6999
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          6985
     Length:          12
     ReplacementText: 'p.inStride.z()'
     ConstantFlag:    ''
@@ -991,8 +1504,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          7018
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          7004
     Length:          12
     ReplacementText: 'p.inStride.w()'
     ConstantFlag:    ''
@@ -1000,17 +1513,17 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          7146
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          7132
     Length:          15
-    ReplacementText: "/*\n            DPCT1065:2: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.\n            */\n            item_ct1.barrier()"
+    ReplacementText: "/*\n            DPCT1065:4: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.\n            */\n            item_ct1.barrier()"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          7193
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          7179
     Length:          11
     ReplacementText: 'item_ct1.get_local_id(2)'
     ConstantFlag:    ''
@@ -1018,8 +1531,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          7258
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          7244
     Length:          10
     ReplacementText: 'item_ct1.get_local_range(2)'
     ConstantFlag:    ''
@@ -1027,8 +1540,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          8175
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          8161
     Length:          11
     ReplacementText: 'p.outSize.x()'
     ConstantFlag:    ''
@@ -1036,8 +1549,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          8196
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          8182
     Length:          11
     ReplacementText: 'p.outSize.y()'
     ConstantFlag:    ''
@@ -1045,8 +1558,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          8214
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          8200
     Length:          11
     ReplacementText: 'p.outSize.z()'
     ConstantFlag:    ''
@@ -1054,8 +1567,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          8659
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          8645
     Length:          13
     ReplacementText: 'p.outStride.x()'
     ConstantFlag:    ''
@@ -1063,8 +1576,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          8682
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          8668
     Length:          13
     ReplacementText: 'p.outStride.y()'
     ConstantFlag:    ''
@@ -1072,8 +1585,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          8702
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          8688
     Length:          13
     ReplacementText: 'p.outStride.z()'
     ConstantFlag:    ''
@@ -1081,8 +1594,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          8722
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          8708
     Length:          13
     ReplacementText: 'p.outStride.w()'
     ConstantFlag:    ''
@@ -1090,470 +1603,83 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          9011
-    Length:          12
-    ReplacementText: 'p.inStride.z()'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          8934
+    Length:          11
+    ReplacementText: ''
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          9030
-    Length:          14
-    ReplacementText: 'p.filterSize.x()'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          8990
+    Length:          0
+    ReplacementText: ', const sycl::nd_item<3> &item_ct1, sycl::local_accessor<scalar_t, 2> sf, sycl::local_accessor<scalar_t, 3> sx'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          9051
-    Length:          14
-    ReplacementText: 'p.filterSize.y()'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          9196
+    Length:          11
+    ReplacementText: ''
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          9296
-    Length:          6
-    ReplacementText: 'p.up.x()'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          9268
+    Length:          0
+    ReplacementText: ",\n                                             const sycl::nd_item<3> &item_ct1"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          9311
-    Length:          6
-    ReplacementText: 'p.up.y()'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          9280
+    Length:          11
+    ReplacementText: ''
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          9326
-    Length:          8
-    ReplacementText: 'p.down.x()'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          9351
+    Length:          0
+    ReplacementText: ",\n                                            const sycl::nd_item<3> &item_ct1"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          9343
-    Length:          8
-    ReplacementText: 'p.down.y()'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          9363
+    Length:          11
+    ReplacementText: ''
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          12724
-    Length:          6
-    ReplacementText: 'p.up.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          12739
-    Length:          6
-    ReplacementText: 'p.up.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          12754
-    Length:          8
-    ReplacementText: 'p.down.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          12771
-    Length:          8
-    ReplacementText: 'p.down.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          14353
-    Length:          6
-    ReplacementText: 'p.up.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          14368
-    Length:          6
-    ReplacementText: 'p.up.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          14383
-    Length:          8
-    ReplacementText: 'p.down.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          14400
-    Length:          8
-    ReplacementText: 'p.down.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          15226
-    Length:          6
-    ReplacementText: 'p.up.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          15241
-    Length:          6
-    ReplacementText: 'p.up.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          15256
-    Length:          8
-    ReplacementText: 'p.down.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          15273
-    Length:          8
-    ReplacementText: 'p.down.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          16124
-    Length:          6
-    ReplacementText: 'p.up.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          16139
-    Length:          6
-    ReplacementText: 'p.up.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          16154
-    Length:          8
-    ReplacementText: 'p.down.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          16171
-    Length:          8
-    ReplacementText: 'p.down.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          17753
-    Length:          6
-    ReplacementText: 'p.up.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          17768
-    Length:          6
-    ReplacementText: 'p.up.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          17783
-    Length:          8
-    ReplacementText: 'p.down.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          17800
-    Length:          8
-    ReplacementText: 'p.down.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          18608
-    Length:          6
-    ReplacementText: 'p.up.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          18623
-    Length:          6
-    ReplacementText: 'p.up.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          18638
-    Length:          8
-    ReplacementText: 'p.down.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          18655
-    Length:          8
-    ReplacementText: 'p.down.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          19495
-    Length:          6
-    ReplacementText: 'p.up.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          19510
-    Length:          6
-    ReplacementText: 'p.up.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          19525
-    Length:          8
-    ReplacementText: 'p.down.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          19542
-    Length:          8
-    ReplacementText: 'p.down.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          20124
-    Length:          6
-    ReplacementText: 'p.up.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          20139
-    Length:          6
-    ReplacementText: 'p.up.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          20154
-    Length:          8
-    ReplacementText: 'p.down.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          20171
-    Length:          8
-    ReplacementText: 'p.down.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          20749
-    Length:          6
-    ReplacementText: 'p.up.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          20764
-    Length:          6
-    ReplacementText: 'p.up.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          20779
-    Length:          8
-    ReplacementText: 'p.down.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          20796
-    Length:          8
-    ReplacementText: 'p.down.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          21413
-    Length:          6
-    ReplacementText: 'p.up.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          21428
-    Length:          6
-    ReplacementText: 'p.up.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          21443
-    Length:          8
-    ReplacementText: 'p.down.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          21460
-    Length:          8
-    ReplacementText: 'p.down.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          22026
-    Length:          6
-    ReplacementText: 'p.up.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          22041
-    Length:          6
-    ReplacementText: 'p.up.y()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          22056
-    Length:          8
-    ReplacementText: 'p.down.x()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Offset:          22073
-    Length:          8
-    ReplacementText: 'p.down.y()'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Offset:          9438
+    Length:          0
+    ReplacementText: ",\n                                                const sycl::nd_item<3> &item_ct1"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
 MainSourceFilesDigest:
-  - MainSourceFile:  '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cpp'
-    Digest:          161a8f2d096ed1ac39e8b8c2011d97a7
-  - MainSourceFile:  '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
-    Digest:          1a4c8bd26c9fb87fd21df0657a144ced
+  - MainSourceFile:  '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cpp'
+    Digest:          a9cb59af3e85f882a79d37f8f2dc347d
+  - MainSourceFile:  '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+    Digest:          05b4470dfc684fa31723039cf6cec69e
 DpctVersion:     2023.2.0
 MainHelperFileName: dpct
 USMLevel:        ''
@@ -1562,7 +1688,7 @@ FeatureMap:
     dpct_align_and_inline:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000/upfirdn2d.cu'
+        - '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
       SubFeatureMap:   {}
     non_local_include_dependency:
       IsCalled:        true
@@ -1572,7 +1698,7 @@ FeatureMap:
 CompileTargets:  {}
 OptionMap:
   AnalysisScopePath:
-    Value:           '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000'
+    Value:           '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000'
     Specified:       false
   AsyncHandler:
     Value:           'false'
@@ -1581,7 +1707,7 @@ OptionMap:
     Value:           'false'
     Specified:       false
   CompilationsDir:
-    Value:           '/home/martin/.cache/torch_extensions/upfirdn2d_plugin/7edf9e6a584689218f8aa5314b3a0356-nvidia-rtx-a6000'
+    Value:           '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000'
     Specified:       true
   CtadEnabled:
     Value:           'false'
