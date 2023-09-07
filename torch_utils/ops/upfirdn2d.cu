@@ -7,6 +7,7 @@
 // license agreement from NVIDIA CORPORATION is strictly prohibited.
 
 #include <c10/util/Half.h>
+#include <ATen/cuda/CUDAContext.h>
 #include "upfirdn2d.h"
 
 //------------------------------------------------------------------------
@@ -23,10 +24,19 @@ static __device__ __forceinline__ int floor_div(int a, int b)
     return (a + t * b) / b - t;
 }
 
+static void update_params(upfirdn2d_kernel_params& p, int loopMinor, int loopX) {
+    // Set looping options.
+    p.loopMajor     = (p.sizeMajor - 1) / 16384 + 1; // could be set earlier - does not depend on "spec"
+    p.loopMinor     = loopMinor; // "spec" unnecessary - known from kernel's template argument
+    p.loopX         = loopX; // "spec" unnecessary - always 1 (except for contiguous large kernel)
+    p.launchMinor   = (p.sizeMinor - 1) / loopMinor + 1;
+    p.launchMajor   = (p.sizeMajor - 1) / p.loopMajor + 1; // could be set earlier - does not depend on "spec"
+}
+
 //------------------------------------------------------------------------
 // Generic CUDA implementation for large filters.
 
-template <class T> __global__ void upfirdn2d_kernel_large(upfirdn2d_kernel_params p)
+template <class T> static __global__ void upfirdn2d_kernel_large(upfirdn2d_kernel_params p)
 {
     typedef typename InternalType<T>::scalar_t scalar_t;
 
@@ -95,7 +105,7 @@ template <class T> __global__ void upfirdn2d_kernel_large(upfirdn2d_kernel_param
 // Specialized CUDA implementation for small filters.
 
 template <class T, int upx, int upy, int downx, int downy, int filterW, int filterH, int tileOutW, int tileOutH, int loopMinor>
-__global__ void upfirdn2d_kernel_small(upfirdn2d_kernel_params p)
+static __global__ void upfirdn2d_kernel_small(upfirdn2d_kernel_params p)
 {
     typedef typename InternalType<T>::scalar_t scalar_t;
     const int tileInW = ((tileOutW - 1) * downx + filterW - 1) / upx + 1;
@@ -199,124 +209,157 @@ __global__ void upfirdn2d_kernel_small(upfirdn2d_kernel_params p)
     }
 }
 
+//------------------------------------------------------------------------
+// Helper functions for launching the kernels.
+
+template <class T, int upx, int upy, int downx, int downy, int filterW, int filterH, int tileOutW, int tileOutH, int loopMinor>
+void run_upfirdn2d_kernel_small(upfirdn2d_kernel_params p) {
+    update_params(p, loopMinor, 1);
+    
+    // Compute grid size - for small kernels
+    dim3 blockSize = dim3(256, 1, 1);
+    dim3 gridSize = dim3(
+        ((p.outSize.y - 1) / tileOutH + 1) * p.launchMinor,
+        (p.outSize.x - 1) / (tileOutW * p.loopX) + 1,
+        p.launchMajor);
+    
+    void* args[] = {&p};
+    cudaLaunchKernel((void*)&upfirdn2d_kernel_small<T, upx, upy, downx, downy, filterW, filterH, tileOutW, tileOutH, loopMinor>, gridSize, blockSize, args, 0, at::cuda::getCurrentCUDAStream());
+}
+
+template <class T>
+void run_upfirdn2d_kernel_large(upfirdn2d_kernel_params p, int tileOutW, int tileOutH, int loopMinor, int loopX) {
+    update_params(p, loopMinor, loopX);
+    
+    // Compute grid size - for large kernels
+    dim3 blockSize = dim3(4, 32, 1);
+    dim3 gridSize = dim3(
+        ((p.outSize.y - 1) / blockSize.x + 1) * p.launchMinor,
+        (p.outSize.x - 1) / (blockSize.y * p.loopX) + 1,
+        p.launchMajor);
+    
+    void* args[] = {&p};
+    cudaLaunchKernel((void*)&upfirdn2d_kernel_large<T>, gridSize, blockSize, args, 0, at::cuda::getCurrentCUDAStream());
+}
 
 //------------------------------------------------------------------------
 // Template specializations.
 
-#define SPEC_with_type(f, ...) \
-    template __global__ void f<__VA_ARGS__>(upfirdn2d_kernel_params p);
-
-#define SPEC(f, ...) \
-    SPEC_with_type(f, double, __VA_ARGS__) \
-    SPEC_with_type(f, float, __VA_ARGS__) \
-    SPEC_with_type(f, c10::Half, __VA_ARGS__)
-
 // "large" kernel specializations
-template __global__ void upfirdn2d_kernel_large<double>(upfirdn2d_kernel_params p);
-template __global__ void upfirdn2d_kernel_large<float>(upfirdn2d_kernel_params p);
-template __global__ void upfirdn2d_kernel_large<c10::Half>(upfirdn2d_kernel_params p);
+template void run_upfirdn2d_kernel_large<double>(upfirdn2d_kernel_params p, int tileOutW, int tileOutH, int loopMinor, int loopX);
+template void run_upfirdn2d_kernel_large<float>(upfirdn2d_kernel_params p, int tileOutW, int tileOutH, int loopMinor, int loopX);
+template void run_upfirdn2d_kernel_large<c10::Half>(upfirdn2d_kernel_params p, int tileOutW, int tileOutH, int loopMinor, int loopX);
+
+
+#define SPEC_with_type(...) \
+    template void run_upfirdn2d_kernel_small<__VA_ARGS__>(upfirdn2d_kernel_params p);
+
+#define SPEC(...) \
+    SPEC_with_type(double, __VA_ARGS__) \
+    SPEC_with_type(float, __VA_ARGS__) \
+    SPEC_with_type(c10::Half, __VA_ARGS__)
 
 // Instead of writing full specializations for all the variants of the "small" kernel and it data type (~300 difficult-to-read lines like this):
-//   template __global__ void upfirdn2d_kernel_small<double, 1, 1, 1, 4, 1, 48, 32, 8, 1>(upfirdn2d_kernel_params p);
-//   template __global__ void upfirdn2d_kernel_small<float, 1, 1, 1, 4, 1, 48, 32, 8, 1>(upfirdn2d_kernel_params p);
-//   template __global__ void upfirdn2d_kernel_small<c10::Half, 1, 1, 1, 4, 1, 48, 32, 8, 1>(upfirdn2d_kernel_params p);
-// we can just write "SPEC(kernel_name, params)", e.g. "SPEC(upfirdn2d_kernel_small, 1, 1, 1, 4, 1, 48, 32, 8, 1)" to make specializations for all types of one kernel variation with a single line.
-// These lines can be generated automatically from the file they are called from, using the following command:
-//   grep 'upfirdn2d_kernel_\(small\|large\)<T, .*>(p)' torch_utils/ops/upfirdn2d.cpp | sed 's/.*\(upfirdn2d_kernel_\(small\|large\)\)<T,\(.*\)>.*/SPEC(\1,\3)/'
+//   template void run_upfirdn2d_kernel_small<double, 1, 1, 1, 4, 1, 48, 32, 8, 1>(upfirdn2d_kernel_params p);
+//   template void run_upfirdn2d_kernel_small<float, 1, 1, 1, 4, 1, 48, 32, 8, 1>(upfirdn2d_kernel_params p);
+//   template void run_upfirdn2d_kernel_small<c10::Half, 1, 1, 1, 4, 1, 48, 32, 8, 1>(upfirdn2d_kernel_params p);
+// we can just write "SPEC(params)", e.g. "SPEC(1, 1, 1, 4, 1, 48, 32, 8, 1)" to make specializations for all types of one kernel variation with a single line.
+// These lines can be generated automatically from the `.cpp` file from where the `run_upfirdn2d_kernel_small<...>` functions are called, using the following command:
+//   grep 'run_upfirdn2d_kernel_small<T, .*>(p)' torch_utils/ops/upfirdn2d.cpp | sed 's/.*run_upfirdn2d_kernel_small<T, *\(.*\)>.*/SPEC(\1)/'
 
-SPEC(upfirdn2d_kernel_small, 1,1, 1,4, 1,32, 1,32,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,4, 1,48, 1,32,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,4, 1,32, 32,8,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,4, 1,48, 32,8,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 4,1, 32,1, 32,1,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 4,1, 48,1, 32,1,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 4,1, 32,1, 32,8,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 4,1, 48,1, 32,8,1)
-SPEC(upfirdn2d_kernel_small, 1,4, 1,1, 1,32, 1,128,16)
-SPEC(upfirdn2d_kernel_small, 1,4, 1,1, 1,48, 1,128,16)
-SPEC(upfirdn2d_kernel_small, 1,4, 1,1, 1,32, 32,32,1)
-SPEC(upfirdn2d_kernel_small, 1,4, 1,1, 1,48, 32,32,1)
-SPEC(upfirdn2d_kernel_small, 4,1, 1,1, 32,1, 128,1,16)
-SPEC(upfirdn2d_kernel_small, 4,1, 1,1, 48,1, 128,1,16)
-SPEC(upfirdn2d_kernel_small, 4,1, 1,1, 32,1, 128,8,1)
-SPEC(upfirdn2d_kernel_small, 4,1, 1,1, 48,1, 128,8,1)
-SPEC(upfirdn2d_kernel_small, 4,4, 1,1, 32,32, 32,32,1)
-SPEC(upfirdn2d_kernel_small, 4,4, 1,1, 48,48, 32,32,1)
-SPEC(upfirdn2d_kernel_small, 4,4, 1,1, 32,32, 64,32,1)
-SPEC(upfirdn2d_kernel_small, 4,4, 1,1, 48,48, 64,32,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,2, 1,8,  1,64,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,2, 1,16, 1,64,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,2, 1,24, 1,64,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,2, 1,8,  32,16,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,2, 1,16, 32,16,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,2, 1,24, 32,16,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,1, 8,1,  64,1,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,1, 16,1, 64,1,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,1, 24,1, 64,1,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,1, 8,1,  64,8,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,1, 16,1, 64,8,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,1, 24,1, 64,8,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,2, 2,2,   8,8,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,2, 4,4,   8,8,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,2, 6,6,   8,8,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,2, 8,8,   8,8,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,2, 16,16, 16,16,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,2, 24,24, 16,16,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,2, 2,2,   32,8,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,2, 4,4,   32,8,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,2, 6,6,   32,8,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,2, 8,8,   32,8,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,2, 16,16, 32,16,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 2,2, 24,24, 32,16,1)
-SPEC(upfirdn2d_kernel_small, 1,2, 1,1, 1,8,  1,128,16)
-SPEC(upfirdn2d_kernel_small, 1,2, 1,1, 1,16, 1,128,16)
-SPEC(upfirdn2d_kernel_small, 1,2, 1,1, 1,24, 1,128,16)
-SPEC(upfirdn2d_kernel_small, 1,2, 1,1, 1,8,  32,32,1)
-SPEC(upfirdn2d_kernel_small, 1,2, 1,1, 1,16, 32,32,1)
-SPEC(upfirdn2d_kernel_small, 1,2, 1,1, 1,24, 32,32,1)
-SPEC(upfirdn2d_kernel_small, 2,1, 1,1, 8,1,  128,1,16)
-SPEC(upfirdn2d_kernel_small, 2,1, 1,1, 16,1, 128,1,16)
-SPEC(upfirdn2d_kernel_small, 2,1, 1,1, 24,1, 128,1,16)
-SPEC(upfirdn2d_kernel_small, 2,1, 1,1, 8,1,  128,8,1)
-SPEC(upfirdn2d_kernel_small, 2,1, 1,1, 16,1, 128,8,1)
-SPEC(upfirdn2d_kernel_small, 2,1, 1,1, 24,1, 128,8,1)
-SPEC(upfirdn2d_kernel_small, 2,2, 1,1, 2,2,   16,16,8)
-SPEC(upfirdn2d_kernel_small, 2,2, 1,1, 4,4,   16,16,8)
-SPEC(upfirdn2d_kernel_small, 2,2, 1,1, 6,6,   16,16,8)
-SPEC(upfirdn2d_kernel_small, 2,2, 1,1, 8,8,   16,16,8)
-SPEC(upfirdn2d_kernel_small, 2,2, 1,1, 16,16, 32,32,1)
-SPEC(upfirdn2d_kernel_small, 2,2, 1,1, 24,24, 32,32,1)
-SPEC(upfirdn2d_kernel_small, 2,2, 1,1, 2,2,   64,16,1)
-SPEC(upfirdn2d_kernel_small, 2,2, 1,1, 4,4,   64,16,1)
-SPEC(upfirdn2d_kernel_small, 2,2, 1,1, 6,6,   64,16,1)
-SPEC(upfirdn2d_kernel_small, 2,2, 1,1, 8,8,   64,16,1)
-SPEC(upfirdn2d_kernel_small, 2,2, 1,1, 16,16, 64,32,1)
-SPEC(upfirdn2d_kernel_small, 2,2, 1,1, 24,24, 64,32,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 1,8,   1,128,16)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 1,16,  1,128,16)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 1,24,  1,128,16)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 8,1,   128,1,16)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 16,1,  128,1,16)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 24,1,  128,1,16)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 3,3,   16,16,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 4,4,   16,16,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 5,5,   16,16,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 6,6,   16,16,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 7,7,   16,16,8)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 16,16, 32,32,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 24,24, 32,32,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 1,8,   32,32,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 1,16,  32,32,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 1,24,  32,32,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 8,1,   128,8,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 16,1,  128,8,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 24,1,  128,8,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 3,3,   64,16,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 4,4,   64,16,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 5,5,   64,16,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 6,6,   64,16,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 7,7,   64,16,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 16,16, 64,32,1)
-SPEC(upfirdn2d_kernel_small, 1,1, 1,1, 24,24, 64,32,1)
+SPEC(1,1, 1,4, 1,32, 1,32,8)
+SPEC(1,1, 1,4, 1,48, 1,32,8)
+SPEC(1,1, 1,4, 1,32, 32,8,1)
+SPEC(1,1, 1,4, 1,48, 32,8,1)
+SPEC(1,1, 4,1, 32,1, 32,1,8)
+SPEC(1,1, 4,1, 48,1, 32,1,8)
+SPEC(1,1, 4,1, 32,1, 32,8,1)
+SPEC(1,1, 4,1, 48,1, 32,8,1)
+SPEC(1,4, 1,1, 1,32, 1,128,16)
+SPEC(1,4, 1,1, 1,48, 1,128,16)
+SPEC(1,4, 1,1, 1,32, 32,32,1)
+SPEC(1,4, 1,1, 1,48, 32,32,1)
+SPEC(4,1, 1,1, 32,1, 128,1,16)
+SPEC(4,1, 1,1, 48,1, 128,1,16)
+SPEC(4,1, 1,1, 32,1, 128,8,1)
+SPEC(4,1, 1,1, 48,1, 128,8,1)
+SPEC(4,4, 1,1, 32,32, 32,32,1)
+SPEC(4,4, 1,1, 48,48, 32,32,1)
+SPEC(4,4, 1,1, 32,32, 64,32,1)
+SPEC(4,4, 1,1, 48,48, 64,32,1)
+SPEC(1,1, 1,2, 1,8,  1,64,8)
+SPEC(1,1, 1,2, 1,16, 1,64,8)
+SPEC(1,1, 1,2, 1,24, 1,64,8)
+SPEC(1,1, 1,2, 1,8,  32,16,1)
+SPEC(1,1, 1,2, 1,16, 32,16,1)
+SPEC(1,1, 1,2, 1,24, 32,16,1)
+SPEC(1,1, 2,1, 8,1,  64,1,8)
+SPEC(1,1, 2,1, 16,1, 64,1,8)
+SPEC(1,1, 2,1, 24,1, 64,1,8)
+SPEC(1,1, 2,1, 8,1,  64,8,1)
+SPEC(1,1, 2,1, 16,1, 64,8,1)
+SPEC(1,1, 2,1, 24,1, 64,8,1)
+SPEC(1,1, 2,2, 2,2,   8,8,8)
+SPEC(1,1, 2,2, 4,4,   8,8,8)
+SPEC(1,1, 2,2, 6,6,   8,8,8)
+SPEC(1,1, 2,2, 8,8,   8,8,8)
+SPEC(1,1, 2,2, 16,16, 16,16,1)
+SPEC(1,1, 2,2, 24,24, 16,16,1)
+SPEC(1,1, 2,2, 2,2,   32,8,1)
+SPEC(1,1, 2,2, 4,4,   32,8,1)
+SPEC(1,1, 2,2, 6,6,   32,8,1)
+SPEC(1,1, 2,2, 8,8,   32,8,1)
+SPEC(1,1, 2,2, 16,16, 32,16,1)
+SPEC(1,1, 2,2, 24,24, 32,16,1)
+SPEC(1,2, 1,1, 1,8,  1,128,16)
+SPEC(1,2, 1,1, 1,16, 1,128,16)
+SPEC(1,2, 1,1, 1,24, 1,128,16)
+SPEC(1,2, 1,1, 1,8,  32,32,1)
+SPEC(1,2, 1,1, 1,16, 32,32,1)
+SPEC(1,2, 1,1, 1,24, 32,32,1)
+SPEC(2,1, 1,1, 8,1,  128,1,16)
+SPEC(2,1, 1,1, 16,1, 128,1,16)
+SPEC(2,1, 1,1, 24,1, 128,1,16)
+SPEC(2,1, 1,1, 8,1,  128,8,1)
+SPEC(2,1, 1,1, 16,1, 128,8,1)
+SPEC(2,1, 1,1, 24,1, 128,8,1)
+SPEC(2,2, 1,1, 2,2,   16,16,8)
+SPEC(2,2, 1,1, 4,4,   16,16,8)
+SPEC(2,2, 1,1, 6,6,   16,16,8)
+SPEC(2,2, 1,1, 8,8,   16,16,8)
+SPEC(2,2, 1,1, 16,16, 32,32,1)
+SPEC(2,2, 1,1, 24,24, 32,32,1)
+SPEC(2,2, 1,1, 2,2,   64,16,1)
+SPEC(2,2, 1,1, 4,4,   64,16,1)
+SPEC(2,2, 1,1, 6,6,   64,16,1)
+SPEC(2,2, 1,1, 8,8,   64,16,1)
+SPEC(2,2, 1,1, 16,16, 64,32,1)
+SPEC(2,2, 1,1, 24,24, 64,32,1)
+SPEC(1,1, 1,1, 1,8,   1,128,16)
+SPEC(1,1, 1,1, 1,16,  1,128,16)
+SPEC(1,1, 1,1, 1,24,  1,128,16)
+SPEC(1,1, 1,1, 8,1,   128,1,16)
+SPEC(1,1, 1,1, 16,1,  128,1,16)
+SPEC(1,1, 1,1, 24,1,  128,1,16)
+SPEC(1,1, 1,1, 3,3,   16,16,8)
+SPEC(1,1, 1,1, 4,4,   16,16,8)
+SPEC(1,1, 1,1, 5,5,   16,16,8)
+SPEC(1,1, 1,1, 6,6,   16,16,8)
+SPEC(1,1, 1,1, 7,7,   16,16,8)
+SPEC(1,1, 1,1, 16,16, 32,32,1)
+SPEC(1,1, 1,1, 24,24, 32,32,1)
+SPEC(1,1, 1,1, 1,8,   32,32,1)
+SPEC(1,1, 1,1, 1,16,  32,32,1)
+SPEC(1,1, 1,1, 1,24,  32,32,1)
+SPEC(1,1, 1,1, 8,1,   128,8,1)
+SPEC(1,1, 1,1, 16,1,  128,8,1)
+SPEC(1,1, 1,1, 24,1,  128,8,1)
+SPEC(1,1, 1,1, 3,3,   64,16,1)
+SPEC(1,1, 1,1, 4,4,   64,16,1)
+SPEC(1,1, 1,1, 5,5,   64,16,1)
+SPEC(1,1, 1,1, 6,6,   64,16,1)
+SPEC(1,1, 1,1, 7,7,   64,16,1)
+SPEC(1,1, 1,1, 16,16, 64,32,1)
+SPEC(1,1, 1,1, 24,24, 64,32,1)
 
 //------------------------------------------------------------------------

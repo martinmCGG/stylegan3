@@ -43,9 +43,9 @@ struct upfirdn2d_kernel_params
 // CUDA kernel selection.
 
 template <class T>
-__global__ void upfirdn2d_kernel_large(upfirdn2d_kernel_params p);
+void run_upfirdn2d_kernel_large(upfirdn2d_kernel_params p, int tileOutW, int tileOutH, int loopMinor, int loopX);
 
 template <class T, int upx, int upy, int downx, int downy, int filterW, int filterH, int tileOutW, int tileOutH, int loopMinor>
-__global__ void upfirdn2d_kernel_small(upfirdn2d_kernel_params p);
+void run_upfirdn2d_kernel_small(upfirdn2d_kernel_params p);
 
 //------------------------------------------------------------------------
