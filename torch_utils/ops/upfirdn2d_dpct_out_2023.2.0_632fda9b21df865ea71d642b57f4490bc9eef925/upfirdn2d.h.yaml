@@ -1,7 +1,7 @@
 ---
 MainSourceFile:  '/home/martin/intel_hackathon/stylegan3/torch_utils/ops/upfirdn2d_dpct_out_2023.2.0_632fda9b21df865ea71d642b57f4490bc9eef925/upfirdn2d.h'
 Replacements:
-  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000/upfirdn2d.h'
     Offset:          447
     Length:          26
     ReplacementText: "#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
@@ -10,7 +10,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000/upfirdn2d.h'
     Offset:          684
     Length:          4
     ReplacementText: 'sycl::int2'
@@ -19,7 +19,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000/upfirdn2d.h'
     Offset:          708
     Length:          4
     ReplacementText: 'sycl::int2'
@@ -28,7 +28,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000/upfirdn2d.h'
     Offset:          734
     Length:          4
     ReplacementText: 'sycl::int2'
@@ -37,7 +37,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000/upfirdn2d.h'
     Offset:          813
     Length:          4
     ReplacementText: 'sycl::int4'
@@ -46,7 +46,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000/upfirdn2d.h'
     Offset:          884
     Length:          4
     ReplacementText: 'sycl::int4'
@@ -55,7 +55,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000/upfirdn2d.h'
     Offset:          914
     Length:          4
     ReplacementText: 'sycl::int2'
@@ -64,7 +64,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000/upfirdn2d.h'
     Offset:          969
     Length:          4
     ReplacementText: 'sycl::int2'
@@ -73,7 +73,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000/upfirdn2d.h'
     Offset:          1003
     Length:          4
     ReplacementText: 'sycl::int4'
@@ -82,7 +82,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000/upfirdn2d.h'
     Offset:          1074
     Length:          4
     ReplacementText: 'sycl::int4'
@@ -91,59 +91,29 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
-    Offset:          1444
-    Length:          11
-    ReplacementText: ''
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
-    Offset:          1508
-    Length:          0
-    ReplacementText: ",\n                            const sycl::nd_item<3> &item_ct1"
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
-    Offset:          1640
-    Length:          11
-    ReplacementText: ''
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
-    Offset:          1704
-    Length:          0
-    ReplacementText: ",\n                            const sycl::nd_item<3> &item_ct1,\n                            sycl::local_accessor<volatile scalar_t, 2> sf,\n                            sycl::local_accessor<volatile scalar_t, 3> sx"
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
 MainSourceFilesDigest:
-  - MainSourceFile:  '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.h'
-    Digest:          fd6333628735647eabf474a74dc579e0
+  - MainSourceFile:  '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000/upfirdn2d.h'
+    Digest:          5853ea67ae61d1d21d1053963c7f2991
 DpctVersion:     2023.2.0
 MainHelperFileName: dpct
 USMLevel:        ''
 FeatureMap:
+  device.hpp:
+    has_capability_or_fail:
+      IsCalled:        true
+      CallerSrcFiles:
+        - '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000/upfirdn2d.cu'
+      SubFeatureMap:   {}
   dpct.hpp:
     dpct_align_and_inline:
       IsCalled:        true
       CallerSrcFiles:
-        - '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000/upfirdn2d.cu'
+        - '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000/upfirdn2d.cu'
       SubFeatureMap:   {}
 CompileTargets:  {}
 OptionMap:
   AnalysisScopePath:
-    Value:           '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000'
+    Value:           '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000'
     Specified:       false
   AsyncHandler:
     Value:           'false'
@@ -152,7 +122,7 @@ OptionMap:
     Value:           'false'
     Specified:       false
   CompilationsDir:
-    Value:           '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/039895197f260fff3bfce2c00c2b03e9-nvidia-rtx-a6000'
+    Value:           '/home/martin/.cache/torch_extensions/py39_cu117/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-rtx-a6000'
     Specified:       true
   CtadEnabled:
     Value:           'false'

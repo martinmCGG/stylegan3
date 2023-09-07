@@ -9,59 +9,11 @@
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include <torch/extension.h>
-#include <ATen/cuda/CUDAContext.h>
 #include <c10/cuda/CUDAGuard.h>
 #include "upfirdn2d.h"
 #include <exception>
 
 //------------------------------------------------------------------------
-
-void update_params(upfirdn2d_kernel_params& p, int loopMinor, int loopX) {
-    // Set looping options.
-    p.loopMajor     = (p.sizeMajor - 1) / 16384 + 1; // could be set earlier - does not depend on "spec"
-    p.loopMinor     = loopMinor; // "spec" unnecessary - known from kernel's template argument
-    p.loopX         = loopX; // "spec" unnecessary - always 1 (except for contiguous large kernel)
-    p.launchMinor   = (p.sizeMinor - 1) / loopMinor + 1;
-    p.launchMajor   = (p.sizeMajor - 1) / p.loopMajor + 1; // could be set earlier - does not depend on "spec"
-}
-
-template <class T, int upx, int upy, int downx, int downy, int filterW, int filterH, int tileOutW, int tileOutH, int loopMinor>
-static void run_upfirdn2d_kernel_small(upfirdn2d_kernel_params p) {
-    update_params(p, loopMinor, 1);
-    
-    // Compute grid size - for small kernels
-    sycl::range<3> blockSize = sycl::range<3>(1, 1, 256);
-    sycl::range<3> gridSize = sycl::range<3>(
-        p.launchMajor, (p.outSize.x() - 1) / (tileOutW * p.loopX) + 1,
-        ((p.outSize.y() - 1) / tileOutH + 1) * p.launchMinor);
-
-    void* args[] = {&p};
-    /*
-    DPCT1007:0: Migration of cudaLaunchKernel is not supported.
-    */
-    cudaLaunchKernel(
-        (void *)&upfirdn2d_kernel_small<T, upx, upy, downx, downy, filterW,
-                                        filterH, tileOutW, tileOutH, loopMinor>,
-        gridSize, blockSize, args, 0, at::cuda::getCurrentCUDAStream());
-}
-
-template <class T>
-static void run_upfirdn2d_kernel_large(upfirdn2d_kernel_params p, int tileOutW, int tileOutH, int loopMinor, int loopX) {
-    update_params(p, loopMinor, loopX);
-    
-    // Compute grid size - for large kernels
-    sycl::range<3> blockSize = sycl::range<3>(1, 32, 4);
-    sycl::range<3> gridSize = sycl::range<3>(
-        p.launchMajor, (p.outSize.x() - 1) / (blockSize[1] * p.loopX) + 1,
-        ((p.outSize.y() - 1) / blockSize[2] + 1) * p.launchMinor);
-
-    void* args[] = {&p};
-    /*
-    DPCT1007:1: Migration of cudaLaunchKernel is not supported.
-    */
-    cudaLaunchKernel((void *)&upfirdn2d_kernel_large<T>, gridSize, blockSize,
-                     args, 0, at::cuda::getCurrentCUDAStream());
-}
 
 template <class T> void choose_and_run_upfirdn2d_kernel(const upfirdn2d_kernel_params& p)
 {
