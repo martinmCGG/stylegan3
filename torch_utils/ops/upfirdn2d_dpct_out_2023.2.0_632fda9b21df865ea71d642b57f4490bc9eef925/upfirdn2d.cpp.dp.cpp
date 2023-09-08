@@ -9,7 +9,7 @@
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include <torch/extension.h>
-#include <c10/cuda/CUDAGuard.h>
+//#include <c10/cuda/CUDAGuard.h>
 #include "upfirdn2d.h"
 #include <exception>
 
@@ -219,7 +219,7 @@ template <class T> void choose_and_run_upfirdn2d_kernel(const upfirdn2d_kernel_p
 static torch::Tensor upfirdn2d(torch::Tensor x, torch::Tensor f, int upx, int upy, int downx, int downy, int padx0, int padx1, int pady0, int pady1, bool flip, float gain)
 {
     // Validate arguments.
-    TORCH_CHECK(x.is_cuda(), "x must reside on CUDA device");
+    TORCH_CHECK(x.is_xpu(), "x must reside on XPU device");
     TORCH_CHECK(f.device() == x.device(), "f must reside on the same device as x");
     TORCH_CHECK(f.dtype() == torch::kFloat, "f must be float32");
     TORCH_CHECK(x.numel() <= INT_MAX, "x is too large");
@@ -234,7 +234,7 @@ static torch::Tensor upfirdn2d(torch::Tensor x, torch::Tensor f, int upx, int up
     TORCH_CHECK(downx >= 1 && downy >= 1, "downsampling factor must be at least 1");
 
     // Create output tensor.
-    const at::cuda::OptionalCUDAGuard device_guard(device_of(x));
+    //const at::cuda::OptionalCUDAGuard device_guard(device_of(x)); // TODO maybe needed for mult-GPU
     int outW = ((int)x.size(3) * upx + padx0 + padx1 - (int)f.size(1) + downx) / downx;
     int outH = ((int)x.size(2) * upy + pady0 + pady1 - (int)f.size(0) + downy) / downy;
     TORCH_CHECK(outW >= 1 && outH >= 1, "output must be at least 1x1");
@@ -267,7 +267,7 @@ static torch::Tensor upfirdn2d(torch::Tensor x, torch::Tensor f, int upx, int up
     p.sizeMinor = (p.inStride.z() == 1) ? p.inSize.z() : 1;
 
     // Choose CUDA kernel.
-    AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "upfirdn2d_cuda", [&]
+    AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "upfirdn2d_xpu", [&]
     {
         choose_and_run_upfirdn2d_kernel<scalar_t>(p);
     });

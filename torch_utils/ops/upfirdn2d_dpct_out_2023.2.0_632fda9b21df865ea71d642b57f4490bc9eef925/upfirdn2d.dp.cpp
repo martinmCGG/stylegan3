@@ -9,7 +9,7 @@
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include <c10/util/Half.h>
-#include <ATen/cuda/CUDAContext.h>
+//#include <ATen/cuda/CUDAContext.h>
 #include "upfirdn2d.h"
 
 //------------------------------------------------------------------------
@@ -138,8 +138,8 @@ adjust the code, or use smaller sub-group size to avoid high register pressure.
 static void
 upfirdn2d_kernel_small(upfirdn2d_kernel_params p,
                        const sycl::nd_item<3> &item_ct1,
-                       sycl::local_accessor<volatile scalar_t, 2> sf,
-                       sycl::local_accessor<volatile scalar_t, 3> sx)
+                       sycl::local_accessor<T, 2> sf,
+                       sycl::local_accessor<T, 3> sx)
 {
     typedef typename InternalType<T>::scalar_t scalar_t;
     const int tileInW = ((tileOutW - 1) * downx + filterW - 1) / upx + 1;
@@ -287,14 +287,18 @@ void run_upfirdn2d_kernel_small(upfirdn2d_kernel_params p) {
     Adjust the work-group size if needed.
     */
   {
-    dpct::has_capability_or_fail(
+    // tileInW/H computation copied from inside the kernel (needed for accessor definition here)
+    const int tileInW = ((tileOutW - 1) * downx + filterW - 1) / upx + 1;
+    const int tileInH = ((tileOutH - 1) * downy + filterH - 1) / upy + 1;
+
+    /*dpct::has_capability_or_fail(
         ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))->get_device(),
-        {sycl::aspect::fp64});
-    ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))
-        ->submit([&](sycl::handler &cgh) {
-          sycl::local_accessor<scalar_t, 2> sf_acc_ct1(
+        {sycl::aspect::fp64});*/
+    sycl::queue queue = dpct::get_current_device().default_queue();
+    queue.submit([&](sycl::handler &cgh) {
+          sycl::local_accessor<T, 2> sf_acc_ct1(
               sycl::range<2>(filterH, filterW), cgh);
-          sycl::local_accessor<scalar_t, 3> sx_acc_ct1(
+          sycl::local_accessor<T, 3> sx_acc_ct1(
               sycl::range<3>(tileInH, tileInW, loopMinor), cgh);
 
           auto p_ct0 = *(upfirdn2d_kernel_params *)args[0];
@@ -327,11 +331,11 @@ void run_upfirdn2d_kernel_large(upfirdn2d_kernel_params p, int tileOutW, int til
     Adjust the work-group size if needed.
     */
   {
-    dpct::has_capability_or_fail(
+    /*dpct::has_capability_or_fail(
         ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))->get_device(),
-        {sycl::aspect::fp64});
-    ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))
-        ->submit([&](sycl::handler &cgh) {
+        {sycl::aspect::fp64});*/
+    sycl::queue queue = dpct::get_current_device().default_queue();
+    queue.submit([&](sycl::handler &cgh) {
           auto p_ct0 = *(upfirdn2d_kernel_params *)args[0];
 
           cgh.parallel_for(sycl::nd_range<3>(gridSize * blockSize, blockSize),
