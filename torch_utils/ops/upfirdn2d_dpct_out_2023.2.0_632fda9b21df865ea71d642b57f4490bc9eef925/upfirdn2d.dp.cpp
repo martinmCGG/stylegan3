@@ -9,7 +9,6 @@
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include <c10/util/Half.h>
-//#include <ATen/cuda/CUDAContext.h>
 #include "upfirdn2d.h"
 
 //------------------------------------------------------------------------
@@ -28,11 +27,11 @@ static __dpct_inline__ int floor_div(int a, int b)
 
 static void update_params(upfirdn2d_kernel_params& p, int loopMinor, int loopX) {
     // Set looping options.
-    p.loopMajor     = (p.sizeMajor - 1) / 16384 + 1; // could be set earlier - does not depend on "spec"
-    p.loopMinor     = loopMinor; // "spec" unnecessary - known from kernel's template argument
-    p.loopX         = loopX; // "spec" unnecessary - always 1 (except for contiguous large kernel)
+    p.loopMajor     = (p.sizeMajor - 1) / 16384 + 1;
+    p.loopMinor     = loopMinor;
+    p.loopX         = loopX;
     p.launchMinor   = (p.sizeMinor - 1) / loopMinor + 1;
-    p.launchMajor   = (p.sizeMajor - 1) / p.loopMajor + 1; // could be set earlier - does not depend on "spec"
+    p.launchMajor   = (p.sizeMajor - 1) / p.loopMajor + 1;
 }
 
 //------------------------------------------------------------------------
@@ -261,9 +260,7 @@ upfirdn2d_kernel_small(upfirdn2d_kernel_params p,
                             v += sx[relInY + y][relInX + x][relC] * sf[filterY + y * upy][filterX + x * upx];
                     v *= p.gain;
                     ((T *)p.y)[outX * p.outStride.x() + outY * p.outStride.y() +
-                               c * p.outStride.z() + n * p.outStride.w()] =
-                        //0;
-                        (T)v;
+                               c * p.outStride.z() + n * p.outStride.w()] = (T)v;
                 }
             }
         }
@@ -283,7 +280,6 @@ void run_upfirdn2d_kernel_small(upfirdn2d_kernel_params p) {
         ((p.outSize.y() - 1) / tileOutH + 1) * p.launchMinor,
         (p.outSize.x() - 1) / (tileOutW * p.loopX) + 1, p.launchMajor);
 
-    void* args[] = {&p};
     /*
     DPCT1049:1: The work-group size passed to the SYCL kernel may exceed the
     limit. To get the device limit, query info::device::max_work_group_size.
@@ -304,14 +300,12 @@ void run_upfirdn2d_kernel_small(upfirdn2d_kernel_params p) {
           sycl::local_accessor<T, 3> sx_acc_ct1(
               sycl::range<3>(tileInH, tileInW, loopMinor), cgh);
 
-          auto p_ct0 = *(upfirdn2d_kernel_params *)args[0];
-
           cgh.parallel_for(
               sycl::nd_range<3>(gridSize * blockSize, blockSize),
               [=](sycl::nd_item<3> item_ct1) {
                 upfirdn2d_kernel_small<T, upx, upy, downx, downy, filterW,
                                        filterH, tileOutW, tileOutH, loopMinor>(
-                    p_ct0, item_ct1, sf_acc_ct1, sx_acc_ct1);
+                    p, item_ct1, sf_acc_ct1, sx_acc_ct1);
               });
         });
   }
@@ -339,11 +333,10 @@ void run_upfirdn2d_kernel_large(upfirdn2d_kernel_params p, int tileOutW, int til
         {sycl::aspect::fp64});*/
     sycl::queue queue = dpct::get_current_device().default_queue();
     queue.submit([&](sycl::handler &cgh) {
-          auto p_ct0 = *(upfirdn2d_kernel_params *)args[0];
 
           cgh.parallel_for(sycl::nd_range<3>(gridSize * blockSize, blockSize),
                            [=](sycl::nd_item<3> item_ct1) {
-                             upfirdn2d_kernel_large<T>(p_ct0, item_ct1);
+                             upfirdn2d_kernel_large<T>(p, item_ct1);
                            });
         });
   }
