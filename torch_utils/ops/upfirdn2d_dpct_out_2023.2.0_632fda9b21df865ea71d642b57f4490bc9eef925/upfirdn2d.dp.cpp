@@ -148,20 +148,20 @@ upfirdn2d_kernel_small(upfirdn2d_kernel_params p,
     const int tileInH = ((tileOutH - 1) * downy + filterH - 1) / upy + 1;
 
     // Calculate tile index.
-    int minorBase = item_ct1.get_group(2);
+    int minorBase = item_ct1.get_group(0);
     int tileOutY = minorBase / p.launchMinor;
     minorBase -= tileOutY * p.launchMinor;
     minorBase *= loopMinor;
     tileOutY *= tileOutH;
     int tileOutXBase = item_ct1.get_group(1) * p.loopX * tileOutW;
-    int majorBase = item_ct1.get_group(0) * p.loopMajor;
+    int majorBase = item_ct1.get_group(2) * p.loopMajor;
     if (tileOutXBase >= p.outSize.x() | tileOutY >= p.outSize.y() |
         majorBase >= p.sizeMajor)
         return;
 
     // Load filter (flipped).
-    for (int tapIdx = item_ct1.get_local_id(2); tapIdx < filterH * filterW;
-         tapIdx += item_ct1.get_local_range(2))
+    for (int tapIdx = item_ct1.get_local_id(0); tapIdx < filterH * filterW;
+         tapIdx += item_ct1.get_local_range(0))
     {
         int fy = tapIdx / filterW;
         int fx = tapIdx - fy * filterW;
@@ -197,9 +197,9 @@ upfirdn2d_kernel_small(upfirdn2d_kernel_params p,
             better performance if there is no access to global memory.
             */
             item_ct1.barrier();
-            for (int inIdx = item_ct1.get_local_id(2);
+            for (int inIdx = item_ct1.get_local_id(0);
                  inIdx < tileInH * tileInW * loopMinor;
-                 inIdx += item_ct1.get_local_range(2))
+                 inIdx += item_ct1.get_local_range(0))
             {
                 int relC = inIdx;
                 int relInX = relC / loopMinor;
@@ -226,9 +226,9 @@ upfirdn2d_kernel_small(upfirdn2d_kernel_params p,
             better performance if there is no access to global memory.
             */
             item_ct1.barrier();
-            for (int outIdx = item_ct1.get_local_id(2);
+            for (int outIdx = item_ct1.get_local_id(0);
                  outIdx < tileOutH * tileOutW * loopMinor;
-                 outIdx += item_ct1.get_local_range(2))
+                 outIdx += item_ct1.get_local_range(0))
             {
                 int relC = outIdx;
                 int relOutX = relC / loopMinor;
@@ -373,7 +373,7 @@ template void run_upfirdn2d_kernel_large<c10::Half>(upfirdn2d_kernel_params p, i
 // we can just write "SPEC(params)", e.g. "SPEC(1, 1, 1, 4, 1, 48, 32, 8, 1)" to make specializations for all types of one kernel variation with a single line.
 // These lines can be generated automatically from the `.cpp` file from where the `run_upfirdn2d_kernel_small<...>` functions are called, using the following command:
 //   grep 'run_upfirdn2d_kernel_small<T, .*>(p)' torch_utils/ops/upfirdn2d.cpp | sed 's/.*run_upfirdn2d_kernel_small<T, *\(.*\)>.*/SPEC(\1)/'
-/*
+
 SPEC(1,1, 1,4, 1,32, 1,32,8)
 SPEC(1,1, 1,4, 1,48, 1,32,8)
 SPEC(1,1, 1,4, 1,32, 32,8,1)
@@ -468,5 +468,5 @@ SPEC(1,1, 1,1, 6,6,   64,16,1)
 SPEC(1,1, 1,1, 7,7,   64,16,1)
 SPEC(1,1, 1,1, 16,16, 64,32,1)
 SPEC(1,1, 1,1, 24,24, 64,32,1)
-*/
+
 //------------------------------------------------------------------------

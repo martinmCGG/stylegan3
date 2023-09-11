@@ -29,7 +29,7 @@ template <class T> void choose_and_run_upfirdn2d_kernel(const upfirdn2d_kernel_p
     int s = p.inStride.z(), fx = p.filterSize.x(), fy = p.filterSize.y();
 
     // handle special cases with a "small" kernel
-    /*
+    
     // 4x downsampling (inefficient).
     if (p.up.x() == 1 && p.up.y() == 1 && p.down.x() == 1 && p.down.y() == 4)
     {
@@ -213,7 +213,7 @@ template <class T> void choose_and_run_upfirdn2d_kernel(const upfirdn2d_kernel_p
     // fallback to the large kernel
 
     else if (s == 1) run_upfirdn2d_kernel_large<T>(p, -1,-1,4, 1); // channels_last
-    else*/ run_upfirdn2d_kernel_large<T>(p, -1,-1,1, 4); // contiguous
+    else run_upfirdn2d_kernel_large<T>(p, -1,-1,1, 4); // contiguous
 }
 
 static torch::Tensor upfirdn2d(torch::Tensor x, torch::Tensor f, int upx, int upy, int downx, int downy, int padx0, int padx1, int pady0, int pady1, bool flip, float gain)
