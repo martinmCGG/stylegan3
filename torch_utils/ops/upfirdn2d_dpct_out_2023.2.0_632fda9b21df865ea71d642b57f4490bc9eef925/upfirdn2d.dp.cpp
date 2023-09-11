@@ -44,14 +44,14 @@ template <class T> static void upfirdn2d_kernel_large(upfirdn2d_kernel_params p,
     typedef typename InternalType<T>::scalar_t scalar_t;
 
     // Calculate thread index.
-    int minorBase = item_ct1.get_group(2) * item_ct1.get_local_range(2) +
-                    item_ct1.get_local_id(2);
+    int minorBase = item_ct1.get_group(0) * item_ct1.get_local_range(0) +
+                    item_ct1.get_local_id(0);
     int outY = minorBase / p.launchMinor;
     minorBase -= outY * p.launchMinor;
     int outXBase =
         item_ct1.get_group(1) * p.loopX * item_ct1.get_local_range(1) +
         item_ct1.get_local_id(1);
-    int majorBase = item_ct1.get_group(0) * p.loopMajor;
+    int majorBase = item_ct1.get_group(2) * p.loopMajor;
     if (outXBase >= p.outSize.x() | outY >= p.outSize.y() |
         majorBase >= p.sizeMajor)
         return;
@@ -119,7 +119,9 @@ template <class T> static void upfirdn2d_kernel_large(upfirdn2d_kernel_params p,
             // Store result.
             v *= p.gain;
             ((T *)p.y)[outX * p.outStride.x() + outY * p.outStride.y() +
-                       c * p.outStride.z() + n * p.outStride.w()] = (T)v;
+                       c * p.outStride.z() + n * p.outStride.w()] = 
+                       //1;
+                       (T)v;
         }
     }
 }
@@ -260,6 +262,7 @@ upfirdn2d_kernel_small(upfirdn2d_kernel_params p,
                     v *= p.gain;
                     ((T *)p.y)[outX * p.outStride.x() + outY * p.outStride.y() +
                                c * p.outStride.z() + n * p.outStride.w()] =
+                        //0;
                         (T)v;
                 }
             }
@@ -322,9 +325,9 @@ void run_upfirdn2d_kernel_large(upfirdn2d_kernel_params p, int tileOutW, int til
     sycl::range<3> blockSize = sycl::range<3>(4, 32, 1);
     sycl::range<3> gridSize = sycl::range<3>(
         ((p.outSize.y() - 1) / blockSize[2] + 1) * p.launchMinor,
-        (p.outSize.x() - 1) / (blockSize[1] * p.loopX) + 1, p.launchMajor);
+        (p.outSize.x() - 1) / (blockSize[1] * p.loopX) + 1,
+        p.launchMajor);
 
-    void* args[] = {&p};
     /*
     DPCT1049:0: The work-group size passed to the SYCL kernel may exceed the
     limit. To get the device limit, query info::device::max_work_group_size.
@@ -370,7 +373,7 @@ template void run_upfirdn2d_kernel_large<c10::Half>(upfirdn2d_kernel_params p, i
 // we can just write "SPEC(params)", e.g. "SPEC(1, 1, 1, 4, 1, 48, 32, 8, 1)" to make specializations for all types of one kernel variation with a single line.
 // These lines can be generated automatically from the `.cpp` file from where the `run_upfirdn2d_kernel_small<...>` functions are called, using the following command:
 //   grep 'run_upfirdn2d_kernel_small<T, .*>(p)' torch_utils/ops/upfirdn2d.cpp | sed 's/.*run_upfirdn2d_kernel_small<T, *\(.*\)>.*/SPEC(\1)/'
-
+/*
 SPEC(1,1, 1,4, 1,32, 1,32,8)
 SPEC(1,1, 1,4, 1,48, 1,32,8)
 SPEC(1,1, 1,4, 1,32, 32,8,1)
@@ -465,5 +468,5 @@ SPEC(1,1, 1,1, 6,6,   64,16,1)
 SPEC(1,1, 1,1, 7,7,   64,16,1)
 SPEC(1,1, 1,1, 16,16, 64,32,1)
 SPEC(1,1, 1,1, 24,24, 64,32,1)
-
+*/
 //------------------------------------------------------------------------
