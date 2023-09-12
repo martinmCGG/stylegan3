@@ -65,9 +65,9 @@ def _get_mangled_gpu_name():
 
 ori_subprocess_run = subprocess.run
 def hooked_subprocess_run(command, **kwargs):
-    print('hooked_subprocess_run', command, kwargs)
+    #print('hooked_subprocess_run', command, kwargs)
     if command == ['ninja', '-v']:
-        print('MATCHED!!!!!!!!!!!!!!!!!!!')
+        #print('MATCHED!!!!!!!!!!!!!!!!!!!')
         ori_subprocess_run(['bash', '-c', 'ninja -t compdb > compile_commands.json'], **kwargs)
         print('CHECK THE BUILD DIR FOR compile_commands.json:', kwargs['cwd'])
     return ori_subprocess_run(command, **kwargs)

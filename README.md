@@ -1,3 +1,36 @@
+# StyleGAN3 on SYCL
+
+ - StyleGAN3 codebase running on SYCL instead of CUDA
+ - tested on Intel Arc A770 GPU (locally) and Data Center GPU Max 1100 at [Intel Developer Cloud](https://devcloud.intel.com/oneapi/home/)
+ - ported the kernels `bias_act` and `upfirdn2d` from CUDA to SYCL
+ - `filtered_lrelu` porting in progress ('ref' CPU implementation is used temporarily)
+ - performance tuning will follow
+
+## Usage
+```
+git clone https://github.com/martinmCGG/stylegan3 && cd stylegan3
+
+# install conda if not installed yet (https://docs.conda.io/projects/miniconda/en/latest/miniconda-install.html)
+
+# install dependencies (run only the first time)
+conda env create -f environment_intel.yml
+# In case you encounter "Could not find a version that satisfies the requirement torch==2.0.1a0", try environment_intel_fullurl.yml instead (https://github.com/intel/intel-extension-for-pytorch/issues/412)
+
+# if running on Intel Developer Cloud, switch to a node with a GPU
+srun --pty bash
+
+# prepare environment
+conda activate stylegan3
+source /opt/intel/oneapi/setvars.sh  # tested with 2023.2.0
+
+# run inference using an existing network (note: the first run will take a couple of minutes to compile the kernels and to download the network)
+python gen_images.py --outdir=out --trunc=1 --seeds=1-10 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl
+```
+---
+
+This is a fork of [NVLabs' official implementation of StyleGAN3](https://github.com/NVlabs/stylegan3), see its README below.
+
+
 ## Alias-Free Generative Adversarial Networks (StyleGAN3)<br><sub>Official PyTorch implementation of the NeurIPS 2021 paper</sub>
 
 ![Teaser image](./docs/stylegan3-teaser-1920x1006.png)
