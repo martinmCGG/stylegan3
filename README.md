@@ -58,6 +58,7 @@ While new generator approaches enable new media synthesis capabilities, they may
 * GCC 7 or later (Linux) or Visual Studio (Windows) compilers.  Recommended GCC version depends on CUDA version, see for example [CUDA 11.4 system requirements](https://docs.nvidia.com/cuda/archive/11.4.1/cuda-installation-guide-linux/index.html#system-requirements).
 * Python libraries: see [environment.yml](./environment.yml) for exact library dependencies.  You can use the following commands with Miniconda3 to create and activate your StyleGAN3 Python environment:
   - `conda env create -f environment.yml`
+  - or `conda env create -f environment_intel.yml` to use an Intel GPU
   - `conda activate stylegan3`
 * Docker users:
   - Ensure you have correctly installed the [NVIDIA container runtime](https://docs.docker.com/config/containers/resource_constraints/#gpu).
