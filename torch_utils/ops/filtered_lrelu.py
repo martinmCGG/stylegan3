@@ -22,14 +22,25 @@ _plugin = None
 
 def _init():
     global _plugin
+    plugin_dir = 'filtered_lrelu_dpct_out_2023.2.0_632fda9b21df865ea71d642b57f4490bc9eef925/'
+
     if _plugin is None:
-        _plugin = custom_ops.get_plugin(
-            module_name='filtered_lrelu_plugin',
-            sources=['filtered_lrelu.cpp', 'filtered_lrelu_wr.cu', 'filtered_lrelu_rd.cu', 'filtered_lrelu_ns.cu'],
-            headers=['filtered_lrelu.h', 'filtered_lrelu.cu'],
-            source_dir=os.path.dirname(__file__),
-            extra_cuda_cflags=['--use_fast_math', '--allow-unsupported-compiler'],
-        )
+        if 'xpu' in dir(torch):
+            _plugin = custom_ops.get_plugin(
+                module_name='filtered_lrelu_plugin',
+                sources=[plugin_dir+'filtered_lrelu.dp.cpp', plugin_dir+'filtered_lrelu_wr.dp.cpp', plugin_dir+'filtered_lrelu_rd.dp.cpp', plugin_dir+'filtered_lrelu_ns.dp.cpp'],
+                headers=[plugin_dir+'filtered_lrelu.h', plugin_dir+'filtered_lrelu.cpp.dp.cpp'],
+                source_dir=os.path.dirname(__file__),
+                #extra_cuda_cflags=['--use_fast_math', '--allow-unsupported-compiler'], # -ffast-math
+            )
+        else:
+            _plugin = custom_ops.get_plugin(
+                module_name='filtered_lrelu_plugin',
+                sources=['filtered_lrelu.cpp', 'filtered_lrelu_wr.cu', 'filtered_lrelu_rd.cu', 'filtered_lrelu_ns.cu'],
+                headers=['filtered_lrelu.h', 'filtered_lrelu.cu'],
+                source_dir=os.path.dirname(__file__),
+                extra_cuda_cflags=['--use_fast_math', '--allow-unsupported-compiler'],
+            )
     return True
 
 def _get_filter_size(f):
@@ -53,7 +64,7 @@ def _parse_padding(padding):
 
 #----------------------------------------------------------------------------
 
-def filtered_lrelu(x, fu=None, fd=None, b=None, up=1, down=1, padding=0, gain=np.sqrt(2), slope=0.2, clamp=None, flip_filter=False, impl='cuda'):
+def filtered_lrelu(x, fu=None, fd=None, b=None, up=1, down=1, padding=0, gain=np.sqrt(2), slope=0.2, clamp=None, flip_filter=False, impl='ref'): # TODO xpu
     r"""Filtered leaky ReLU for a batch of 2D images.
 
     Performs the following sequence of operations for each channel:
