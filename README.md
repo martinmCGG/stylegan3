@@ -24,10 +24,13 @@ conda activate stylegan3
 source /opt/intel/oneapi/setvars.sh  # tested with 2023.2.0
 
 # run inference using an existing network (note: the first run will take a couple of minutes to compile the kernels and to download the network):
-# generate animal faces (512x512)
+# generate images of animal faces (512x512)
 python gen_images.py --outdir=out --trunc=1 --seeds=1-10 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl
 # or human faces (1024x1024)
 python gen_images.py --outdir=out --trunc=1 --seeds=1-10 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-ffhqu-1024x1024.pkl
+# or a video interpolating between the seeds
+python gen_video.py --output=stylegan3-r-afhqv2_512_1-2.mp4 --trunc=1 --seeds=1-2 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl
+python gen_video.py --output=stylegan3-t-ffhqu-1024_1-5.mp4 --trunc=1 --seeds=1-5 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-ffhqu-1024x1024.pkl
 # or choose other pre-trained models listed in the readme below
 
 # training is not recommended: runs out of memory on Arc (16GB VRAM); runs on Max 1100 GPU (but very slowly: ~1.25h per 1000 images)
