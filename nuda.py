@@ -1,5 +1,7 @@
 # NUDA: "Non-proprietary Unified Device Architecture", a replacemnet for CUDA-specific things
 
+# TODO: skip if running on CUDA
+
 import torch
 import time
 
@@ -30,3 +32,8 @@ def return_dummy(arg):
     return 'dummy'
 
 torch.cuda.current_stream = return_dummy
+
+def dummy():
+    pass
+
+torch.cuda.reset_peak_memory_stats = dummy

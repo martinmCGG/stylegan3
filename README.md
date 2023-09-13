@@ -3,7 +3,7 @@
  - StyleGAN3 codebase running on SYCL instead of CUDA
  - tested on Intel Arc A770 GPU (locally) and Data Center GPU Max 1100 at [Intel Developer Cloud](https://devcloud.intel.com/oneapi/home/)
  - ported the kernels `bias_act` and `upfirdn2d` from CUDA to SYCL
- - `filtered_lrelu` porting in progress ('ref' CPU implementation is used temporarily)
+ - `filtered_lrelu` porting in progress ('ref' implementation using pure PyTorch is used temporarily)
  - performance tuning will follow
 
 ## Usage
@@ -23,8 +23,15 @@ srun --pty bash
 conda activate stylegan3
 source /opt/intel/oneapi/setvars.sh  # tested with 2023.2.0
 
-# run inference using an existing network (note: the first run will take a couple of minutes to compile the kernels and to download the network)
+# run inference using an existing network (note: the first run will take a couple of minutes to compile the kernels and to download the network):
+# generate animal faces (512x512)
 python gen_images.py --outdir=out --trunc=1 --seeds=1-10 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl
+# or human faces (1024x1024)
+python gen_images.py --outdir=out --trunc=1 --seeds=1-10 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-ffhqu-1024x1024.pkl
+# or choose other pre-trained models listed in the readme below
+
+# training is not recommended: runs out of memory on Arc (16GB VRAM); runs on Max 1100 GPU (but very slowly: ~1.25h per 1000 images)
+python train.py --outdir=~/training-runs --cfg=stylegan3-t --data=$HOME/afhq_v2.zip --gpus=1 --batch=4 --gamma=8.2 --mirror=1 --metrics=none --snap=1 --tick=1
 ```
 ---
 

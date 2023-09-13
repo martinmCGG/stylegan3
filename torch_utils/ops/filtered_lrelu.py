@@ -64,6 +64,8 @@ def _parse_padding(padding):
 
 #----------------------------------------------------------------------------
 
+warned = False
+
 def filtered_lrelu(x, fu=None, fd=None, b=None, up=1, down=1, padding=0, gain=np.sqrt(2), slope=0.2, clamp=None, flip_filter=False, impl='ref'): # TODO xpu
     r"""Filtered leaky ReLU for a batch of 2D images.
 
@@ -122,7 +124,11 @@ def filtered_lrelu(x, fu=None, fd=None, b=None, up=1, down=1, padding=0, gain=np
     """
     assert isinstance(x, torch.Tensor)
     assert impl in ['ref', 'xpu']
-    if impl == 'xpu' and _init(): # and x.device.type == 'xpu'
+    global warned
+    if not warned:
+        print('Warning: filtered_lrelu using impl=ref')
+        warned = True
+    if False and impl == 'xpu' and _init(): # and x.device.type == 'xpu'
         return _filtered_lrelu_cuda(up=up, down=down, padding=padding, gain=gain, slope=slope, clamp=clamp, flip_filter=flip_filter).apply(x, fu, fd, b, None, 0, 0)
     return _filtered_lrelu_ref(x, fu=fu, fd=fd, b=b, up=up, down=down, padding=padding, gain=gain, slope=slope, clamp=clamp, flip_filter=flip_filter)
 
