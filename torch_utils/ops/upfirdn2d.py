@@ -24,15 +24,25 @@ def _init():
     global _plugin
     plugin_dir = 'upfirdn2d_dpct_out_2023.2.0_632fda9b21df865ea71d642b57f4490bc9eef925/'
     if _plugin is None:
-        _plugin = custom_ops.get_plugin(
-            module_name='upfirdn2d_plugin',
-            sources=[plugin_dir + 'upfirdn2d.cpp.dp.cpp', plugin_dir + 'upfirdn2d.dp.cpp'],
-            headers=['upfirdn2d.h'],
-            source_dir=os.path.dirname(__file__),
-            extra_cflags=['-ffast-math'], # takes ~3min 10s to compile
-            #extra_cflags=['-ffast-math', '-cl-fast-relaxed-math', '-O3'], # takes ~3.5 min to compile; TODO 
-            # the compiled kernel is ~186MB large -> TODO consider/try optimizing for size (might not help much, because many of the large-ish symbols are mkl_*; our kernels are <100kB each)
-        )
+        if 'xpu' in dir(torch):
+            _plugin = custom_ops.get_plugin(
+                module_name='upfirdn2d_plugin',
+                sources=[plugin_dir + 'upfirdn2d.cpp.dp.cpp', plugin_dir + 'upfirdn2d.dp.cpp'],
+                headers=['upfirdn2d.h'],
+                source_dir=os.path.dirname(__file__),
+                extra_cflags=['-ffast-math'], # takes ~3min 10s to compile
+                #extra_cflags=['-ffast-math', '-cl-fast-relaxed-math', '-O3'], # takes ~3.5 min to compile; TODO 
+                # the compiled kernel is ~186MB large -> TODO consider/try optimizing for size (might not help much, because many of the large-ish symbols are mkl_*; our kernels are <100kB each)
+            )
+        else:
+            _plugin = custom_ops.get_plugin(
+                module_name='upfirdn2d_plugin',
+                sources=['upfirdn2d.cpp', 'upfirdn2d.cu'],
+                headers=['upfirdn2d.h'],
+                source_dir=os.path.dirname(__file__),
+                extra_cuda_cflags=['--use_fast_math', '--allow-unsupported-compiler'],
+            )
+        
     return True
 
 def _parse_scaling(scaling):
@@ -160,7 +170,7 @@ def upfirdn2d(x, f, up=1, down=1, padding=0, flip_filter=False, gain=1, impl='xp
     """
     assert isinstance(x, torch.Tensor)
     assert impl in ['ref', 'xpu']
-    if impl == 'xpu' and x.device.type == 'xpu' and _init():
+    if impl == 'xpu' and _init(): # and x.device.type == 'xpu'
         return _upfirdn2d_xpu(up=up, down=down, padding=padding, flip_filter=flip_filter, gain=gain).apply(x, f)
     return _upfirdn2d_ref(x, f, up=up, down=down, padding=padding, flip_filter=flip_filter, gain=gain)
 

@@ -7,12 +7,12 @@
 # enter the environment with StyleGAN dependencies
 #   conda activate stylegan3
 # generate compilation database for each module by running train.py (in the project root directory)
-#   python train.py --outdir=~/training-runs --cfg=stylegan3-t --data=/projects/ImageDatasets/Other/AFHQv2/afhq_v2.zip --gpus=1 --batch=4 --gamma=8.2 --metrics=none --kimg=0 | grep 'CHECK THE BUILD DIR FOR compile_commands.json:' | sed 's/CHECK THE BUILD DIR FOR compile_commands.json: //' > CUDA2SYCL/cuda_builddirs.txt
+#   python train.py --outdir=~/training-runs --cfg=stylegan3-t --data=/projects/ImageDatasets/Other/AFHQv2/afhq_v2.zip --gpus=1 --batch=4 --gamma=8.2 --metrics=none --kimg=0 | sed -n 's/.*CHECK THE BUILD DIR FOR compile_commands.json: //p' > CUDA2SYCL/cuda_builddirs.txt
 #   # Note: --gamma should be different for single-GPU training, but we just want to compile the modules, then no training is run
 # cuda_builddirs.txt now says where the modules and their compilation databases are located (each directory on one line)
 # Finally run this script. Use one of the following commands (depending on wheter c2s from Base Toolkit or SYCLomatic should be used) in the current directory:
 #   ( . /opt/intel/oneapi/setvars.sh && ./migrate.sh )
-#   ( export PATH=~/intel_hackathon/SYCLomatic_2023-08-09/bin:"$PATH" && ./migrate.sh )
+#   ( export PATH=~/intel_hackathon/SYCLomatic_2023-09-13/bin:"$PATH" && ./migrate.sh )
 # The migrated source code will appear in torch_utils/ops as individual directories named as the module + c2s version.
 
 # where to copy the directory with migrated files
