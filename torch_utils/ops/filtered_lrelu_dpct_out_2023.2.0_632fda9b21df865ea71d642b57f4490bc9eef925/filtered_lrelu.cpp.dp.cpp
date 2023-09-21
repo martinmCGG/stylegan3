@@ -12,7 +12,52 @@
 #include <ATen/cuda/CUDAContext.h>
 #include <c10/cuda/CUDAGuard.h>
 #include "filtered_lrelu.h"
+
+
+template <class T, class index_t, bool signWrite, bool signRead>
+void choose_and_run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p, int sharedKB)
+{
+    // Run the first matching kernel.
+#define CASE(SH, U, FU, D, FD, MODE, TW, TH, W, XR, WS)                        \
+    if (sharedKB >= SH)                                                        \
+        if ((p.fuShape.y() == 0 &&                                             \
+             (MODE == MODE_SUSD || MODE == MODE_SUFD)) ||                      \
+            (p.fuShape.y() > 0 && (MODE == MODE_FUSD || MODE == MODE_FUFD)))   \
+            if ((p.fdShape.y() == 0 &&                                         \
+                 (MODE == MODE_SUSD || MODE == MODE_FUSD)) ||                  \
+                (p.fdShape.y() > 0 &&                                          \
+                 (MODE == MODE_SUFD || MODE == MODE_FUFD)))                    \
+                if (p.up == U && p.fuShape.x() <= FU && p.fuShape.y() <= FU && \
+                    p.down == D && p.fdShape.x() <= FD && p.fdShape.y() <= FD) \
+                {                                                              \
+                    static_assert((D * TW % 4) == 0,                           \
+                                  "down * tileWidth must be divisible by 4");  \
+                    static_assert(FU % U == 0,                                 \
+                                  "upscaling filter size must be multiple of " \
+                                  "upscaling factor");                         \
+                    static_assert(FD % D == 0,                                 \
+                                  "downscaling filter size must be multiple "  \
+                                  "of downscaling factor");                    \
+                                                                               \
+                    run_filtered_lrelu_kernel<T, index_t, signWrite, signRead, \
+                                              SH, MODE, U, FU, D, FD, TW, TH,  \
+                                              W, XR, WS>(p);                   \
+                    return;                                                    \
+                }
+
+    // Launch parameters for various kernel specializations.
+    // Small filters must be listed before large filters, otherwise the kernel for larger filter will always match first.
+    // Kernels that use more shared memory must be listed before those that use less, for the same reason.
+
+#include "filtered_lrelu_cases.h"
 #include <cmath>
+
+#undef CASE
+
+    // TODO throw - no kernel found
+    TORCH_CHECK(false, "no kernel found")
+    return;
+}
 
 //------------------------------------------------------------------------
 
@@ -42,25 +87,7 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
 
     // Figure out how much shared memory is available on the device.
     int maxSharedBytes = 0;
-    /*
-    DPCT1010:32: SYCL uses exceptions to report errors and does not use the
-    error codes. The call was replaced with 0. You need to rewrite this code.
-    */
-    /*
-    DPCT1009:33: SYCL uses exceptions to report errors and does not use the
-    error codes. The original code was commented out and a warning string was
-    inserted. You need to rewrite this code.
-    */
-    /*
-    DPCT1001:30: The statement could not be removed.
-    */
-    /*
-    DPCT1000:31: Error handling if-stmt was detected but could not be rewritten.
-    */
-    "cudaGetErrorString is not supported" /*cudaGetErrorString(AT_CUDA_CHECK(cudaDeviceGetAttribute(&maxSharedBytes,
-                                             cudaDevAttrMaxSharedMemoryPerBlockOptin,
-                                             x.device().index())))*/
-        ;
+    AT_CUDA_CHECK(cudaDeviceGetAttribute(&maxSharedBytes, cudaDevAttrMaxSharedMemoryPerBlockOptin, x.device().index()));
     int sharedKB = maxSharedBytes >> 10;
 
     // Populate enough launch parameters to check if a CUDA kernel exists.
@@ -73,12 +100,6 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
                                : 0); // shape [n, 0] indicates separable filter.
     p.fdShape =
         sycl::int2((int)fd.size(-1), fd.dim() == 2 ? (int)fd.size(0) : 0);
-    filtered_lrelu_kernel_spec test_spec = choose_filtered_lrelu_kernel<float, int32_t, false, false>(p, sharedKB);
-    if (!test_spec.exec)
-    {
-        // No kernel found - return empty tensors and indicate missing kernel with return code of -1.
-        return std::make_tuple(torch::Tensor(), torch::Tensor(), -1);
-    }
 
     // Input/output element size.
     int64_t sz = (x.dtype() == torch::kHalf) ? 2 : 4;
@@ -192,274 +213,20 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     if (s.numel() > INT_MAX) index64b = true;
 
     // Choose CUDA kernel.
-    filtered_lrelu_kernel_spec spec = { 0 };
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "filtered_lrelu_cuda", [&]
     {
         if constexpr (sizeof(scalar_t) <= 4) // Exclude doubles. constexpr prevents template instantiation.
         {
             // Choose kernel based on index type, datatype and sign read/write modes.
-            if      (!index64b &&  writeSigns && !readSigns) spec = choose_filtered_lrelu_kernel<scalar_t, int32_t, true,  false>(p, sharedKB);
-            else if (!index64b && !writeSigns &&  readSigns) spec = choose_filtered_lrelu_kernel<scalar_t, int32_t, false, true >(p, sharedKB);
-            else if (!index64b && !writeSigns && !readSigns) spec = choose_filtered_lrelu_kernel<scalar_t, int32_t, false, false>(p, sharedKB);
-            else if ( index64b &&  writeSigns && !readSigns) spec = choose_filtered_lrelu_kernel<scalar_t, int64_t, true,  false>(p, sharedKB);
-            else if ( index64b && !writeSigns &&  readSigns) spec = choose_filtered_lrelu_kernel<scalar_t, int64_t, false, true >(p, sharedKB);
-            else if ( index64b && !writeSigns && !readSigns) spec = choose_filtered_lrelu_kernel<scalar_t, int64_t, false, false>(p, sharedKB);
-        }
+            if      (!index64b &&  writeSigns && !readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int32_t, true,  false>(p, sharedKB);
+            else if (!index64b && !writeSigns &&  readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int32_t, false, true >(p, sharedKB);
+            else if (!index64b && !writeSigns && !readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int32_t, false, false>(p, sharedKB);
+            else if ( index64b &&  writeSigns && !readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int64_t, true,  false>(p, sharedKB);
+            else if ( index64b && !writeSigns &&  readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int64_t, false, true >(p, sharedKB);
+            else if ( index64b && !writeSigns && !readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int64_t, false, false>(p, sharedKB);
+            else TORCH_CHECK(false, "internal error - CUDA kernel not found") // This should not happen because we tested earlier that kernel exists.
+        } else TORCH_CHECK(false, "internal error - CUDA kernel not found") // This should not happen because we tested earlier that kernel exists. - maybe not necessary to check?
     });
-    TORCH_CHECK(spec.exec, "internal error - CUDA kernel not found") // This should not happen because we tested earlier that kernel exists.
-
-    // Launch CUDA kernel.
-    void* args[] = {&p};
-    int bx = spec.numWarps * 32;
-    int gx = (p.yShape.x() - 1) / spec.tileOut.x() + 1;
-    int gy = (p.yShape.y() - 1) / spec.tileOut.y() + 1;
-    int gz = p.yShape.z() * p.yShape.w();
-
-    // Repeat multiple horizontal tiles in a CTA?
-    if (spec.xrep)
-    {
-        p.tilesXrep = spec.xrep;
-        p.tilesXdim = gx;
-
-        gx = (gx + p.tilesXrep - 1) / p.tilesXrep;
-        std::swap(gx, gy);
-    }
-    else
-    {
-        p.tilesXrep = 0;
-        p.tilesXdim = 0;
-    }
-
-    // Launch filter setup kernel.
-    /*
-    DPCT1007:0: Migration of cudaLaunchKernel is not supported.
-    */
-    /*
-    DPCT1010:36: SYCL uses exceptions to report errors and does not use the
-    error codes. The call was replaced with 0. You need to rewrite this code.
-    */
-    /*
-    DPCT1009:37: SYCL uses exceptions to report errors and does not use the
-    error codes. The original code was commented out and a warning string was
-    inserted. You need to rewrite this code.
-    */
-    /*
-    DPCT1064:38: Migrated cudaGetErrorString call is used in a macro/template
-    definition and may not be valid for all macro/template uses. Adjust the
-    code.
-    */
-    /*
-    DPCT1001:34: The statement could not be removed.
-    */
-    /*
-    DPCT1000:35: Error handling if-stmt was detected but could not be rewritten.
-    */
-    "cudaGetErrorString is not supported" /*cudaGetErrorString(AT_CUDA_CHECK(cudaLaunchKernel(spec.setup,
-                                             1, 1024, args, 0,
-                                             at::cuda::getCurrentCUDAStream())))*/
-        ;
-
-    // Copy kernels to constant memory.
-    /*
-    DPCT1010:41: SYCL uses exceptions to report errors and does not use the
-    error codes. The call was replaced with 0. You need to rewrite this code.
-    */
-    /*
-    DPCT1009:42: SYCL uses exceptions to report errors and does not use the
-    error codes. The original code was commented out and a warning string was
-    inserted. You need to rewrite this code.
-    */
-    /*
-    DPCT1064:43: Migrated cudaGetErrorString call is used in a macro/template
-    definition and may not be valid for all macro/template uses. Adjust the
-    code.
-    */
-    /*
-    DPCT1001:39: The statement could not be removed.
-    */
-    /*
-    DPCT1000:40: Error handling if-stmt was detected but could not be rewritten.
-    */
-    if (writeSigns &&
-        !readSigns) "cudaGetErrorString is not supported" /*cudaGetErrorString(AT_CUDA_CHECK((copy_filters<true,
-                                                             false>(at::cuda::getCurrentCUDAStream()))))*/
-        ;
-    /*
-    DPCT1010:46: SYCL uses exceptions to report errors and does not use the
-    error codes. The call was replaced with 0. You need to rewrite this code.
-    */
-    /*
-    DPCT1009:47: SYCL uses exceptions to report errors and does not use the
-    error codes. The original code was commented out and a warning string was
-    inserted. You need to rewrite this code.
-    */
-    /*
-    DPCT1064:48: Migrated cudaGetErrorString call is used in a macro/template
-    definition and may not be valid for all macro/template uses. Adjust the
-    code.
-    */
-    /*
-    DPCT1001:44: The statement could not be removed.
-    */
-    /*
-    DPCT1000:45: Error handling if-stmt was detected but could not be rewritten.
-    */
-    else if (
-        !writeSigns &&
-        readSigns) "cudaGetErrorString is not supported" /*cudaGetErrorString(AT_CUDA_CHECK((copy_filters<false,
-                                                            true
-                                                            >(at::cuda::getCurrentCUDAStream()))))*/
-        ;
-    /*
-    DPCT1010:51: SYCL uses exceptions to report errors and does not use the
-    error codes. The call was replaced with 0. You need to rewrite this code.
-    */
-    /*
-    DPCT1009:52: SYCL uses exceptions to report errors and does not use the
-    error codes. The original code was commented out and a warning string was
-    inserted. You need to rewrite this code.
-    */
-    /*
-    DPCT1064:53: Migrated cudaGetErrorString call is used in a macro/template
-    definition and may not be valid for all macro/template uses. Adjust the
-    code.
-    */
-    /*
-    DPCT1001:49: The statement could not be removed.
-    */
-    /*
-    DPCT1000:50: Error handling if-stmt was detected but could not be rewritten.
-    */
-    else if (
-        !writeSigns &&
-        !readSigns) "cudaGetErrorString is not supported" /*cudaGetErrorString(AT_CUDA_CHECK((copy_filters<false,
-                                                             false>(at::cuda::getCurrentCUDAStream()))))*/
-        ;
-
-    // Set cache and shared memory configurations for main kernel.
-    /*
-    DPCT1010:57: SYCL uses exceptions to report errors and does not use the
-    error codes. The call was replaced with 0. You need to rewrite this code.
-    */
-    /*
-    DPCT1009:58: SYCL uses exceptions to report errors and does not use the
-    error codes. The original code was commented out and a warning string was
-    inserted. You need to rewrite this code.
-    */
-    /*
-    DPCT1064:59: Migrated cudaGetErrorString call is used in a macro/template
-    definition and may not be valid for all macro/template uses. Adjust the
-    code.
-    */
-    /*
-    DPCT1001:54: The statement could not be removed.
-    */
-    /*
-    DPCT1000:55: Error handling if-stmt was detected but could not be rewritten.
-    */
-    /*
-    DPCT1027:56: The call to cudaFuncSetCacheConfig was replaced with 0 because
-    SYCL currently does not support configuring shared memory on devices.
-    */
-    "cudaGetErrorString is not supported" /*cudaGetErrorString(AT_CUDA_CHECK(cudaFuncSetCacheConfig(spec.exec,
-                                             cudaFuncCachePreferShared)))*/
-        ;
-    if (spec.dynamicSharedKB) // Need dynamically allocated shared memory?
-        /*
-        DPCT1010:63: SYCL uses exceptions to report errors and does not use the
-        error codes. The call was replaced with 0. You need to rewrite this
-        code.
-        */
-        /*
-        DPCT1009:64: SYCL uses exceptions to report errors and does not use the
-        error codes. The original code was commented out and a warning string
-        was inserted. You need to rewrite this code.
-        */
-        /*
-        DPCT1064:65: Migrated cudaGetErrorString call is used in a
-        macro/template definition and may not be valid for all macro/template
-        uses. Adjust the code.
-        */
-        /*
-        DPCT1001:60: The statement could not be removed.
-        */
-        /*
-        DPCT1000:61: Error handling if-stmt was detected but could not be
-        rewritten.
-        */
-        /*
-        DPCT1007:62: Migration of cudaFuncSetAttribute is not supported.
-        */
-        "cudaGetErrorString is not supported" /*cudaGetErrorString(AT_CUDA_CHECK(cudaFuncSetAttribute(spec.exec,
-                                                 cudaFuncAttributeMaxDynamicSharedMemorySize,
-                                                 spec.dynamicSharedKB << 10)))*/
-            ;
-    /*
-    DPCT1010:69: SYCL uses exceptions to report errors and does not use the
-    error codes. The call was replaced with 0. You need to rewrite this code.
-    */
-    /*
-    DPCT1009:70: SYCL uses exceptions to report errors and does not use the
-    error codes. The original code was commented out and a warning string was
-    inserted. You need to rewrite this code.
-    */
-    /*
-    DPCT1064:71: Migrated cudaGetErrorString call is used in a macro/template
-    definition and may not be valid for all macro/template uses. Adjust the
-    code.
-    */
-    /*
-    DPCT1001:66: The statement could not be removed.
-    */
-    /*
-    DPCT1000:67: Error handling if-stmt was detected but could not be rewritten.
-    */
-    /*
-    DPCT1027:68: The call to cudaFuncSetSharedMemConfig was replaced with 0
-    because SYCL currently does not support configuring shared memory on
-    devices.
-    */
-    "cudaGetErrorString is not supported" /*cudaGetErrorString(AT_CUDA_CHECK(cudaFuncSetSharedMemConfig(spec.exec,
-                                             cudaSharedMemBankSizeFourByte)))*/
-        ;
-
-    // Launch main kernel.
-    const int maxSubGz = 65535; // CUDA maximum for block z dimension.
-    for (int zofs=0; zofs < gz; zofs += maxSubGz) // Do multiple launches if gz is too big.
-    {
-        p.blockZofs = zofs;
-        int subGz = std::min(maxSubGz, gz - zofs);
-        /*
-        DPCT1007:1: Migration of cudaLaunchKernel is not supported.
-        */
-        /*
-        DPCT1010:74: SYCL uses exceptions to report errors and does not use the
-        error codes. The call was replaced with 0. You need to rewrite this
-        code.
-        */
-        /*
-        DPCT1009:75: SYCL uses exceptions to report errors and does not use the
-        error codes. The original code was commented out and a warning string
-        was inserted. You need to rewrite this code.
-        */
-        /*
-        DPCT1064:76: Migrated cudaGetErrorString call is used in a
-        macro/template definition and may not be valid for all macro/template
-        uses. Adjust the code.
-        */
-        /*
-        DPCT1001:72: The statement could not be removed.
-        */
-        /*
-        DPCT1000:73: Error handling if-stmt was detected but could not be
-        rewritten.
-        */
-        "cudaGetErrorString is not supported" /*cudaGetErrorString(AT_CUDA_CHECK(cudaLaunchKernel(spec.exec,
-                                                 dim3(gx, gy, subGz), bx, args,
-                                                 spec.dynamicSharedKB << 10,
-                                                 at::cuda::getCurrentCUDAStream())))*/
-            ;
-    }
 
     // Done.
     return std::make_tuple(y, so, 0);
@@ -520,59 +287,11 @@ static torch::Tensor filtered_lrelu_act(torch::Tensor x, torch::Tensor si, int s
     void* func = 0;
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "filtered_lrelu_act_cuda", [&]
     {
-        if (writeSigns)
-            func = choose_filtered_lrelu_act_kernel<scalar_t, true, false>();
-        else if (readSigns)
-            func = choose_filtered_lrelu_act_kernel<scalar_t, false, true>();
-        else
-            func = choose_filtered_lrelu_act_kernel<scalar_t, false, false>();
+        if (writeSigns) run_filtered_lrelu_act_kernel<scalar_t, true, false>(p);
+        else if (readSigns) run_filtered_lrelu_act_kernel<scalar_t, false, true>(p);
+        else run_filtered_lrelu_act_kernel<scalar_t, false, false>(p);
     });
-    TORCH_CHECK(func, "internal error - CUDA kernel not found");
 
-    // Launch CUDA kernel.
-    void* args[] = {&p};
-    int bx = 128; // 4 warps per block.
-
-    // Logical size of launch = writeSigns ? p.s : p.x
-    uint32_t gx = writeSigns ? p.sShape.x() : p.xShape.x();
-    uint32_t gy = writeSigns ? p.sShape.y() : p.xShape.y();
-    uint32_t gz =
-        p.xShape.z() * p.xShape.w(); // Same as in p.sShape if signs are in use.
-    gx = (gx - 1) / bx + 1;
-
-    // Make sure grid y and z dimensions are within CUDA launch limits. Kernel loops internally to do the rest.
-    const uint32_t gmax = 65535;
-    gy = std::min(gy, gmax);
-    gz = std::min(gz, gmax);
-
-    // Launch.
-    /*
-    DPCT1007:2: Migration of cudaLaunchKernel is not supported.
-    */
-    /*
-    DPCT1010:79: SYCL uses exceptions to report errors and does not use the
-    error codes. The call was replaced with 0. You need to rewrite this code.
-    */
-    /*
-    DPCT1009:80: SYCL uses exceptions to report errors and does not use the
-    error codes. The original code was commented out and a warning string was
-    inserted. You need to rewrite this code.
-    */
-    /*
-    DPCT1064:81: Migrated cudaGetErrorString call is used in a macro/template
-    definition and may not be valid for all macro/template uses. Adjust the
-    code.
-    */
-    /*
-    DPCT1001:77: The statement could not be removed.
-    */
-    /*
-    DPCT1000:78: Error handling if-stmt was detected but could not be rewritten.
-    */
-    "cudaGetErrorString is not supported" /*cudaGetErrorString(AT_CUDA_CHECK(cudaLaunchKernel(func,
-                                             dim3(gx, gy, gz), bx, args, 0,
-                                             at::cuda::getCurrentCUDAStream())))*/
-        ;
     return so;
 }
 

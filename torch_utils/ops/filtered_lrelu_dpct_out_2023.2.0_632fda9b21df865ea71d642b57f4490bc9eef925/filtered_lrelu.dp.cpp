@@ -8,20 +8,15 @@
 
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
+#include <torch/extension.h>
 #include <c10/util/Half.h>
+#include <ATen/cuda/CUDAContext.h>
 #include "filtered_lrelu.h"
 #include <cstdint>
+#include <cmath>
 
 //------------------------------------------------------------------------
 // Helpers.
-
-enum // Filter modes.
-{
-    MODE_SUSD = 0,  // Separable upsampling, separable downsampling.
-    MODE_FUSD = 1,  // Full upsampling, separable downsampling.
-    MODE_SUFD = 2,  // Separable upsampling, full downsampling.
-    MODE_FUFD = 3,  // Full upsampling, full downsampling.
-};
 
 template <class T> struct InternalType;
 template <> struct InternalType<double>
@@ -148,10 +143,10 @@ static dpct::err0 copy_filters(dpct::queue_ptr stream) try {
     void* src = 0;
     dpct::err0 err = DPCT_CHECK_ERROR(*(&src) = g_fbuf.get_ptr());
     /*
-    DPCT1001:82: The statement could not be removed.
+    DPCT1001:36: The statement could not be removed.
     */
     /*
-    DPCT1000:83: Error handling if-stmt was detected but could not be rewritten.
+    DPCT1000:37: Error handling if-stmt was detected but could not be rewritten.
     */
     if (err) return err;
     return DPCT_CHECK_ERROR(
@@ -633,6 +628,16 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                 to use the experimental helper function to
                                 migrate __shfl_xor_sync.
                                 */
+                                /*
+                                DPCT1096:40: The right-most dimension of the
+                                work-group used in the SYCL kernel that calls
+                                this function may be less than "32". The
+                                function "dpct::permute_sub_group_by_xor" may
+                                return an unexpected result on the CPU device.
+                                Modify the size of the work-group to ensure that
+                                the value of the right-most dimension is a
+                                multiple of "32".
+                                */
                                 s |= dpct::permute_sub_group_by_xor(
                                     item_ct1.get_sub_group(), s, 1);
                                 /*
@@ -642,6 +647,16 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                 "--use-experimental-features=masked-sub-group-operation"
                                 to use the experimental helper function to
                                 migrate __shfl_xor_sync.
+                                */
+                                /*
+                                DPCT1096:41: The right-most dimension of the
+                                work-group used in the SYCL kernel that calls
+                                this function may be less than "32". The
+                                function "dpct::permute_sub_group_by_xor" may
+                                return an unexpected result on the CPU device.
+                                Modify the size of the work-group to ensure that
+                                the value of the right-most dimension is a
+                                multiple of "32".
                                 */
                                 s |= dpct::permute_sub_group_by_xor(
                                     item_ct1.get_sub_group(), s, 2);
@@ -700,6 +715,16 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                 to use the experimental helper function to
                                 migrate __shfl_xor_sync.
                                 */
+                                /*
+                                DPCT1096:42: The right-most dimension of the
+                                work-group used in the SYCL kernel that calls
+                                this function may be less than "32". The
+                                function "dpct::permute_sub_group_by_xor" may
+                                return an unexpected result on the CPU device.
+                                Modify the size of the work-group to ensure that
+                                the value of the right-most dimension is a
+                                multiple of "32".
+                                */
                                 s |= dpct::permute_sub_group_by_xor(
                                     item_ct1.get_sub_group(), s, 1);
                                 /*
@@ -709,6 +734,16 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                 "--use-experimental-features=masked-sub-group-operation"
                                 to use the experimental helper function to
                                 migrate __shfl_xor_sync.
+                                */
+                                /*
+                                DPCT1096:43: The right-most dimension of the
+                                work-group used in the SYCL kernel that calls
+                                this function may be less than "32". The
+                                function "dpct::permute_sub_group_by_xor" may
+                                return an unexpected result on the CPU device.
+                                Modify the size of the work-group to ensure that
+                                the value of the right-most dimension is a
+                                multiple of "32".
                                 */
                                 s |= dpct::permute_sub_group_by_xor(
                                     item_ct1.get_sub_group(), s, 2);
@@ -868,6 +903,16 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                 to use the experimental helper function to
                                 migrate __shfl_xor_sync.
                                 */
+                                /*
+                                DPCT1096:44: The right-most dimension of the
+                                work-group used in the SYCL kernel that calls
+                                this function may be less than "32". The
+                                function "dpct::permute_sub_group_by_xor" may
+                                return an unexpected result on the CPU device.
+                                Modify the size of the work-group to ensure that
+                                the value of the right-most dimension is a
+                                multiple of "32".
+                                */
                                 s |= dpct::permute_sub_group_by_xor(
                                     item_ct1.get_sub_group(), s, 1);
                                 /*
@@ -877,6 +922,16 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                 "--use-experimental-features=masked-sub-group-operation"
                                 to use the experimental helper function to
                                 migrate __shfl_xor_sync.
+                                */
+                                /*
+                                DPCT1096:45: The right-most dimension of the
+                                work-group used in the SYCL kernel that calls
+                                this function may be less than "32". The
+                                function "dpct::permute_sub_group_by_xor" may
+                                return an unexpected result on the CPU device.
+                                Modify the size of the work-group to ensure that
+                                the value of the right-most dimension is a
+                                multiple of "32".
                                 */
                                 s |= dpct::permute_sub_group_by_xor(
                                     item_ct1.get_sub_group(), s, 2);
@@ -917,6 +972,16 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                 to use the experimental helper function to
                                 migrate __shfl_xor_sync.
                                 */
+                                /*
+                                DPCT1096:46: The right-most dimension of the
+                                work-group used in the SYCL kernel that calls
+                                this function may be less than "32". The
+                                function "dpct::permute_sub_group_by_xor" may
+                                return an unexpected result on the CPU device.
+                                Modify the size of the work-group to ensure that
+                                the value of the right-most dimension is a
+                                multiple of "32".
+                                */
                                 s |= dpct::permute_sub_group_by_xor(
                                     item_ct1.get_sub_group(), s, 1);
                                 /*
@@ -926,6 +991,16 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                 "--use-experimental-features=masked-sub-group-operation"
                                 to use the experimental helper function to
                                 migrate __shfl_xor_sync.
+                                */
+                                /*
+                                DPCT1096:47: The right-most dimension of the
+                                work-group used in the SYCL kernel that calls
+                                this function may be less than "32". The
+                                function "dpct::permute_sub_group_by_xor" may
+                                return an unexpected result on the CPU device.
+                                Modify the size of the work-group to ensure that
+                                the value of the right-most dimension is a
+                                multiple of "32".
                                 */
                                 s |= dpct::permute_sub_group_by_xor(
                                     item_ct1.get_sub_group(), s, 2);
@@ -1270,6 +1345,16 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                 to use the experimental helper function to
                                 migrate __shfl_xor_sync.
                                 */
+                                /*
+                                DPCT1096:48: The right-most dimension of the
+                                work-group used in the SYCL kernel that calls
+                                this function may be less than "32". The
+                                function "dpct::permute_sub_group_by_xor" may
+                                return an unexpected result on the CPU device.
+                                Modify the size of the work-group to ensure that
+                                the value of the right-most dimension is a
+                                multiple of "32".
+                                */
                                 s += dpct::permute_sub_group_by_xor(
                                     item_ct1.get_sub_group(), s,
                                     1); // Coalesce.
@@ -1280,6 +1365,16 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                 "--use-experimental-features=masked-sub-group-operation"
                                 to use the experimental helper function to
                                 migrate __shfl_xor_sync.
+                                */
+                                /*
+                                DPCT1096:49: The right-most dimension of the
+                                work-group used in the SYCL kernel that calls
+                                this function may be less than "32". The
+                                function "dpct::permute_sub_group_by_xor" may
+                                return an unexpected result on the CPU device.
+                                Modify the size of the work-group to ensure that
+                                the value of the right-most dimension is a
+                                multiple of "32".
                                 */
                                 s += dpct::permute_sub_group_by_xor(
                                     item_ct1.get_sub_group(), s,
@@ -1313,6 +1408,16 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                 to use the experimental helper function to
                                 migrate __shfl_xor_sync.
                                 */
+                                /*
+                                DPCT1096:50: The right-most dimension of the
+                                work-group used in the SYCL kernel that calls
+                                this function may be less than "32". The
+                                function "dpct::permute_sub_group_by_xor" may
+                                return an unexpected result on the CPU device.
+                                Modify the size of the work-group to ensure that
+                                the value of the right-most dimension is a
+                                multiple of "32".
+                                */
                                 s += dpct::permute_sub_group_by_xor(
                                     item_ct1.get_sub_group(), s,
                                     1); // Coalesce.
@@ -1323,6 +1428,16 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                 "--use-experimental-features=masked-sub-group-operation"
                                 to use the experimental helper function to
                                 migrate __shfl_xor_sync.
+                                */
+                                /*
+                                DPCT1096:51: The right-most dimension of the
+                                work-group used in the SYCL kernel that calls
+                                this function may be less than "32". The
+                                function "dpct::permute_sub_group_by_xor" may
+                                return an unexpected result on the CPU device.
+                                Modify the size of the work-group to ensure that
+                                the value of the right-most dimension is a
+                                multiple of "32".
                                 */
                                 s += dpct::permute_sub_group_by_xor(
                                     item_ct1.get_sub_group(), s,
@@ -1619,7 +1734,7 @@ static void filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params p,
                     s = 1; // Sign.
                 }
                 /*
-                DPCT1064:84: Migrated fabsf call is used in a macro/template
+                DPCT1064:38: Migrated fabsf call is used in a macro/template
                 definition and may not be valid for all macro/template uses.
                 Adjust the code.
                 */
@@ -1642,6 +1757,14 @@ static void filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params p,
             "--use-experimental-features=masked-sub-group-operation" to use the
             experimental helper function to migrate __shfl_xor_sync.
             */
+            /*
+            DPCT1096:52: The right-most dimension of the work-group used in the
+            SYCL kernel that calls this function may be less than "32". The
+            function "dpct::permute_sub_group_by_xor" may return an unexpected
+            result on the CPU device. Modify the size of the work-group to
+            ensure that the value of the right-most dimension is a multiple of
+            "32".
+            */
             s |= dpct::permute_sub_group_by_xor(item_ct1.get_sub_group(), s,
                                                 1); // Distribute.
             /*
@@ -1650,6 +1773,14 @@ static void filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params p,
             "--use-experimental-features=masked-sub-group-operation" to use the
             experimental helper function to migrate __shfl_xor_sync.
             */
+            /*
+            DPCT1096:53: The right-most dimension of the work-group used in the
+            SYCL kernel that calls this function may be less than "32". The
+            function "dpct::permute_sub_group_by_xor" may return an unexpected
+            result on the CPU device. Modify the size of the work-group to
+            ensure that the value of the right-most dimension is a multiple of
+            "32".
+            */
             s |= dpct::permute_sub_group_by_xor(item_ct1.get_sub_group(), s, 2);
             /*
             DPCT1023:27: The SYCL sub-group does not support mask options for
@@ -1657,12 +1788,28 @@ static void filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params p,
             "--use-experimental-features=masked-sub-group-operation" to use the
             experimental helper function to migrate __shfl_xor_sync.
             */
+            /*
+            DPCT1096:54: The right-most dimension of the work-group used in the
+            SYCL kernel that calls this function may be less than "32". The
+            function "dpct::permute_sub_group_by_xor" may return an unexpected
+            result on the CPU device. Modify the size of the work-group to
+            ensure that the value of the right-most dimension is a multiple of
+            "32".
+            */
             s |= dpct::permute_sub_group_by_xor(item_ct1.get_sub_group(), s, 4);
             /*
             DPCT1023:28: The SYCL sub-group does not support mask options for
             dpct::permute_sub_group_by_xor. You can specify
             "--use-experimental-features=masked-sub-group-operation" to use the
             experimental helper function to migrate __shfl_xor_sync.
+            */
+            /*
+            DPCT1096:55: The right-most dimension of the work-group used in the
+            SYCL kernel that calls this function may be less than "32". The
+            function "dpct::permute_sub_group_by_xor" may return an unexpected
+            result on the CPU device. Modify the size of the work-group to
+            ensure that the value of the right-most dimension is a multiple of
+            "32".
             */
             s |= dpct::permute_sub_group_by_xor(item_ct1.get_sub_group(), s, 8);
 
@@ -1720,7 +1867,7 @@ static void filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params p,
                 if (v < 0.f)
                     v *= p.slope;
                 /*
-                DPCT1064:85: Migrated fabsf call is used in a macro/template
+                DPCT1064:39: Migrated fabsf call is used in a macro/template
                 definition and may not be valid for all macro/template uses.
                 Adjust the code.
                 */
@@ -1732,88 +1879,197 @@ static void filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params p,
     }
 }
 
-template <class T, bool signWrite, bool signRead> void* choose_filtered_lrelu_act_kernel(void)
-{
-    return (void*)filtered_lrelu_act_kernel<T, signWrite, signRead>;
+//------------------------------------------------------------------------
+// CUDA kernel launchers.
+
+template <class T, class index_t, bool signWrite, bool signRead, int SH,
+          int MODE, int U, int FU, int D, int FD, int TW, int TH, int W, int XR,
+          int WS> // TODO: XR and WS could be just booleans and the actual value
+                  // passed as a parameter - to reduce the number of template
+                  // instantiations/specializations (but then duplicate
+                  // specializations would need to be avoided)
+                  void run_filtered_lrelu_kernel(
+                      filtered_lrelu_kernel_params &p) try {
+    // Launch CUDA kernel.
+    void* args[] = {&p};
+    int bx = W * 32;
+    int gx = (p.yShape.x() - 1) / TW + 1;
+    int gy = (p.yShape.y() - 1) / TH + 1;
+    int gz = p.yShape.z() * p.yShape.w();
+
+    // Repeat multiple horizontal tiles in a CTA?
+    if (XR)
+    {
+        p.tilesXrep = XR;
+        p.tilesXdim = gx;
+       
+        gx = (gx + p.tilesXrep - 1) / p.tilesXrep;
+        std::swap(gx, gy);
+    }
+    else
+    {
+        p.tilesXrep = 0;
+        p.tilesXdim = 0;
+    }
+
+    // Launch filter setup kernel.
+    /*
+    DPCT1049:0: The work-group size passed to the SYCL kernel may exceed the
+    limit. To get the device limit, query info::device::max_work_group_size.
+    Adjust the work-group size if needed.
+    */
+    /*
+    DPCT1007:30: Migration of cudaLaunchKernel is not supported.
+    */
+  ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))
+      ->submit([&](sycl::handler &cgh) {
+        g_fbuf.init(*((sycl::queue *)(at::cuda::getCurrentCUDAStream())));
+
+        auto g_fbuf_ptr_ct1 = g_fbuf.get_ptr();
+
+        auto p_ct0 = *(filtered_lrelu_kernel_params *)args[0];
+
+        cgh.parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, 1024),
+                                           sycl::range<3>(1, 1, 1024)),
+                         [=](sycl::nd_item<3> item_ct1) {
+                           setup_filters_kernel(p_ct0, item_ct1,
+                                                g_fbuf_ptr_ct1);
+                         });
+      });
+  AT_CUDA_CHECK();
+
+    // Copy kernels to constant memory.
+    if      ( signWrite && !signRead) AT_CUDA_CHECK((copy_filters<true,  false>(at::cuda::getCurrentCUDAStream())));
+    else if (!signWrite &&  signRead) AT_CUDA_CHECK((copy_filters<false, true >(at::cuda::getCurrentCUDAStream())));
+    else if (!signWrite && !signRead) AT_CUDA_CHECK((copy_filters<false, false>(at::cuda::getCurrentCUDAStream())));
+
+    // Set cache and shared memory configurations for main kernel.
+    /*
+    DPCT1027:33: The call to cudaFuncSetCacheConfig was replaced with 0 because
+    SYCL currently does not support configuring shared memory on devices.
+    */
+    AT_CUDA_CHECK(0);
+
+    const int dynamicSharedKB = (SH == 48) ? 0 : SH;
+    if (dynamicSharedKB) // Need dynamically allocated shared memory?
+        /*
+        DPCT1007:34: Migration of cudaFuncSetAttribute is not supported.
+        */
+        AT_CUDA_CHECK(cudaFuncSetAttribute(
+            (void *)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead,
+                                           MODE, U, FU, D, FD, TW, TH, W * 32,
+                                           !!XR, !!WS>,
+            cudaFuncAttributeMaxDynamicSharedMemorySize,
+            dynamicSharedKB << 10));
+    /*
+    DPCT1027:35: The call to cudaFuncSetSharedMemConfig was replaced with 0
+    because SYCL currently does not support configuring shared memory on
+    devices.
+    */
+    AT_CUDA_CHECK(0);
+
+    // Launch main kernel.
+    const int maxSubGz = 65535; // CUDA maximum for block z dimension.
+    for (int zofs=0; zofs < gz; zofs += maxSubGz) // Do multiple launches if gz is too big.
+    {
+        p.blockZofs = zofs;
+        int subGz = std::min(maxSubGz, gz - zofs);
+        /*
+        DPCT1049:1: The work-group size passed to the SYCL kernel may exceed the
+        limit. To get the device limit, query info::device::max_work_group_size.
+        Adjust the work-group size if needed.
+        */
+        /*
+        DPCT1007:31: Migration of cudaLaunchKernel is not supported.
+        */
+    ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))
+        ->submit([&](sycl::handler &cgh) {
+          c_fbuf.init(*((sycl::queue *)(at::cuda::getCurrentCUDAStream())));
+
+          auto c_fbuf_ptr_ct1 = c_fbuf.get_ptr();
+
+          sycl::local_accessor<scalar_t, 1> s_buf0_st_acc_ct1(
+              sycl::range<1>((SH > 48) ? (1 << 24)
+                                       : (s_buf0_size + s_buf1_size)),
+              cgh);
+          sycl::local_accessor<char, 1> s_buf_raw_acc_ct1(
+              sycl::range<1>(dynamicSharedKB << 10), cgh);
+
+          auto p_ct0 = *(filtered_lrelu_kernel_params *)args[0];
+
+          cgh.parallel_for(
+              sycl::nd_range<3>(sycl::range<3>(subGz, gy, gx) *
+                                    sycl::range<3>(1, 1, bx),
+                                sycl::range<3>(1, 1, bx)),
+              [=](sycl::nd_item<3> item_ct1) [[intel::reqd_sub_group_size(
+                  32)]] {
+                filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE,
+                                      U, FU, D, FD, TW, TH, W * 32, !!XR, !!WS>(
+                    p_ct0, item_ct1, c_fbuf_ptr_ct1,
+                    s_buf_raw_acc_ct1.get_pointer(),
+                    s_buf0_st_acc_ct1.get_pointer());
+              });
+        });
+    AT_CUDA_CHECK();
+    }
+}
+catch (sycl::exception const &exc) {
+  std::cerr << exc.what() << "Exception caught at file:" << __FILE__
+            << ", line:" << __LINE__ << std::endl;
+  std::exit(1);
 }
 
-//------------------------------------------------------------------------
-// CUDA kernel selection.
+template <class T, bool signWrite, bool signRead>
+void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
+    // Launch CUDA kernel.
+    void* args[] = {&p};
+    int bx = 128; // 4 warps per block.
 
-template <class T, class index_t, bool signWrite, bool signRead> filtered_lrelu_kernel_spec choose_filtered_lrelu_kernel(const filtered_lrelu_kernel_params& p, int sharedKB)
-{
-    filtered_lrelu_kernel_spec s = { 0 };
+    // Logical size of launch = writeSigns ? p.s : p.x
+    uint32_t gx = signWrite ? p.sShape.x() : p.xShape.x();
+    uint32_t gy = signWrite ? p.sShape.y() : p.xShape.y();
+    uint32_t gz =
+        p.xShape.z() * p.xShape.w(); // Same as in p.sShape if signs are in use.
+    gx = (gx - 1) / bx + 1;
 
-    // Return the first matching kernel.
-#define CASE(SH, U, FU, D, FD, MODE, TW, TH, W, XR, WS)                        \
-    if (sharedKB >= SH)                                                        \
-        if ((p.fuShape.y() == 0 &&                                             \
-             (MODE == MODE_SUSD || MODE == MODE_SUFD)) ||                      \
-            (p.fuShape.y() > 0 && (MODE == MODE_FUSD || MODE == MODE_FUFD)))   \
-            if ((p.fdShape.y() == 0 &&                                         \
-                 (MODE == MODE_SUSD || MODE == MODE_FUSD)) ||                  \
-                (p.fdShape.y() > 0 &&                                          \
-                 (MODE == MODE_SUFD || MODE == MODE_FUFD)))                    \
-                if (p.up == U && p.fuShape.x() <= FU && p.fuShape.y() <= FU && \
-                    p.down == D && p.fdShape.x() <= FD && p.fdShape.y() <= FD) \
-                {                                                              \
-                    static_assert((D * TW % 4) == 0,                           \
-                                  "down * tileWidth must be divisible by 4");  \
-                    static_assert(FU % U == 0,                                 \
-                                  "upscaling filter size must be multiple of " \
-                                  "upscaling factor");                         \
-                    static_assert(FD % D == 0,                                 \
-                                  "downscaling filter size must be multiple "  \
-                                  "of downscaling factor");                    \
-                    s.setup = (void *)setup_filters_kernel;                    \
-                    s.exec = (void *)filtered_lrelu_kernel<                    \
-                        T, index_t, SH, signWrite, signRead, MODE, U, FU, D,   \
-                        FD, TW, TH, W * 32, !!XR, !!WS>;                       \
-                    s.tileOut = sycl::int2(TW, TH);                            \
-                    s.numWarps = W;                                            \
-                    s.xrep = XR;                                               \
-                    s.dynamicSharedKB = (SH == 48) ? 0 : SH;                   \
-                    return s;                                                  \
-                }
+    // Make sure grid y and z dimensions are within CUDA launch limits. Kernel loops internally to do the rest.
+    const uint32_t gmax = 65535;
+    gy = std::min(gy, gmax);
+    gz = std::min(gz, gmax);
 
-    // Launch parameters for various kernel specializations.
-    // Small filters must be listed before large filters, otherwise the kernel for larger filter will always match first.
-    // Kernels that use more shared memory must be listed before those that use less, for the same reason.
+    // Launch.
+    /*
+    DPCT1049:2: The work-group size passed to the SYCL kernel may exceed the
+    limit. To get the device limit, query info::device::max_work_group_size.
+    Adjust the work-group size if needed.
+    */
+    /*
+    DPCT1007:32: Migration of cudaLaunchKernel is not supported.
+    */
+  {
+    dpct::has_capability_or_fail(
+        ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))->get_device(),
+        {sycl::aspect::fp64});
+    ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))
+        ->submit([&](sycl::handler &cgh) {
+          auto p_ct0 = *(filtered_lrelu_act_kernel_params *)args[0];
 
-    CASE(/*sharedKB*/48, /*up,fu*/1,1,  /*down,fd*/1,1,  /*mode*/MODE_FUFD, /*tw,th,warps,xrep,wskip*/64,  178, 32,  0,  0) // 1t-upf1-downf1
-    CASE(/*sharedKB*/48, /*up,fu*/2,8,  /*down,fd*/1,1,  /*mode*/MODE_SUFD, /*tw,th,warps,xrep,wskip*/152, 95,  16,  0,  0) // 4t-ups2-downf1
-    CASE(/*sharedKB*/48, /*up,fu*/1,1,  /*down,fd*/2,8,  /*mode*/MODE_FUSD, /*tw,th,warps,xrep,wskip*/56,  22,  16,  0,  0) // 4t-upf1-downs2
-    CASE(/*sharedKB*/48, /*up,fu*/2,8,  /*down,fd*/2,8,  /*mode*/MODE_SUSD, /*tw,th,warps,xrep,wskip*/56,  29,  16,  11, 0) // 4t-ups2-downs2
-    CASE(/*sharedKB*/48, /*up,fu*/2,8,  /*down,fd*/2,8,  /*mode*/MODE_FUSD, /*tw,th,warps,xrep,wskip*/60,  28,  16,  0,  0) // 4t-upf2-downs2
-    CASE(/*sharedKB*/48, /*up,fu*/2,8,  /*down,fd*/2,8,  /*mode*/MODE_SUFD, /*tw,th,warps,xrep,wskip*/56,  28,  16,  0,  0) // 4t-ups2-downf2
-    CASE(/*sharedKB*/48, /*up,fu*/4,16, /*down,fd*/2,8,  /*mode*/MODE_SUSD, /*tw,th,warps,xrep,wskip*/56,  31,  16,  11, 0) // 4t-ups4-downs2
-    CASE(/*sharedKB*/48, /*up,fu*/4,16, /*down,fd*/2,8,  /*mode*/MODE_SUFD, /*tw,th,warps,xrep,wskip*/56,  36,  16,  0,  0) // 4t-ups4-downf2
-    CASE(/*sharedKB*/48, /*up,fu*/2,8,  /*down,fd*/4,16, /*mode*/MODE_SUSD, /*tw,th,warps,xrep,wskip*/16,  22,  16,  12, 0) // 4t-ups2-downs4
-    CASE(/*sharedKB*/48, /*up,fu*/2,8,  /*down,fd*/4,16, /*mode*/MODE_FUSD, /*tw,th,warps,xrep,wskip*/29,  15,  16,  0,  0) // 4t-upf2-downs4
-    CASE(/*sharedKB*/48, /*up,fu*/2,12, /*down,fd*/1,1,  /*mode*/MODE_SUFD, /*tw,th,warps,xrep,wskip*/96,  150, 28,  0,  0) // 6t-ups2-downf1
-    CASE(/*sharedKB*/48, /*up,fu*/1,1,  /*down,fd*/2,12, /*mode*/MODE_FUSD, /*tw,th,warps,xrep,wskip*/32,  35,  24,  0,  0) // 6t-upf1-downs2
-    CASE(/*sharedKB*/48, /*up,fu*/2,12, /*down,fd*/2,12, /*mode*/MODE_SUSD, /*tw,th,warps,xrep,wskip*/32,  46,  16,  10, 0) // 6t-ups2-downs2
-    CASE(/*sharedKB*/48, /*up,fu*/2,12, /*down,fd*/2,12, /*mode*/MODE_FUSD, /*tw,th,warps,xrep,wskip*/58,  28,  24,  8,  0) // 6t-upf2-downs2
-    CASE(/*sharedKB*/48, /*up,fu*/2,12, /*down,fd*/2,12, /*mode*/MODE_SUFD, /*tw,th,warps,xrep,wskip*/52,  28,  16,  0,  0) // 6t-ups2-downf2
-    CASE(/*sharedKB*/48, /*up,fu*/4,24, /*down,fd*/2,12, /*mode*/MODE_SUSD, /*tw,th,warps,xrep,wskip*/32,  51,  16,  5,  0) // 6t-ups4-downs2
-    CASE(/*sharedKB*/48, /*up,fu*/4,24, /*down,fd*/2,12, /*mode*/MODE_SUFD, /*tw,th,warps,xrep,wskip*/32,  56,  16,  6,  0) // 6t-ups4-downf2
-    CASE(/*sharedKB*/48, /*up,fu*/2,12, /*down,fd*/4,24, /*mode*/MODE_SUSD, /*tw,th,warps,xrep,wskip*/16,  18,  16,  12, 0) // 6t-ups2-downs4
-    CASE(/*sharedKB*/96, /*up,fu*/2,12, /*down,fd*/4,24, /*mode*/MODE_FUSD, /*tw,th,warps,xrep,wskip*/27,  31,  32,  6,  0) // 6t-upf2-downs4 96kB
-    CASE(/*sharedKB*/48, /*up,fu*/2,12, /*down,fd*/4,24, /*mode*/MODE_FUSD, /*tw,th,warps,xrep,wskip*/27,  13,  24,  0,  0) // 6t-upf2-downs4
-    CASE(/*sharedKB*/48, /*up,fu*/2,16, /*down,fd*/1,1,  /*mode*/MODE_SUFD, /*tw,th,warps,xrep,wskip*/148, 89,  24,  0,  0) // 8t-ups2-downf1
-    CASE(/*sharedKB*/48, /*up,fu*/1,1,  /*down,fd*/2,16, /*mode*/MODE_FUSD, /*tw,th,warps,xrep,wskip*/32,  31,  16,  5,  0) // 8t-upf1-downs2
-    CASE(/*sharedKB*/48, /*up,fu*/2,16, /*down,fd*/2,16, /*mode*/MODE_SUSD, /*tw,th,warps,xrep,wskip*/32,  41,  16,  9,  0) // 8t-ups2-downs2
-    CASE(/*sharedKB*/48, /*up,fu*/2,16, /*down,fd*/2,16, /*mode*/MODE_FUSD, /*tw,th,warps,xrep,wskip*/56,  26,  24,  0,  0) // 8t-upf2-downs2
-    CASE(/*sharedKB*/48, /*up,fu*/2,16, /*down,fd*/2,16, /*mode*/MODE_SUFD, /*tw,th,warps,xrep,wskip*/32,  40,  16,  0,  0) // 8t-ups2-downf2
-    CASE(/*sharedKB*/48, /*up,fu*/4,32, /*down,fd*/2,16, /*mode*/MODE_SUSD, /*tw,th,warps,xrep,wskip*/32,  46,  24,  5,  0) // 8t-ups4-downs2
-    CASE(/*sharedKB*/48, /*up,fu*/4,32, /*down,fd*/2,16, /*mode*/MODE_SUFD, /*tw,th,warps,xrep,wskip*/32,  50,  16,  0,  0) // 8t-ups4-downf2
-    CASE(/*sharedKB*/96, /*up,fu*/2,16, /*down,fd*/4,32, /*mode*/MODE_SUSD, /*tw,th,warps,xrep,wskip*/24,  24,  32,  12, 1) // 8t-ups2-downs4 96kB
-    CASE(/*sharedKB*/48, /*up,fu*/2,16, /*down,fd*/4,32, /*mode*/MODE_SUSD, /*tw,th,warps,xrep,wskip*/16,  13,  16,  10, 1) // 8t-ups2-downs4
-    CASE(/*sharedKB*/96, /*up,fu*/2,16, /*down,fd*/4,32, /*mode*/MODE_FUSD, /*tw,th,warps,xrep,wskip*/25,  28,  28,  4,  0) // 8t-upf2-downs4 96kB
-    CASE(/*sharedKB*/48, /*up,fu*/2,16, /*down,fd*/4,32, /*mode*/MODE_FUSD, /*tw,th,warps,xrep,wskip*/25,  10,  24,  0,  0) // 8t-upf2-downs4
-
-    #undef CASE
-    return s; // No kernel found.
+          cgh.parallel_for(
+              sycl::nd_range<3>(sycl::range<3>(gz, gy, gx) *
+                                    sycl::range<3>(1, 1, bx),
+                                sycl::range<3>(1, 1, bx)),
+              [=](sycl::nd_item<3> item_ct1)
+                  [[intel::reqd_sub_group_size(32)]] {
+                    filtered_lrelu_act_kernel<T, signWrite, signRead>(p_ct0,
+                                                                      item_ct1);
+                  });
+        });
+  } AT_CUDA_CHECK();
+}
+catch (sycl::exception const &exc) {
+  std::cerr << exc.what() << "Exception caught at file:" << __FILE__
+            << ", line:" << __LINE__ << std::endl;
+  std::exit(1);
 }
 
 //------------------------------------------------------------------------

@@ -24,7 +24,7 @@ migrate() {
         mv compile_commands.json compile_commands.json.ori
         grep -v '"output"' compile_commands.json.ori > compile_commands.json
     fi
-    module_name=$(ls | grep .h$ | sed 's/\.h$//') # assuming the build directory contains a single header named as the module (good enough for SytleGAN3)
+    module_name=$(ls | grep .h$ | tail -n 1 | sed 's/\.h$//') # assuming the build directory contains a header named as the module (if there are more, the alphabetically last one is taken)
     module_outdir="$outdir"/"${module_name}"_dpct_out_"$c2s_version"
     ret=0
     c2s --gen-helper-function --out-root "$module_outdir" -p .  >migrate.stdout.log 2>migrate.stderr.log || ret=$?

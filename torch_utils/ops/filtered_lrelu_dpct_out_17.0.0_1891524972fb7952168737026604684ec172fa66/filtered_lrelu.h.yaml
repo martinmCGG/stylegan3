@@ -1,7 +1,7 @@
 ---
 MainSourceFile:  '/home/martin/intel_hackathon/stylegan3/torch_utils/ops/filtered_lrelu_dpct_out_17.0.0_1891524972fb7952168737026604684ec172fa66/filtered_lrelu.h'
 Replacements:
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          447
     Length:          26
     ReplacementText: "#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
@@ -10,7 +10,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          797
     Length:          4
     ReplacementText: 'sycl::int2'
@@ -19,7 +19,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          857
     Length:          4
     ReplacementText: 'sycl::int2'
@@ -28,7 +28,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          1325
     Length:          4
     ReplacementText: 'sycl::int2'
@@ -37,7 +37,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          1898
     Length:          4
     ReplacementText: 'sycl::int4'
@@ -46,7 +46,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          1965
     Length:          4
     ReplacementText: 'sycl::int4'
@@ -55,7 +55,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          2032
     Length:          4
     ReplacementText: 'sycl::int2'
@@ -64,7 +64,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          2133
     Length:          4
     ReplacementText: 'sycl::int2'
@@ -73,7 +73,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          2306
     Length:          9
     ReplacementText: 'sycl::long4'
@@ -82,7 +82,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          2410
     Length:          9
     ReplacementText: 'sycl::long4'
@@ -91,7 +91,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          2480
     Length:          9
     ReplacementText: 'sycl::long3'
@@ -100,7 +100,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          2515
     Length:          9
     ReplacementText: 'sycl::long3'
@@ -109,7 +109,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          2927
     Length:          4
     ReplacementText: 'sycl::int4'
@@ -118,7 +118,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          2994
     Length:          9
     ReplacementText: 'sycl::long4'
@@ -127,7 +127,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          3082
     Length:          4
     ReplacementText: 'sycl::int2'
@@ -136,7 +136,7 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
     Offset:          3186
     Length:          4
     ReplacementText: 'sycl::int2'
@@ -145,8 +145,8 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
-    Offset:          3565
+  - FilePath:        '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
+    Offset:          3853
     Length:          4
     ReplacementText: 'sycl::int2'
     ConstantFlag:    ''
@@ -154,27 +154,9 @@ Replacements:
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
-    Offset:          4325
-    Length:          11
-    ReplacementText: 'dpct::err0'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
-    Offset:          4350
-    Length:          12
-    ReplacementText: 'dpct::queue_ptr'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
 MainSourceFilesDigest:
-  - MainSourceFile:  '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000/filtered_lrelu.h'
-    Digest:          8986d4f20f6c8513b0f2ad4d72eeb920
+  - MainSourceFile:  '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000/filtered_lrelu.h'
+    Digest:          f5906d097088aee04daf528a05ef585f
 DpctVersion:     17.0.0
 MainHelperFileName: ''
 USMLevel:        ''
@@ -182,7 +164,7 @@ FeatureMap:      {}
 CompileTargets:  {}
 OptionMap:
   AnalysisScopePath:
-    Value:           '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000'
+    Value:           '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000'
     Specified:       false
   AsyncHandler:
     Value:           'false'
@@ -191,7 +173,7 @@ OptionMap:
     Value:           'false'
     Specified:       false
   CompilationsDir:
-    Value:           '/home/martin/.cache/torch_extensions/filtered_lrelu_plugin/2e9606d7cf844ec44b9f500eaacd35c0-nvidia-rtx-a6000'
+    Value:           '/home/martin/.cache/torch_extensions/py39_cu117/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-rtx-a6000'
     Specified:       true
   CtadEnabled:
     Value:           'false'
