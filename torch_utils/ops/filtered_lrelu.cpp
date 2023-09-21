@@ -12,7 +12,8 @@
 #include "filtered_lrelu.h"
 
 
-template <class T, class index_t, bool signWrite, bool signRead> void choose_and_run_filtered_lrelu_kernel(filtered_lrelu_kernel_params p, int sharedKB)
+template <class T, class index_t, bool signWrite, bool signRead>
+void choose_and_run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p, int sharedKB)
 {
     // Run the first matching kernel.
 #define CASE(SH, U, FU, D, FD, MODE, TW, TH, W, XR, WS) \
@@ -246,32 +247,12 @@ static torch::Tensor filtered_lrelu_act(torch::Tensor x, torch::Tensor si, int s
     void* func = 0;
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "filtered_lrelu_act_cuda", [&]
     {
-        if (writeSigns)
-            func = choose_filtered_lrelu_act_kernel<scalar_t, true, false>();
-        else if (readSigns)
-            func = choose_filtered_lrelu_act_kernel<scalar_t, false, true>();
-        else
-            func = choose_filtered_lrelu_act_kernel<scalar_t, false, false>();
+        if (writeSigns) run_filtered_lrelu_act_kernel<scalar_t, true, false>(p);
+        else if (readSigns) run_filtered_lrelu_act_kernel<scalar_t, false, true>(p);
+        else run_filtered_lrelu_act_kernel<scalar_t, false, false>(p);
     });
     TORCH_CHECK(func, "internal error - CUDA kernel not found");
 
-    // Launch CUDA kernel.
-    void* args[] = {&p};
-    int bx = 128; // 4 warps per block.
-
-    // Logical size of launch = writeSigns ? p.s : p.x
-    uint32_t gx = writeSigns ? p.sShape.x : p.xShape.x;
-    uint32_t gy = writeSigns ? p.sShape.y : p.xShape.y;
-    uint32_t gz = p.xShape.z * p.xShape.w; // Same as in p.sShape if signs are in use.
-    gx = (gx - 1) / bx + 1;
-
-    // Make sure grid y and z dimensions are within CUDA launch limits. Kernel loops internally to do the rest.
-    const uint32_t gmax = 65535;
-    gy = std::min(gy, gmax);
-    gz = std::min(gz, gmax);
-
-    // Launch.
-    AT_CUDA_CHECK(cudaLaunchKernel(func, dim3(gx, gy, gz), bx, args, 0, at::cuda::getCurrentCUDAStream()));
     return so;
 }
 

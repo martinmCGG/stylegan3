@@ -1206,10 +1206,10 @@ static __global__ void filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_param
     }
 }
 
-template <class T, bool signWrite, bool signRead> void* choose_filtered_lrelu_act_kernel(void)
+/*template <class T, bool signWrite, bool signRead> void* choose_filtered_lrelu_act_kernel(void)
 {
     return (void*)filtered_lrelu_act_kernel<T, signWrite, signRead>;
-}
+}*/
 
 //------------------------------------------------------------------------
 // CUDA kernel selection.
@@ -1267,6 +1267,27 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p)
         int subGz = std::min(maxSubGz, gz - zofs);
         AT_CUDA_CHECK(cudaLaunchKernel((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, dim3(gx, gy, subGz), bx, args, s.dynamicSharedKB << 10, at::cuda::getCurrentCUDAStream()));
     }
+}
+
+template <class T, bool signWrite, bool signRead>
+void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params& p) {
+    // Launch CUDA kernel.
+    void* args[] = {&p};
+    int bx = 128; // 4 warps per block.
+
+    // Logical size of launch = writeSigns ? p.s : p.x
+    uint32_t gx = signWrite ? p.sShape.x : p.xShape.x;
+    uint32_t gy = signWrite ? p.sShape.y : p.xShape.y;
+    uint32_t gz = p.xShape.z * p.xShape.w; // Same as in p.sShape if signs are in use.
+    gx = (gx - 1) / bx + 1;
+
+    // Make sure grid y and z dimensions are within CUDA launch limits. Kernel loops internally to do the rest.
+    const uint32_t gmax = 65535;
+    gy = std::min(gy, gmax);
+    gz = std::min(gz, gmax);
+
+    // Launch.
+    AT_CUDA_CHECK(cudaLaunchKernel((void*)&filtered_lrelu_act_kernel<T, signWrite, signRead>, dim3(gx, gy, gz), bx, args, 0, at::cuda::getCurrentCUDAStream()));
 }
 
 //------------------------------------------------------------------------

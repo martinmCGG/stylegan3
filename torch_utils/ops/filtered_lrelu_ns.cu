@@ -25,9 +25,9 @@
 #undef CASE
 
 // Activation/signs only for generic variant. 64-bit indexing.
-template void* choose_filtered_lrelu_act_kernel<c10::Half, false, false>(void);
-template void* choose_filtered_lrelu_act_kernel<float,     false, false>(void);
-template void* choose_filtered_lrelu_act_kernel<double,    false, false>(void);
+template void run_filtered_lrelu_act_kernel<c10::Half, false, false>(filtered_lrelu_act_kernel_params& p);
+template void run_filtered_lrelu_act_kernel<float,     false, false>(filtered_lrelu_act_kernel_params& p);
+template void run_filtered_lrelu_act_kernel<double,    false, false>(filtered_lrelu_act_kernel_params& p);
 
 // Copy filters to constant memory.
-template cudaError_t copy_filters<false, false>(cudaStream_t stream);
+//template cudaError_t copy_filters<false, false>(cudaStream_t stream);
