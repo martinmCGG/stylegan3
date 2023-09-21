@@ -29,7 +29,7 @@ def _init():
             _plugin = custom_ops.get_plugin(
                 module_name='filtered_lrelu_plugin',
                 sources=[plugin_dir+'filtered_lrelu.dp.cpp', plugin_dir+'filtered_lrelu_wr.dp.cpp', plugin_dir+'filtered_lrelu_rd.dp.cpp', plugin_dir+'filtered_lrelu_ns.dp.cpp'],
-                headers=[plugin_dir+'filtered_lrelu.h', plugin_dir+'filtered_lrelu.cpp.dp.cpp'],
+                headers=[plugin_dir+'filtered_lrelu.h', plugin_dir+'filtered_lrelu_cases.h', plugin_dir+'filtered_lrelu.cpp.dp.cpp'],
                 source_dir=os.path.dirname(__file__),
                 #extra_cuda_cflags=['--use_fast_math', '--allow-unsupported-compiler'], # -ffast-math
             )
@@ -37,7 +37,7 @@ def _init():
             _plugin = custom_ops.get_plugin(
                 module_name='filtered_lrelu_plugin',
                 sources=['filtered_lrelu.cpp', 'filtered_lrelu_wr.cu', 'filtered_lrelu_rd.cu', 'filtered_lrelu_ns.cu'],
-                headers=['filtered_lrelu.h', 'filtered_lrelu.cu'],
+                headers=['filtered_lrelu.h', 'filtered_lrelu_cases.h', 'filtered_lrelu.cu'],
                 source_dir=os.path.dirname(__file__),
                 extra_cuda_cflags=['--use_fast_math', '--allow-unsupported-compiler'],
             )
@@ -64,9 +64,7 @@ def _parse_padding(padding):
 
 #----------------------------------------------------------------------------
 
-warned = False
-
-def filtered_lrelu(x, fu=None, fd=None, b=None, up=1, down=1, padding=0, gain=np.sqrt(2), slope=0.2, clamp=None, flip_filter=False, impl='ref'): # TODO xpu
+def filtered_lrelu(x, fu=None, fd=None, b=None, up=1, down=1, padding=0, gain=np.sqrt(2), slope=0.2, clamp=None, flip_filter=False, impl='xpu'):
     r"""Filtered leaky ReLU for a batch of 2D images.
 
     Performs the following sequence of operations for each channel:
@@ -124,11 +122,7 @@ def filtered_lrelu(x, fu=None, fd=None, b=None, up=1, down=1, padding=0, gain=np
     """
     assert isinstance(x, torch.Tensor)
     assert impl in ['ref', 'xpu']
-    global warned
-    if not warned:
-        print('Warning: filtered_lrelu using impl=ref')
-        warned = True
-    if False and impl == 'xpu' and _init(): # and x.device.type == 'xpu'
+    if impl == 'xpu' and _init(): # and x.device.type == 'xpu'
         return _filtered_lrelu_cuda(up=up, down=down, padding=padding, gain=gain, slope=slope, clamp=clamp, flip_filter=flip_filter).apply(x, fu, fd, b, None, 0, 0)
     return _filtered_lrelu_ref(x, fu=fu, fd=fd, b=b, up=up, down=down, padding=padding, gain=gain, slope=slope, clamp=clamp, flip_filter=flip_filter)
 
