@@ -8,9 +8,7 @@
 
 #include <torch/extension.h>
 #include <c10/util/Half.h>
-//#include <c10/cuda/CUDAStream.h>
 #include <ATen/cuda/CUDAContext.h>
-#include <c10/cuda/CUDAGuard.h>
 #include "filtered_lrelu.h"
 #include <cstdint>
 
@@ -1206,34 +1204,23 @@ static __global__ void filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_param
     }
 }
 
-/*template <class T, bool signWrite, bool signRead> void* choose_filtered_lrelu_act_kernel(void)
-{
-    return (void*)filtered_lrelu_act_kernel<T, signWrite, signRead>;
-}*/
-
 //------------------------------------------------------------------------
-// CUDA kernel selection.
+// CUDA kernel launchers.
 
-template <class T, class index_t, bool signWrite, bool signRead, int SH, int MODE, int U, int FU, int D, int FD, int TW, int TH, int W, int XR, int WS> // TODO: XR and WS could be just booleans and the actual value passed as a parameter - to reduce the number of template instantiations/specializations
+template <class T, class index_t, bool signWrite, bool signRead, int SH, int MODE, int U, int FU, int D, int FD, int TW, int TH, int W, int XR, int WS> // TODO: XR and WS could be just booleans and the actual value passed as a parameter - to reduce the number of template instantiations/specializations (but then duplicate specializations would need to be avoided)
 void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p)
 {
-    filtered_lrelu_kernel_spec s = { 0 }; // TODO: filtered_lrelu_kernel_spec could be skipped - the values can be computed on-demand
-    s.tileOut = make_int2(TW, TH);
-    s.numWarps = W;
-    s.xrep = XR;
-    s.dynamicSharedKB = (SH == 48) ? 0 : SH;
-
     // Launch CUDA kernel.
     void* args[] = {&p};
-    int bx = s.numWarps * 32;
-    int gx = (p.yShape.x - 1) / s.tileOut.x + 1;
-    int gy = (p.yShape.y - 1) / s.tileOut.y + 1;
+    int bx = W * 32;
+    int gx = (p.yShape.x - 1) / TW + 1;
+    int gy = (p.yShape.y - 1) / TH + 1;
     int gz = p.yShape.z * p.yShape.w;
 
     // Repeat multiple horizontal tiles in a CTA?
-    if (s.xrep)
+    if (XR)
     {
-        p.tilesXrep = s.xrep;
+        p.tilesXrep = XR;
         p.tilesXdim = gx;
        
         gx = (gx + p.tilesXrep - 1) / p.tilesXrep;
@@ -1255,8 +1242,10 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p)
 
     // Set cache and shared memory configurations for main kernel.
     AT_CUDA_CHECK(cudaFuncSetCacheConfig((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, cudaFuncCachePreferShared));
-    if (s.dynamicSharedKB) // Need dynamically allocated shared memory?
-        AT_CUDA_CHECK(cudaFuncSetAttribute((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, cudaFuncAttributeMaxDynamicSharedMemorySize, s.dynamicSharedKB << 10));
+    
+    const int dynamicSharedKB = (SH == 48) ? 0 : SH;
+    if (dynamicSharedKB) // Need dynamically allocated shared memory?
+        AT_CUDA_CHECK(cudaFuncSetAttribute((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, cudaFuncAttributeMaxDynamicSharedMemorySize, dynamicSharedKB << 10));
     AT_CUDA_CHECK(cudaFuncSetSharedMemConfig((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, cudaSharedMemBankSizeFourByte));
 
     // Launch main kernel.
@@ -1265,7 +1254,7 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p)
     {
         p.blockZofs = zofs;
         int subGz = std::min(maxSubGz, gz - zofs);
-        AT_CUDA_CHECK(cudaLaunchKernel((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, dim3(gx, gy, subGz), bx, args, s.dynamicSharedKB << 10, at::cuda::getCurrentCUDAStream()));
+        AT_CUDA_CHECK(cudaLaunchKernel((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, dim3(gx, gy, subGz), bx, args, dynamicSharedKB << 10, at::cuda::getCurrentCUDAStream()));
     }
 }
 

@@ -28,6 +28,3 @@
 template void run_filtered_lrelu_act_kernel<c10::Half, false, true>(filtered_lrelu_act_kernel_params& p);
 template void run_filtered_lrelu_act_kernel<float,     false, true>(filtered_lrelu_act_kernel_params& p);
 template void run_filtered_lrelu_act_kernel<double,    false, true>(filtered_lrelu_act_kernel_params& p);
-
-// Copy filters to constant memory.
-//template cudaError_t copy_filters<false, true>(cudaStream_t stream);

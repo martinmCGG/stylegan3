@@ -80,13 +80,6 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     p.down    = down;
     p.fuShape = make_int2((int)fu.size(-1), fu.dim() == 2 ? (int)fu.size(0) : 0); // shape [n, 0] indicates separable filter.
     p.fdShape = make_int2((int)fd.size(-1), fd.dim() == 2 ? (int)fd.size(0) : 0);
-    /* REPLACED BY THROWING when no kernel found
-    filtered_lrelu_kernel_spec test_spec = choose_filtered_lrelu_kernel<float, int32_t, false, false>(p, sharedKB);
-    if (!test_spec.exec)
-    {
-        // No kernel found - return empty tensors and indicate missing kernel with return code of -1.
-        return std::make_tuple(torch::Tensor(), torch::Tensor(), -1);
-    }*/
 
     // Input/output element size.
     int64_t sz = (x.dtype() == torch::kHalf) ? 2 : 4;
@@ -251,7 +244,6 @@ static torch::Tensor filtered_lrelu_act(torch::Tensor x, torch::Tensor si, int s
         else if (readSigns) run_filtered_lrelu_act_kernel<scalar_t, false, true>(p);
         else run_filtered_lrelu_act_kernel<scalar_t, false, false>(p);
     });
-    TORCH_CHECK(func, "internal error - CUDA kernel not found");
 
     return so;
 }
