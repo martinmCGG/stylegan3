@@ -10,7 +10,6 @@
 #include <dpct/dpct.hpp>
 #include <torch/extension.h>
 #include <c10/util/Half.h>
-#include <ATen/cuda/CUDAContext.h>
 #include "filtered_lrelu.h"
 #include <cstdint>
 #include <cmath>
@@ -45,13 +44,13 @@ template <> struct InternalType<float>
 };
 template <> struct InternalType<c10::Half>
 {
-    typedef float scalar_t; typedef sycl::float2 vec2_t;
-        typedef sycl::float4 vec4_t;
-    __dpct_inline__ static vec2_t zero_vec2() { return sycl::float2(0, 0); }
+    typedef sycl::half scalar_t; typedef sycl::half2 vec2_t;
+        typedef sycl::half4 vec4_t;
+    __dpct_inline__ static vec2_t zero_vec2() { return sycl::half2(0, 0); }
     __dpct_inline__ static vec4_t zero_vec4() {
-        return sycl::float4(0, 0, 0, 0);
+        return sycl::half4(0, 0, 0, 0);
     }
-    __dpct_inline__ static float clamp(float x, float c) {
+    __dpct_inline__ static sycl::half clamp(sycl::half x, sycl::half c) {
         return sycl::fmin(sycl::fmax(x, -c), c);
     }
 };
@@ -139,7 +138,7 @@ static void setup_filters_kernel(filtered_lrelu_kernel_params p,
 
 // Host function to copy filters written by setup kernel into constant buffer for main kernel.
 template <bool, bool>
-static dpct::err0 copy_filters(dpct::queue_ptr stream) try {
+static dpct::err0 copy_filters(sycl::queue& stream) try {
     void* src = 0;
     dpct::err0 err = DPCT_CHECK_ERROR(*(&src) = g_fbuf.get_ptr());
     /*
@@ -150,7 +149,7 @@ static dpct::err0 copy_filters(dpct::queue_ptr stream) try {
     */
     if (err) return err;
     return DPCT_CHECK_ERROR(
-        stream->memcpy(c_fbuf.get_ptr(*stream), src,
+        stream.memcpy(c_fbuf.get_ptr(stream), src,
                        2 * MAX_FILTER_SIZE * MAX_FILTER_SIZE * sizeof(float)));
 }
 catch (sycl::exception const &exc) {
@@ -193,7 +192,7 @@ adjust the code, or use smaller sub-group size to avoid high register pressure.
 static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                   const sycl::nd_item<3> &item_ct1,
                                   float *c_fbuf, char *s_buf_raw,
-                                  scalar_t *s_buf0_st)
+                                  T *s_buf0_st)
 {
     // Check that we don't try to support non-existing filter modes.
     static_assert(up   == 1 || up   == 2 || up   == 4, "only up=1, up=2, up=4 scales supported");
@@ -1921,9 +1920,9 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
     /*
     DPCT1007:30: Migration of cudaLaunchKernel is not supported.
     */
-  ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))
-      ->submit([&](sycl::handler &cgh) {
-        g_fbuf.init(*((sycl::queue *)(at::cuda::getCurrentCUDAStream())));
+   sycl::queue queue = dpct::get_current_device().default_queue();
+   queue.submit([&](sycl::handler &cgh) {
+        g_fbuf.init(queue);
 
         auto g_fbuf_ptr_ct1 = g_fbuf.get_ptr();
 
@@ -1936,37 +1935,83 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
                                                 g_fbuf_ptr_ct1);
                          });
       });
-  AT_CUDA_CHECK();
+  //AT_CUDA_CHECK();
 
     // Copy kernels to constant memory.
-    if      ( signWrite && !signRead) AT_CUDA_CHECK((copy_filters<true,  false>(at::cuda::getCurrentCUDAStream())));
-    else if (!signWrite &&  signRead) AT_CUDA_CHECK((copy_filters<false, true >(at::cuda::getCurrentCUDAStream())));
-    else if (!signWrite && !signRead) AT_CUDA_CHECK((copy_filters<false, false>(at::cuda::getCurrentCUDAStream())));
+    if      ( signWrite && !signRead) (copy_filters<true,  false>(queue));
+    else if (!signWrite &&  signRead) (copy_filters<false, true >(queue));
+    else if (!signWrite && !signRead) (copy_filters<false, false>(queue));
 
     // Set cache and shared memory configurations for main kernel.
     /*
     DPCT1027:33: The call to cudaFuncSetCacheConfig was replaced with 0 because
     SYCL currently does not support configuring shared memory on devices.
     */
-    AT_CUDA_CHECK(0);
+    //AT_CUDA_CHECK(0);
 
     const int dynamicSharedKB = (SH == 48) ? 0 : SH;
     if (dynamicSharedKB) // Need dynamically allocated shared memory?
         /*
         DPCT1007:34: Migration of cudaFuncSetAttribute is not supported.
         */
-        AT_CUDA_CHECK(cudaFuncSetAttribute(
+       std::cout << "SKIPPED cudaFuncSetAttribute" << std::endl;
+       /* AT_CUDA_CHECK(cudaFuncSetAttribute(
             (void *)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead,
                                            MODE, U, FU, D, FD, TW, TH, W * 32,
                                            !!XR, !!WS>,
             cudaFuncAttributeMaxDynamicSharedMemorySize,
             dynamicSharedKB << 10));
+            */
     /*
     DPCT1027:35: The call to cudaFuncSetSharedMemConfig was replaced with 0
     because SYCL currently does not support configuring shared memory on
     devices.
     */
-    AT_CUDA_CHECK(0);
+    //AT_CUDA_CHECK(0);
+
+/*
+    // Static definitions. - copied from inside the .cu
+    typedef typename InternalType<T>::scalar_t scalar_t;
+    typedef typename InternalType<T>::vec2_t vec2_t;
+    typedef typename InternalType<T>::vec4_t vec4_t;
+    const int tileUpW    = (tileOutW * down + (fdSize - 1) - (down - 1) + 3) & ~3;  // Upsampled tile width, rounded up to multiple of 4.
+    const int tileUpH    = tileOutH * down + (fdSize - 1) - (down - 1);             // Upsampled tile height.
+    const int tileInW    = CEIL_DIV(tileUpW  + (fuSize - 1), up);                   // Input tile width.
+    const int tileInH    = CEIL_DIV(tileUpH  + (fuSize - 1), up);                   // Input tile height.
+    const int tileUpH_up = CEIL_DIV(tileUpH, up) * up;                              // Upsampled tile height rounded up to a multiple of up.
+    const int tileInH_up = CEIL_DIV(tileUpH_up + (fuSize - 1), up);                 // For allocations only, to avoid shared memory read overruns with up=2 and up=4.
+
+    // Merge 1x1 downsampling into last upsampling step for upf1 and ups2.
+    const bool downInline = (down == 1) && ((up == 1 && filterMode == MODE_FUFD) || (up == 2 && filterMode == MODE_SUFD));
+
+    // Sizes of logical buffers.
+    const int szIn    = tileInH_up * tileInW;
+    const int szUpX   = tileInH_up * tileUpW;
+    const int szUpXY  = downInline ? 0 : (tileUpH * tileUpW);
+    const int szDownX = tileUpH * tileOutW;
+
+    // Sizes for shared memory arrays.
+    const int s_buf0_size_base =
+        (MODE == MODE_SUSD) ? MAX(szIn, szUpXY) :
+        (MODE == MODE_FUSD) ? MAX(szIn, szDownX) :
+        (MODE == MODE_SUFD) ? MAX(szIn, szUpXY) :
+        (MODE == MODE_FUFD) ? szIn :
+        -1;
+    const int s_buf1_size_base =
+        (MODE == MODE_SUSD) ? MAX(szUpX, szDownX) :
+        (MODE == MODE_FUSD) ? szUpXY :
+        (MODE == MODE_SUFD) ? szUpX  :
+        (MODE == MODE_FUFD) ? szUpXY :
+        -1;
+
+    // Ensure U128 alignment.
+    const int s_buf0_size = (s_buf0_size_base + 3) & ~3;
+    const int s_buf1_size = (s_buf1_size_base + 3) & ~3;
+
+    // Check at compile time that we don't use too much shared memory.
+    static_assert((s_buf0_size + s_buf1_size) * sizeof(scalar_t) <= (sharedKB << 10), "shared memory overflow");
+*/
+
 
     // Launch main kernel.
     const int maxSubGz = 65535; // CUDA maximum for block z dimension.
@@ -1982,13 +2027,12 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
         /*
         DPCT1007:31: Migration of cudaLaunchKernel is not supported.
         */
-    ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))
-        ->submit([&](sycl::handler &cgh) {
-          c_fbuf.init(*((sycl::queue *)(at::cuda::getCurrentCUDAStream())));
+    queue.submit([&](sycl::handler &cgh) {
+          c_fbuf.init(queue);
 
           auto c_fbuf_ptr_ct1 = c_fbuf.get_ptr();
 
-          sycl::local_accessor<scalar_t, 1> s_buf0_st_acc_ct1(
+          sycl::local_accessor<T, 1> s_buf0_st_acc_ct1(
               sycl::range<1>((SH > 48) ? (1 << 24)
                                        : (s_buf0_size + s_buf1_size)),
               cgh);
@@ -2010,7 +2054,7 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
                     s_buf0_st_acc_ct1.get_pointer());
               });
         });
-    AT_CUDA_CHECK();
+    //AT_CUDA_CHECK();
     }
 }
 catch (sycl::exception const &exc) {
@@ -2047,11 +2091,11 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
     DPCT1007:32: Migration of cudaLaunchKernel is not supported.
     */
   {
-    dpct::has_capability_or_fail(
+    /*dpct::has_capability_or_fail(
         ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))->get_device(),
-        {sycl::aspect::fp64});
-    ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))
-        ->submit([&](sycl::handler &cgh) {
+        {sycl::aspect::fp64});*/
+    sycl::queue queue = dpct::get_current_device().default_queue();
+    queue.submit([&](sycl::handler &cgh) {
           auto p_ct0 = *(filtered_lrelu_act_kernel_params *)args[0];
 
           cgh.parallel_for(
@@ -2064,7 +2108,8 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
                                                                       item_ct1);
                   });
         });
-  } AT_CUDA_CHECK();
+  }
+  //AT_CUDA_CHECK();
 }
 catch (sycl::exception const &exc) {
   std::cerr << exc.what() << "Exception caught at file:" << __FILE__
