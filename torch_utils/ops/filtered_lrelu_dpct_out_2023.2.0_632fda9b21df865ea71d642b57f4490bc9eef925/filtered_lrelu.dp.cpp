@@ -42,15 +42,20 @@ template <> struct InternalType<float>
         return sycl::fmin(sycl::fmax(x, -c), c);
     }
 };
+
+// define the needed type, mimicking sycl/aliases.hpp
+//using chalf2 = sycl::vec<unsigned short, 2>;
+//using chalf4 = sycl::vec<unsigned short, 4>;
+
 template <> struct InternalType<c10::Half>
 {
-    typedef sycl::half scalar_t; typedef sycl::half2 vec2_t;
-        typedef sycl::half4 vec4_t;
-    __dpct_inline__ static vec2_t zero_vec2() { return sycl::half2(0, 0); }
+    typedef float scalar_t; typedef sycl::float2 vec2_t;
+        typedef sycl::float4 vec4_t;
+    __dpct_inline__ static vec2_t zero_vec2() { return sycl::float2(0, 0); }
     __dpct_inline__ static vec4_t zero_vec4() {
-        return sycl::half4(0, 0, 0, 0);
+        return sycl::float4(0, 0, 0, 0);
     }
-    __dpct_inline__ static sycl::half clamp(sycl::half x, sycl::half c) {
+    __dpct_inline__ static float clamp(float x, float c) {
         return sycl::fmin(sycl::fmax(x, -c), c);
     }
 };
@@ -192,7 +197,7 @@ adjust the code, or use smaller sub-group size to avoid high register pressure.
 static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                   const sycl::nd_item<3> &item_ct1,
                                   float *c_fbuf, char *s_buf_raw,
-                                  T *s_buf0_st)
+                                  typename InternalType<T>::scalar_t *s_buf0_st)
 {
     // Check that we don't try to support non-existing filter modes.
     static_assert(up   == 1 || up   == 2 || up   == 4, "only up=1, up=2, up=4 scales supported");
@@ -1969,26 +1974,26 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
     */
     //AT_CUDA_CHECK(0);
 
-/*
+
     // Static definitions. - copied from inside the .cu
     typedef typename InternalType<T>::scalar_t scalar_t;
-    typedef typename InternalType<T>::vec2_t vec2_t;
-    typedef typename InternalType<T>::vec4_t vec4_t;
-    const int tileUpW    = (tileOutW * down + (fdSize - 1) - (down - 1) + 3) & ~3;  // Upsampled tile width, rounded up to multiple of 4.
-    const int tileUpH    = tileOutH * down + (fdSize - 1) - (down - 1);             // Upsampled tile height.
-    const int tileInW    = CEIL_DIV(tileUpW  + (fuSize - 1), up);                   // Input tile width.
-    const int tileInH    = CEIL_DIV(tileUpH  + (fuSize - 1), up);                   // Input tile height.
-    const int tileUpH_up = CEIL_DIV(tileUpH, up) * up;                              // Upsampled tile height rounded up to a multiple of up.
-    const int tileInH_up = CEIL_DIV(tileUpH_up + (fuSize - 1), up);                 // For allocations only, to avoid shared memory read overruns with up=2 and up=4.
+    //typedef typename InternalType<T>::vec2_t vec2_t;
+    //typedef typename InternalType<T>::vec4_t vec4_t;
+    const int tileUpW    = (TW * D + (FD - 1) - (D - 1) + 3) & ~3;  // Upsampled tile width, rounded up to multiple of 4.
+    const int tileUpH    = TH * D + (FD - 1) - (D - 1);             // Upsampled tile height.
+    const int tileInW    = CEIL_DIV(tileUpW  + (FU - 1), U);                   // Input tile width.
+    const int tileInH    = CEIL_DIV(tileUpH  + (FU - 1), U);                   // Input tile height.
+    const int tileUpH_up = CEIL_DIV(tileUpH, U) * U;                              // Upsampled tile height rounded up to a multiple of up.
+    const int tileInH_up = CEIL_DIV(tileUpH_up + (FU - 1), U);                 // For allocations only, to avoid shared memory read overruns with up=2 and up=4.
 
     // Merge 1x1 downsampling into last upsampling step for upf1 and ups2.
-    const bool downInline = (down == 1) && ((up == 1 && filterMode == MODE_FUFD) || (up == 2 && filterMode == MODE_SUFD));
+    const bool downInline = (D == 1) && ((U == 1 && MODE == MODE_FUFD) || (U == 2 && MODE == MODE_SUFD));
 
     // Sizes of logical buffers.
     const int szIn    = tileInH_up * tileInW;
     const int szUpX   = tileInH_up * tileUpW;
     const int szUpXY  = downInline ? 0 : (tileUpH * tileUpW);
-    const int szDownX = tileUpH * tileOutW;
+    const int szDownX = tileUpH * TW;
 
     // Sizes for shared memory arrays.
     const int s_buf0_size_base =
@@ -2009,8 +2014,8 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
     const int s_buf1_size = (s_buf1_size_base + 3) & ~3;
 
     // Check at compile time that we don't use too much shared memory.
-    static_assert((s_buf0_size + s_buf1_size) * sizeof(scalar_t) <= (sharedKB << 10), "shared memory overflow");
-*/
+    static_assert((s_buf0_size + s_buf1_size) * sizeof(scalar_t) <= (SH << 10), "shared memory overflow");
+
 
 
     // Launch main kernel.
@@ -2032,7 +2037,7 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
 
           auto c_fbuf_ptr_ct1 = c_fbuf.get_ptr();
 
-          sycl::local_accessor<T, 1> s_buf0_st_acc_ct1(
+          sycl::local_accessor<scalar_t, 1> s_buf0_st_acc_ct1(
               sycl::range<1>((SH > 48) ? (1 << 24)
                                        : (s_buf0_size + s_buf1_size)),
               cgh);
