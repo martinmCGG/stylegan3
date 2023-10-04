@@ -91,7 +91,7 @@ template <class T> __dpct_inline__ T get_stride(const int64_t &x)
 #define MAX_FILTER_SIZE 32
 
 // Combined up/down filter buffers so that transfer can be done with one copy.
-dpct::global_memory<float, 1> g_fbuf(
+static dpct::global_memory<float, 1> g_fbuf(
     2 * MAX_FILTER_SIZE *
     MAX_FILTER_SIZE); // Filters in global memory, written by setup kernel.
 static dpct::constant_memory<float, 1>

@@ -39,7 +39,7 @@ def _init():
     global _plugin
     plugin_dir = 'bias_act_dpct_out_2023.2.0_632fda9b21df865ea71d642b57f4490bc9eef925/'
     if _plugin is None:
-        if 'xpu' in dir(torch):
+        if custom_ops.using_xpu:
             _plugin = custom_ops.get_plugin(
                 module_name='bias_act_plugin',
                 sources=[plugin_dir + 'bias_act.cpp.dp.cpp', plugin_dir + 'bias_act.dp.cpp'],

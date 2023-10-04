@@ -9,16 +9,19 @@
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include <torch/extension.h>
-#include <ATen/cuda/CUDAContext.h>
-#include <c10/cuda/CUDAGuard.h>
+//#include <ATen/cuda/CUDAContext.h>
+//#include <c10/cuda/CUDAGuard.h>
 #include "filtered_lrelu.h"
 
 
 template <class T, class index_t, bool signWrite, bool signRead>
 void choose_and_run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p, int sharedKB)
 {
+    std::cout << "DEBUG: choose_and_run_filtered_lrelu_kernel<T, index_t, signWrite=" << signWrite << ", signread=" << signRead << ">(p, " << sharedKB << ")" << std::endl; \
+
     // Run the first matching kernel.
 #define CASE(SH, U, FU, D, FD, MODE, TW, TH, W, XR, WS)                        \
+    std::cout << "DEBUG: choose_and_run_filtered_lrelu_kernel CASE(" << SH << ", " << U << ", " << FU << ", " << D << ", " << FD << ", " << MODE << ", " << TW << ", " << TH << ", " << W << ", " << XR << ", " << WS << ")" << std::endl; \
     if (sharedKB >= SH)                                                        \
         if ((p.fuShape.y() == 0 &&                                             \
              (MODE == MODE_SUSD || MODE == MODE_SUFD)) ||                      \
@@ -54,7 +57,6 @@ void choose_and_run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p, int s
 
 #undef CASE
 
-    // TODO throw - no kernel found
     TORCH_CHECK(false, "no kernel found")
     return;
 }
@@ -66,8 +68,8 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     int up, int down, int px0, int px1, int py0, int py1, int sx, int sy, float gain, float slope, float clamp, bool flip_filters, bool writeSigns)
 {
     // Set CUDA device.
-    TORCH_CHECK(x.is_cuda(), "x must reside on CUDA device");
-    const at::cuda::OptionalCUDAGuard device_guard(device_of(x));
+    TORCH_CHECK(x.is_xpu(), "x must reside on CUDA device");
+    //const at::cuda::OptionalCUDAGuard device_guard(device_of(x)); // TODO maybe reenable for multi-gpu
 
     // Validate arguments.
     TORCH_CHECK(fu.device() == x.device() && fd.device() == x.device() && b.device() == x.device(), "all input tensors must reside on the same device");
@@ -87,7 +89,8 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
 
     // Figure out how much shared memory is available on the device.
     int maxSharedBytes = 0;
-    AT_CUDA_CHECK(cudaDeviceGetAttribute(&maxSharedBytes, cudaDevAttrMaxSharedMemoryPerBlockOptin, x.device().index()));
+    // TODO is this necessary for SYCL?
+    //AT_CUDA_CHECK(cudaDeviceGetAttribute(&maxSharedBytes, cudaDevAttrMaxSharedMemoryPerBlockOptin, x.device().index()));
     int sharedKB = maxSharedBytes >> 10;
 
     // Populate enough launch parameters to check if a CUDA kernel exists.
@@ -175,17 +178,17 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     p.swLimit   = (sw_active + 3) >> 2; // Rounded up to bytes.
 
     // x, y, b strides are in bytes.
-    p.xStride = sycl::long4(sz * x.stride(3), sz * x.stride(2),
+    p.xStride = sycl::longlong4(sz * x.stride(3), sz * x.stride(2),
                             sz * x.stride(1), sz * x.stride(0));
-    p.yStride = sycl::long4(sz * y.stride(3), sz * y.stride(2),
+    p.yStride = sycl::longlong4(sz * y.stride(3), sz * y.stride(2),
                             sz * y.stride(1), sz * y.stride(0));
     p.bStride   = sz * b.stride(0);
 
     // fu, fd strides are in elements.
     p.fuStride =
-        sycl::long3(fu.stride(-1), fu.dim() == 2 ? fu.stride(0) : 0, 0);
+        sycl::longlong3(fu.stride(-1), fu.dim() == 2 ? fu.stride(0) : 0, 0);
     p.fdStride =
-        sycl::long3(fd.stride(-1), fd.dim() == 2 ? fd.stride(0) : 0, 0);
+        sycl::longlong3(fd.stride(-1), fd.dim() == 2 ? fd.stride(0) : 0, 0);
 
     // Determine if indices don't fit in int32. Support negative strides although Torch currently never produces those.
     bool index64b = false;
@@ -213,7 +216,7 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     if (s.numel() > INT_MAX) index64b = true;
 
     // Choose CUDA kernel.
-    AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "filtered_lrelu_cuda", [&]
+    AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "filtered_lrelu_xpu", [&]
     {
         if constexpr (sizeof(scalar_t) <= 4) // Exclude doubles. constexpr prevents template instantiation.
         {
@@ -224,8 +227,8 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
             else if ( index64b &&  writeSigns && !readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int64_t, true,  false>(p, sharedKB);
             else if ( index64b && !writeSigns &&  readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int64_t, false, true >(p, sharedKB);
             else if ( index64b && !writeSigns && !readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int64_t, false, false>(p, sharedKB);
-            else TORCH_CHECK(false, "internal error - CUDA kernel not found") // This should not happen because we tested earlier that kernel exists.
-        } else TORCH_CHECK(false, "internal error - CUDA kernel not found") // This should not happen because we tested earlier that kernel exists. - maybe not necessary to check?
+            else TORCH_CHECK(false, "internal error - XPU kernel not found") // This should not happen because we tested earlier that kernel exists.
+        } else TORCH_CHECK(false, "internal error - XPU kernel not found") // This should not happen because we tested earlier that kernel exists. - maybe not necessary to check?
     });
 
     // Done.
@@ -237,8 +240,8 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
 static torch::Tensor filtered_lrelu_act(torch::Tensor x, torch::Tensor si, int sx, int sy, float gain, float slope, float clamp, bool writeSigns)
 {
     // Set CUDA device.
-    TORCH_CHECK(x.is_cuda(), "x must reside on CUDA device");
-    const at::cuda::OptionalCUDAGuard device_guard(device_of(x));
+    TORCH_CHECK(x.is_xpu(), "x must reside on CUDA device");
+    //const at::cuda::OptionalCUDAGuard device_guard(device_of(x)); // TODO maybe needed for multi-gpu
 
     // Validate arguments.
     TORCH_CHECK(x.dim() == 4, "x must be rank 4");
@@ -277,7 +280,7 @@ static torch::Tensor filtered_lrelu_act(torch::Tensor x, torch::Tensor si, int s
     p.clamp     = clamp;
     p.xShape = sycl::int4((int)x.size(3), (int)x.size(2), (int)x.size(1),
                           (int)x.size(0));
-    p.xStride = sycl::long4(x.stride(3), x.stride(2), x.stride(1), x.stride(0));
+    p.xStride = sycl::longlong4(x.stride(3), x.stride(2), x.stride(1), x.stride(0));
     p.sShape = (readSigns || writeSigns)
                    ? sycl::int2((int)s.size(3) << 2, (int)s.size(2))
                    : sycl::int2(0, 0); // Width is in elements. Contiguous.
@@ -285,7 +288,7 @@ static torch::Tensor filtered_lrelu_act(torch::Tensor x, torch::Tensor si, int s
 
     // Choose CUDA kernel.
     void* func = 0;
-    AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "filtered_lrelu_act_cuda", [&]
+    AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "filtered_lrelu_act_xpu", [&]
     {
         if (writeSigns) run_filtered_lrelu_act_kernel<scalar_t, true, false>(p);
         else if (readSigns) run_filtered_lrelu_act_kernel<scalar_t, false, true>(p);

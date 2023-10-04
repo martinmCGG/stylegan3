@@ -22,10 +22,12 @@ from torch.utils.file_baton import FileBaton
 
 try:
     import intel_extension_for_pytorch as ipex
+    using_xpu = True
     cpp_extension = torch.xpu.cpp_extension
     torch_device_specific = ipex.xpu
 except:
     print('Warning: intel_extension_for_pytorch not loaded')
+    using_xpu = False
     cpp_extension = torch.utils.cpp_extension
     torch_device_specific = torch.cuda
 
