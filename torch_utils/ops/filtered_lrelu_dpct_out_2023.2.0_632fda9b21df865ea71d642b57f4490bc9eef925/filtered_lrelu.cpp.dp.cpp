@@ -17,11 +17,11 @@
 template <class T, class index_t, bool signWrite, bool signRead>
 void choose_and_run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p, int sharedKB)
 {
-    std::cout << "DEBUG: choose_and_run_filtered_lrelu_kernel<T, index_t, signWrite=" << signWrite << ", signread=" << signRead << ">(p, " << sharedKB << ")" << std::endl; \
+    //std::cout << "DEBUG: choose_and_run_filtered_lrelu_kernel<T, index_t, signWrite=" << signWrite << ", signread=" << signRead << ">(p, " << sharedKB << ")" << std::endl; \
 
+    //std::cout << "DEBUG: choose_and_run_filtered_lrelu_kernel CASE(" << SH << ", " << U << ", " << FU << ", " << D << ", " << FD << ", " << MODE << ", " << TW << ", " << TH << ", " << W << ", " << XR << ", " << WS << ")" << std::endl; \
     // Run the first matching kernel.
 #define CASE(SH, U, FU, D, FD, MODE, TW, TH, W, XR, WS)                        \
-    std::cout << "DEBUG: choose_and_run_filtered_lrelu_kernel CASE(" << SH << ", " << U << ", " << FU << ", " << D << ", " << FD << ", " << MODE << ", " << TW << ", " << TH << ", " << W << ", " << XR << ", " << WS << ")" << std::endl; \
     if (sharedKB >= SH)                                                        \
         if ((p.fuShape.y() == 0 &&                                             \
              (MODE == MODE_SUSD || MODE == MODE_SUFD)) ||                      \
@@ -89,9 +89,9 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
 
     // Figure out how much shared memory is available on the device.
     int maxSharedBytes = 0;
-    // TODO is this necessary for SYCL?
+    // TODO can we properly get this from SYCL?
     //AT_CUDA_CHECK(cudaDeviceGetAttribute(&maxSharedBytes, cudaDevAttrMaxSharedMemoryPerBlockOptin, x.device().index()));
-    int sharedKB = maxSharedBytes >> 10;
+    int sharedKB = 96;//maxSharedBytes >> 10;
 
     // Populate enough launch parameters to check if a CUDA kernel exists.
     filtered_lrelu_kernel_params p;
@@ -214,6 +214,8 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
             std::max(y.size(3) * p.yStride.x(), 0ll) >
         INT_MAX) index64b = true;
     if (s.numel() > INT_MAX) index64b = true;
+
+    float ori_mean = torch::mean(y.flatten()).item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel was not changing the output from the value it was initialized to (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run); TODO investigate the root cause
 
     // Choose CUDA kernel.
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "filtered_lrelu_xpu", [&]

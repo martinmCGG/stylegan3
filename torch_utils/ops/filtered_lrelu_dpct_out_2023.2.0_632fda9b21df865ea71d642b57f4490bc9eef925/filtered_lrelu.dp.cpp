@@ -196,7 +196,7 @@ adjust the code, or use smaller sub-group size to avoid high register pressure.
 */
 static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                   const sycl::nd_item<3> &item_ct1,
-                                  float *c_fbuf, char *s_buf_raw,
+                                  float *c_fbuf,
                                   typename InternalType<T>::scalar_t *s_buf0_st)
 {
     // Check that we don't try to support non-existing filter modes.
@@ -256,19 +256,9 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
     // Declare shared memory arrays.
     scalar_t* s_buf0;
     scalar_t* s_buf1;
-    if (sharedKB <= 48)
-    {
-        // Allocate shared memory arrays here.
-        // Prevent launching if this isn't optimized away when unused.
-        s_buf0 = s_buf0_st;
-        s_buf1 = s_buf0 + s_buf0_size;
-    }
-    else
-    {
-        // Use the dynamically allocated shared memory array.
-        s_buf0 = (scalar_t*)s_buf_raw;
-        s_buf1 = s_buf0 + s_buf0_size;
-    }
+
+    s_buf0 = s_buf0_st;
+    s_buf1 = s_buf0 + s_buf0_size;
 
     // Pointers to the buffers.
     scalar_t* s_tileIn;       // Input tile:                      [relInX * tileInH + relInY]
@@ -1884,7 +1874,7 @@ static void filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params p,
 }
 
 //------------------------------------------------------------------------
-// CUDA kernel launchers.
+// XPU kernel launchers.
 
 template <class T, class index_t, bool signWrite, bool signRead, int SH,
           int MODE, int U, int FU, int D, int FD, int TW, int TH, int W, int XR,
@@ -1892,10 +1882,9 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
                   // passed as a parameter - to reduce the number of template
                   // instantiations/specializations (but then duplicate
                   // specializations would need to be avoided)
-                  void run_filtered_lrelu_kernel(
-                      filtered_lrelu_kernel_params &p) try {
-    // Launch CUDA kernel.
-    void* args[] = {&p};
+void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
+    std::cout << "run_filtered_lrelu_kernel" << std::endl;
+    // Launch XPU kernel.
     int bx = W * 32;
     int gx = (p.yShape.x() - 1) / TW + 1;
     int gy = (p.yShape.y() - 1) / TH + 1;
@@ -1931,12 +1920,10 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
 
         auto g_fbuf_ptr_ct1 = g_fbuf.get_ptr();
 
-        auto p_ct0 = *(filtered_lrelu_kernel_params *)args[0];
-
         cgh.parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, 1024),
                                            sycl::range<3>(1, 1, 1024)),
                          [=](sycl::nd_item<3> item_ct1) {
-                           setup_filters_kernel(p_ct0, item_ct1,
+                           setup_filters_kernel(p, item_ct1,
                                                 g_fbuf_ptr_ct1);
                          });
       });
@@ -2038,13 +2025,8 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
           auto c_fbuf_ptr_ct1 = c_fbuf.get_ptr();
 
           sycl::local_accessor<scalar_t, 1> s_buf0_st_acc_ct1(
-              sycl::range<1>((SH > 48) ? (1 << 24)
-                                       : (s_buf0_size + s_buf1_size)),
+              s_buf0_size + s_buf1_size,
               cgh);
-          sycl::local_accessor<char, 1> s_buf_raw_acc_ct1(
-              sycl::range<1>(dynamicSharedKB << 10), cgh);
-
-          auto p_ct0 = *(filtered_lrelu_kernel_params *)args[0];
 
           cgh.parallel_for(
               sycl::nd_range<3>(sycl::range<3>(subGz, gy, gx) *
@@ -2054,8 +2036,7 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
                   32)]] {
                 filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE,
                                       U, FU, D, FD, TW, TH, W * 32, !!XR, !!WS>(
-                    p_ct0, item_ct1, c_fbuf_ptr_ct1,
-                    s_buf_raw_acc_ct1.get_pointer(),
+                    p, item_ct1, c_fbuf_ptr_ct1,
                     s_buf0_st_acc_ct1.get_pointer());
               });
         });
@@ -2070,6 +2051,7 @@ catch (sycl::exception const &exc) {
 
 template <class T, bool signWrite, bool signRead>
 void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
+    std::cout << "run_filtered_lrelu_act_kernel" << std::endl;
     // Launch CUDA kernel.
     void* args[] = {&p};
     int bx = 128; // 4 warps per block.
