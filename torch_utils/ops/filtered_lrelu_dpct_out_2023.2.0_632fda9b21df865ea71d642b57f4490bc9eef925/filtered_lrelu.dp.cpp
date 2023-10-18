@@ -1926,7 +1926,7 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
                            setup_filters_kernel(p, item_ct1,
                                                 g_fbuf_ptr_ct1);
                          });
-      });
+      }).wait();
   //AT_CUDA_CHECK();
 
     // Copy kernels to constant memory.
@@ -2039,7 +2039,7 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
                     p, item_ct1, c_fbuf_ptr_ct1,
                     s_buf0_st_acc_ct1.get_pointer());
               });
-        });
+        }).wait();
     //AT_CUDA_CHECK();
     }
 }
@@ -2094,7 +2094,7 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
                     filtered_lrelu_act_kernel<T, signWrite, signRead>(p_ct0,
                                                                       item_ct1);
                   });
-        });
+        }).wait();
   }
   //AT_CUDA_CHECK();
 }

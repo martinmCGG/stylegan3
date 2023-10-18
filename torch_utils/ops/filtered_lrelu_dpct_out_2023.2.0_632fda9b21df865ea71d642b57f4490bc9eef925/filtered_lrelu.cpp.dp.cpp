@@ -128,6 +128,9 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     TORCH_CHECK(yw <= INT_MAX && yh <= INT_MAX, "output is too large");
     torch::Tensor y = torch::empty({x.size(0), x.size(1), yh, yw}, x.options(), x.suggest_memory_format());
 
+    //y *= 0;
+    //y += 1;
+
     // Allocate sign tensor.
     torch::Tensor so;
     torch::Tensor s = si;
