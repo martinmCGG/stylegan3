@@ -218,7 +218,8 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
         INT_MAX) index64b = true;
     if (s.numel() > INT_MAX) index64b = true;
 
-    float ori_mean = torch::mean(y.flatten()).item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel was not changing the output from the value it was initialized to (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run); TODO investigate the root cause
+    //float ori_mean = torch::mean(y.flatten()).item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel was not changing the output from the value it was initialized to (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run); TODO investigate the root cause
+    float touch = y.flatten()[0].item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel output seems unchanged since the initialization/allocation (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run)
 
     // Choose CUDA kernel.
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "filtered_lrelu_xpu", [&]

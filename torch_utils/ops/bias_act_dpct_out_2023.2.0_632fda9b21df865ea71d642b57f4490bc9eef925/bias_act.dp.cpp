@@ -184,6 +184,7 @@ void bias_act_kernel_launch(bias_act_kernel_params p) {
     int blockSize = 4 * 32; // TODO tune, or rather remove and let the runtime choose its favorite work unit size
     int gridSize = (p.sizeX - 1) / (p.loopX * blockSize) + 1;
     sycl::queue queue = dpct::get_current_device().default_queue();
+    //queue.wait();
     queue.submit([&] (sycl::handler& cgh) {
         
         AT_DISPATCH_FLOATING_TYPES_AND_HALF(p.dtype, "bias_act_xpu", [&]
@@ -196,6 +197,6 @@ void bias_act_kernel_launch(bias_act_kernel_params p) {
                         bias_act_kernel<scalar_t>(p, item_ct1);
                     });
         });
-    });
-    queue.wait();
+    }).wait();
+    //queue.wait();
 }

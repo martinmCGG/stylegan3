@@ -1883,7 +1883,7 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
                   // instantiations/specializations (but then duplicate
                   // specializations would need to be avoided)
 void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
-    std::cout << "run_filtered_lrelu_kernel" << std::endl;
+    //std::cout << "run_filtered_lrelu_kernel" << std::endl;
     // Launch XPU kernel.
     int bx = W * 32;
     int gx = (p.yShape.x() - 1) / TW + 1;
@@ -1915,6 +1915,7 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
     DPCT1007:30: Migration of cudaLaunchKernel is not supported.
     */
    sycl::queue queue = dpct::get_current_device().default_queue();
+   //queue.wait();
    queue.submit([&](sycl::handler &cgh) {
         g_fbuf.init(queue);
 
@@ -2051,7 +2052,7 @@ catch (sycl::exception const &exc) {
 
 template <class T, bool signWrite, bool signRead>
 void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
-    std::cout << "run_filtered_lrelu_act_kernel" << std::endl;
+    //std::cout << "run_filtered_lrelu_act_kernel" << std::endl;
     // Launch CUDA kernel.
     void* args[] = {&p};
     int bx = 128; // 4 warps per block.

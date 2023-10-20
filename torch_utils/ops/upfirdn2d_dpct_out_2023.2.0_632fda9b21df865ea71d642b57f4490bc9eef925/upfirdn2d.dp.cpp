@@ -294,6 +294,7 @@ void run_upfirdn2d_kernel_small(upfirdn2d_kernel_params p) {
         ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))->get_device(),
         {sycl::aspect::fp64});*/
     sycl::queue queue = dpct::get_current_device().default_queue();
+    //queue.wait();
     queue.submit([&](sycl::handler &cgh) {
           sycl::local_accessor<T, 2> sf_acc_ct1(
               sycl::range<2>(filterH, filterW), cgh);
@@ -307,7 +308,7 @@ void run_upfirdn2d_kernel_small(upfirdn2d_kernel_params p) {
                                        filterH, tileOutW, tileOutH, loopMinor>(
                     p, item_ct1, sf_acc_ct1, sx_acc_ct1);
               });
-        });
+        }).wait();
   }
 }
 
@@ -332,13 +333,14 @@ void run_upfirdn2d_kernel_large(upfirdn2d_kernel_params p, int tileOutW, int til
         ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))->get_device(),
         {sycl::aspect::fp64});*/
     sycl::queue queue = dpct::get_current_device().default_queue();
+    //queue.wait();
     queue.submit([&](sycl::handler &cgh) {
 
           cgh.parallel_for(sycl::nd_range<3>(gridSize * blockSize, blockSize),
                            [=](sycl::nd_item<3> item_ct1) {
                              upfirdn2d_kernel_large<T>(p, item_ct1);
                            });
-        });
+        }).wait();
   }
 }
 
