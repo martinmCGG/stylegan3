@@ -30,6 +30,7 @@ template <> struct InternalType<double>
         return sycl::fmin(sycl::fmax(x, -c), c);
     }
 };
+
 template <> struct InternalType<float>
 {
     typedef float scalar_t; typedef sycl::float2 vec2_t;
@@ -42,10 +43,6 @@ template <> struct InternalType<float>
         return sycl::fmin(sycl::fmax(x, -c), c);
     }
 };
-
-// define the needed type, mimicking sycl/aliases.hpp
-//using chalf2 = sycl::vec<unsigned short, 2>;
-//using chalf4 = sycl::vec<unsigned short, 4>;
 
 template <> struct InternalType<c10::Half>
 {
@@ -181,10 +178,7 @@ catch (sycl::exception const &exc) {
 // - outX = tileOutX + relOutX
 // - outY = tileOutY + relOutY
 
- // When sharedKB <= 48, allocate shared memory statically inside the kernel,
- // otherwise use the externally allocated shared memory buffer.
-
-template <class T, class index_t, int sharedKB, bool signWrite, bool signRead,
+template <class T, class index_t, bool signWrite, bool signRead,
           int filterMode, int up, int fuSize, int down, int fdSize,
           int tileOutW, int tileOutH, int threadsPerBlock, bool enableXrep,
           bool enableWriteSkip>
@@ -249,9 +243,6 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
     // Ensure U128 alignment.
     const int s_buf0_size = (s_buf0_size_base + 3) & ~3;
     const int s_buf1_size = (s_buf1_size_base + 3) & ~3;
-
-    // Check at compile time that we don't use too much shared memory.
-    static_assert((s_buf0_size + s_buf1_size) * sizeof(scalar_t) <= (sharedKB << 10), "shared memory overflow");
 
     // Declare shared memory arrays.
     scalar_t* s_buf0;
@@ -1876,7 +1867,7 @@ static void filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params p,
 //------------------------------------------------------------------------
 // XPU kernel launchers.
 
-template <class T, class index_t, bool signWrite, bool signRead, int SH,
+template <class T, class index_t, bool signWrite, bool signRead,
           int MODE, int U, int FU, int D, int FD, int TW, int TH, int W, int XR,
           int WS> // TODO: XR and WS could be just booleans and the actual value
                   // passed as a parameter - to reduce the number of template
@@ -1911,11 +1902,7 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
     limit. To get the device limit, query info::device::max_work_group_size.
     Adjust the work-group size if needed.
     */
-    /*
-    DPCT1007:30: Migration of cudaLaunchKernel is not supported.
-    */
    sycl::queue queue = dpct::get_current_device().default_queue();
-   //queue.wait();
    queue.submit([&](sycl::handler &cgh) {
         g_fbuf.init(queue);
 
@@ -1928,45 +1915,14 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
                                                 g_fbuf_ptr_ct1);
                          });
       }).wait();
-  //AT_CUDA_CHECK();
 
     // Copy kernels to constant memory.
     if      ( signWrite && !signRead) (copy_filters<true,  false>(queue));
     else if (!signWrite &&  signRead) (copy_filters<false, true >(queue));
     else if (!signWrite && !signRead) (copy_filters<false, false>(queue));
 
-    // Set cache and shared memory configurations for main kernel.
-    /*
-    DPCT1027:33: The call to cudaFuncSetCacheConfig was replaced with 0 because
-    SYCL currently does not support configuring shared memory on devices.
-    */
-    //AT_CUDA_CHECK(0);
-
-    const int dynamicSharedKB = (SH == 48) ? 0 : SH;
-    if (dynamicSharedKB) // Need dynamically allocated shared memory?
-        /*
-        DPCT1007:34: Migration of cudaFuncSetAttribute is not supported.
-        */
-       std::cout << "SKIPPED cudaFuncSetAttribute" << std::endl;
-       /* AT_CUDA_CHECK(cudaFuncSetAttribute(
-            (void *)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead,
-                                           MODE, U, FU, D, FD, TW, TH, W * 32,
-                                           !!XR, !!WS>,
-            cudaFuncAttributeMaxDynamicSharedMemorySize,
-            dynamicSharedKB << 10));
-            */
-    /*
-    DPCT1027:35: The call to cudaFuncSetSharedMemConfig was replaced with 0
-    because SYCL currently does not support configuring shared memory on
-    devices.
-    */
-    //AT_CUDA_CHECK(0);
-
-
-    // Static definitions. - copied from inside the .cu
+    // Static definitions. - partially copied from inside the .cu (needed to compute e.g. the buffer sizes)
     typedef typename InternalType<T>::scalar_t scalar_t;
-    //typedef typename InternalType<T>::vec2_t vec2_t;
-    //typedef typename InternalType<T>::vec4_t vec4_t;
     const int tileUpW    = (TW * D + (FD - 1) - (D - 1) + 3) & ~3;  // Upsampled tile width, rounded up to multiple of 4.
     const int tileUpH    = TH * D + (FD - 1) - (D - 1);             // Upsampled tile height.
     const int tileInW    = CEIL_DIV(tileUpW  + (FU - 1), U);                   // Input tile width.
@@ -2001,11 +1957,6 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
     const int s_buf0_size = (s_buf0_size_base + 3) & ~3;
     const int s_buf1_size = (s_buf1_size_base + 3) & ~3;
 
-    // Check at compile time that we don't use too much shared memory.
-    static_assert((s_buf0_size + s_buf1_size) * sizeof(scalar_t) <= (SH << 10), "shared memory overflow");
-
-
-
     // Launch main kernel.
     const int maxSubGz = 65535; // CUDA maximum for block z dimension.
     for (int zofs=0; zofs < gz; zofs += maxSubGz) // Do multiple launches if gz is too big.
@@ -2016,9 +1967,6 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
         DPCT1049:1: The work-group size passed to the SYCL kernel may exceed the
         limit. To get the device limit, query info::device::max_work_group_size.
         Adjust the work-group size if needed.
-        */
-        /*
-        DPCT1007:31: Migration of cudaLaunchKernel is not supported.
         */
     queue.submit([&](sycl::handler &cgh) {
           c_fbuf.init(queue);
@@ -2035,13 +1983,12 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
                                 sycl::range<3>(1, 1, bx)),
               [=](sycl::nd_item<3> item_ct1) [[intel::reqd_sub_group_size(
                   32)]] {
-                filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE,
+                filtered_lrelu_kernel<T, index_t, signWrite, signRead, MODE,
                                       U, FU, D, FD, TW, TH, W * 32, !!XR, !!WS>(
                     p, item_ct1, c_fbuf_ptr_ct1,
                     s_buf0_st_acc_ct1.get_pointer());
               });
         }).wait();
-    //AT_CUDA_CHECK();
     }
 }
 catch (sycl::exception const &exc) {
@@ -2053,7 +2000,7 @@ catch (sycl::exception const &exc) {
 template <class T, bool signWrite, bool signRead>
 void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
     //std::cout << "run_filtered_lrelu_act_kernel" << std::endl;
-    // Launch CUDA kernel.
+    // Launch kernel.
     void* args[] = {&p};
     int bx = 128; // 4 warps per block.
 
@@ -2075,14 +2022,11 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
     limit. To get the device limit, query info::device::max_work_group_size.
     Adjust the work-group size if needed.
     */
-    /*
-    DPCT1007:32: Migration of cudaLaunchKernel is not supported.
-    */
   {
-    /*dpct::has_capability_or_fail(
-        ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))->get_device(),
-        {sycl::aspect::fp64});*/
     sycl::queue queue = dpct::get_current_device().default_queue();
+    dpct::has_capability_or_fail(
+        queue.get_device(),
+        {sycl::aspect::fp64});
     queue.submit([&](sycl::handler &cgh) {
           auto p_ct0 = *(filtered_lrelu_act_kernel_params *)args[0];
 
@@ -2097,7 +2041,6 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
                   });
         }).wait();
   }
-  //AT_CUDA_CHECK();
 }
 catch (sycl::exception const &exc) {
   std::cerr << exc.what() << "Exception caught at file:" << __FILE__

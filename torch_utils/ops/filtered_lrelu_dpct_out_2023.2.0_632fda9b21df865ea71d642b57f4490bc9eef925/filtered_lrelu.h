@@ -86,22 +86,9 @@ enum // Filter modes.
 };
 
 //------------------------------------------------------------------------
-// CUDA kernel specialization.
+// kernel selection.
 
-struct filtered_lrelu_kernel_spec
-{
-    //void*   setup;              // Function for filter kernel setup.
-    //void*   exec;               // Function for main operation.
-    sycl::int2 tileOut;         // Width/height of launch tile.
-    int     numWarps;           // Number of warps per thread block, determines launch block size.
-    int     xrep;               // For processing multiple horizontal tiles per thread block.
-    int     dynamicSharedKB;    // How much dynamic shared memory the exec kernel wants.
-};
-
-//------------------------------------------------------------------------
-// CUDA kernel selection.
-
-template <class T, class index_t, bool signWrite, bool signRead, int SH, int MODE, int U, int FU, int D, int FD, int TW, int TH, int W, int XR, int WS>
+template <class T, class index_t, bool signWrite, bool signRead, int MODE, int U, int FU, int D, int FD, int TW, int TH, int W, int XR, int WS>
     void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p);
 template <class T, bool signWrite, bool signRead>
     void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params& p);

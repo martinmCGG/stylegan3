@@ -9,44 +9,41 @@
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include <torch/extension.h>
-//#include <ATen/cuda/CUDAContext.h>
-//#include <c10/cuda/CUDAGuard.h>
 #include "filtered_lrelu.h"
 
 
 template <class T, class index_t, bool signWrite, bool signRead>
-void choose_and_run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p, int sharedKB)
+void choose_and_run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p)
 {
-    //std::cout << "DEBUG: choose_and_run_filtered_lrelu_kernel<T, index_t, signWrite=" << signWrite << ", signread=" << signRead << ">(p, " << sharedKB << ")" << std::endl; \
+    //std::cout << "DEBUG: choose_and_run_filtered_lrelu_kernel<T, index_t, signWrite=" << signWrite << ", signread=" << signRead << ">(p)" << std::endl; \
 
-    //std::cout << "DEBUG: choose_and_run_filtered_lrelu_kernel CASE(" << SH << ", " << U << ", " << FU << ", " << D << ", " << FD << ", " << MODE << ", " << TW << ", " << TH << ", " << W << ", " << XR << ", " << WS << ")" << std::endl; \
+    //std::cout << "DEBUG: choose_and_run_filtered_lrelu_kernel CASE(" << U << ", " << FU << ", " << D << ", " << FD << ", " << MODE << ", " << TW << ", " << TH << ", " << W << ", " << XR << ", " << WS << ")" << std::endl; \
     // Run the first matching kernel.
-#define CASE(SH, U, FU, D, FD, MODE, TW, TH, W, XR, WS)                        \
-    if (sharedKB >= SH)                                                        \
-        if ((p.fuShape.y() == 0 &&                                             \
-             (MODE == MODE_SUSD || MODE == MODE_SUFD)) ||                      \
-            (p.fuShape.y() > 0 && (MODE == MODE_FUSD || MODE == MODE_FUFD)))   \
-            if ((p.fdShape.y() == 0 &&                                         \
-                 (MODE == MODE_SUSD || MODE == MODE_FUSD)) ||                  \
-                (p.fdShape.y() > 0 &&                                          \
-                 (MODE == MODE_SUFD || MODE == MODE_FUFD)))                    \
-                if (p.up == U && p.fuShape.x() <= FU && p.fuShape.y() <= FU && \
-                    p.down == D && p.fdShape.x() <= FD && p.fdShape.y() <= FD) \
-                {                                                              \
-                    static_assert((D * TW % 4) == 0,                           \
-                                  "down * tileWidth must be divisible by 4");  \
-                    static_assert(FU % U == 0,                                 \
-                                  "upscaling filter size must be multiple of " \
-                                  "upscaling factor");                         \
-                    static_assert(FD % D == 0,                                 \
-                                  "downscaling filter size must be multiple "  \
-                                  "of downscaling factor");                    \
-                                                                               \
-                    run_filtered_lrelu_kernel<T, index_t, signWrite, signRead, \
-                                              SH, MODE, U, FU, D, FD, TW, TH,  \
-                                              W, XR, WS>(p);                   \
-                    return;                                                    \
-                }
+#define CASE(U, FU, D, FD, MODE, TW, TH, W, XR, WS)                        \
+    if ((p.fuShape.y() == 0 &&                                             \
+         (MODE == MODE_SUSD || MODE == MODE_SUFD)) ||                      \
+        (p.fuShape.y() > 0 && (MODE == MODE_FUSD || MODE == MODE_FUFD)))   \
+        if ((p.fdShape.y() == 0 &&                                         \
+             (MODE == MODE_SUSD || MODE == MODE_FUSD)) ||                  \
+            (p.fdShape.y() > 0 &&                                          \
+             (MODE == MODE_SUFD || MODE == MODE_FUFD)))                    \
+            if (p.up == U && p.fuShape.x() <= FU && p.fuShape.y() <= FU && \
+                p.down == D && p.fdShape.x() <= FD && p.fdShape.y() <= FD) \
+            {                                                              \
+                static_assert((D * TW % 4) == 0,                           \
+                              "down * tileWidth must be divisible by 4");  \
+                static_assert(FU % U == 0,                                 \
+                              "upscaling filter size must be multiple of " \
+                              "upscaling factor");                         \
+                static_assert(FD % D == 0,                                 \
+                              "downscaling filter size must be multiple "  \
+                              "of downscaling factor");                    \
+                                                                           \
+                run_filtered_lrelu_kernel<T, index_t, signWrite, signRead, \
+                                          MODE, U, FU, D, FD, TW, TH,      \
+                                          W, XR, WS>(p);                   \
+                return;                                                    \
+            }
 
     // Launch parameters for various kernel specializations.
     // Small filters must be listed before large filters, otherwise the kernel for larger filter will always match first.
@@ -67,8 +64,8 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     torch::Tensor x, torch::Tensor fu, torch::Tensor fd, torch::Tensor b, torch::Tensor si,
     int up, int down, int px0, int px1, int py0, int py1, int sx, int sy, float gain, float slope, float clamp, bool flip_filters, bool writeSigns)
 {
-    // Set CUDA device.
-    TORCH_CHECK(x.is_xpu(), "x must reside on CUDA device");
+    // Set device.
+    TORCH_CHECK(x.is_xpu(), "x must reside on XPU device");
     //const at::cuda::OptionalCUDAGuard device_guard(device_of(x)); // TODO maybe reenable for multi-gpu
 
     // Validate arguments.
@@ -87,13 +84,7 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     TORCH_CHECK(b.dim() == 1 && b.size(0) == x.size(1), "b must be a vector with the same number of channels as x");
     TORCH_CHECK(up >= 1 && down >= 1, "up and down must be at least 1");
 
-    // Figure out how much shared memory is available on the device.
-    int maxSharedBytes = 0;
-    // TODO can we properly get this from SYCL?
-    //AT_CUDA_CHECK(cudaDeviceGetAttribute(&maxSharedBytes, cudaDevAttrMaxSharedMemoryPerBlockOptin, x.device().index()));
-    int sharedKB = 96;//maxSharedBytes >> 10;
-
-    // Populate enough launch parameters to check if a CUDA kernel exists.
+    // Populate enough launch parameters to check if a kernel exists.
     filtered_lrelu_kernel_params p;
     p.up      = up;
     p.down    = down;
@@ -128,9 +119,14 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     TORCH_CHECK(yw <= INT_MAX && yh <= INT_MAX, "output is too large");
     torch::Tensor y = torch::empty({x.size(0), x.size(1), yh, yw}, x.options(), x.suggest_memory_format());
 
+    // Initialize to 0 or 1 (only for debugging)
     //y *= 0;
     //y += 1;
 
+    {
+        float touch = y.flatten()[0].item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel output seems unchanged since the initialization/allocation (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run)
+    }
+    
     // Allocate sign tensor.
     torch::Tensor so;
     torch::Tensor s = si;
@@ -143,6 +139,9 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
         int64_t sw = (sw_active + 15) & ~15;            // Width  = active width in elements, rounded up to multiple of 16.
         TORCH_CHECK(sh <= INT_MAX && (sw >> 2) <= INT_MAX, "signs is too large");
         s = so = torch::empty({x.size(0), x.size(1), sh, sw >> 2}, x.options().dtype(torch::kUInt8), at::MemoryFormat::Contiguous);
+        {
+            float touch = so.flatten()[0].item<float>(); // also touch the signs if writeSigns - TODO: is this needed?
+        }
     }
     else if (readSigns)
         sw_active = s.size(3) << 2;
@@ -158,7 +157,7 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
         TORCH_CHECK(s.size(2) <= INT_MAX && s.size(3) <= INT_MAX, "signs is too large");
     }
 
-    // Populate rest of CUDA kernel parameters.
+    // Populate rest of kernel parameters.
     p.x         = x.data_ptr();
     p.y         = y.data_ptr();
     p.b         = b.data_ptr();
@@ -218,21 +217,18 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
         INT_MAX) index64b = true;
     if (s.numel() > INT_MAX) index64b = true;
 
-    //float ori_mean = torch::mean(y.flatten()).item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel was not changing the output from the value it was initialized to (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run); TODO investigate the root cause
-    float touch = y.flatten()[0].item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel output seems unchanged since the initialization/allocation (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run)
-
-    // Choose CUDA kernel.
+    // Choose and run the kernel.
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "filtered_lrelu_xpu", [&]
     {
         if constexpr (sizeof(scalar_t) <= 4) // Exclude doubles. constexpr prevents template instantiation.
         {
             // Choose kernel based on index type, datatype and sign read/write modes.
-            if      (!index64b &&  writeSigns && !readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int32_t, true,  false>(p, sharedKB);
-            else if (!index64b && !writeSigns &&  readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int32_t, false, true >(p, sharedKB);
-            else if (!index64b && !writeSigns && !readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int32_t, false, false>(p, sharedKB);
-            else if ( index64b &&  writeSigns && !readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int64_t, true,  false>(p, sharedKB);
-            else if ( index64b && !writeSigns &&  readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int64_t, false, true >(p, sharedKB);
-            else if ( index64b && !writeSigns && !readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int64_t, false, false>(p, sharedKB);
+            if      (!index64b &&  writeSigns && !readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int32_t, true,  false>(p);
+            else if (!index64b && !writeSigns &&  readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int32_t, false, true >(p);
+            else if (!index64b && !writeSigns && !readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int32_t, false, false>(p);
+            else if ( index64b &&  writeSigns && !readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int64_t, true,  false>(p);
+            else if ( index64b && !writeSigns &&  readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int64_t, false, true >(p);
+            else if ( index64b && !writeSigns && !readSigns) choose_and_run_filtered_lrelu_kernel<scalar_t, int64_t, false, false>(p);
             else TORCH_CHECK(false, "internal error - XPU kernel not found") // This should not happen because we tested earlier that kernel exists.
         } else TORCH_CHECK(false, "internal error - XPU kernel not found") // This should not happen because we tested earlier that kernel exists. - maybe not necessary to check?
     });
@@ -245,8 +241,8 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
 
 static torch::Tensor filtered_lrelu_act(torch::Tensor x, torch::Tensor si, int sx, int sy, float gain, float slope, float clamp, bool writeSigns)
 {
-    // Set CUDA device.
-    TORCH_CHECK(x.is_xpu(), "x must reside on CUDA device");
+    // Set device.
+    TORCH_CHECK(x.is_xpu(), "x must reside on XPU device");
     //const at::cuda::OptionalCUDAGuard device_guard(device_of(x)); // TODO maybe needed for multi-gpu
 
     // Validate arguments.
@@ -264,6 +260,9 @@ static torch::Tensor filtered_lrelu_act(torch::Tensor x, torch::Tensor si, int s
         int64_t sw = x.size(3);
         sw = (sw + 15) & ~15; // Round to a multiple of 16 for coalescing.
         s = so = torch::empty({x.size(0), x.size(1), x.size(2), sw >> 2}, x.options().dtype(torch::kUInt8), at::MemoryFormat::Contiguous);
+        {
+            float touch = so.flatten()[0].item<float>(); // workaround: touch the signs if writeSigns - TODO: is this needed?
+        }
     }
 
     // Validate sign tensor if in use.
@@ -277,7 +276,7 @@ static torch::Tensor filtered_lrelu_act(torch::Tensor x, torch::Tensor si, int s
         TORCH_CHECK(s.size(2) <= INT_MAX && (s.size(3) << 2) <= INT_MAX, "signs tensor is too large");
     }
 
-    // Initialize CUDA kernel parameters.
+    // Initialize kernel parameters.
     filtered_lrelu_act_kernel_params p;
     p.x         = x.data_ptr();
     p.s         = (readSigns || writeSigns) ? s.data_ptr<unsigned char>() : 0;
@@ -292,7 +291,7 @@ static torch::Tensor filtered_lrelu_act(torch::Tensor x, torch::Tensor si, int s
                    : sycl::int2(0, 0); // Width is in elements. Contiguous.
     p.sOfs = sycl::int2(sx, sy);
 
-    // Choose CUDA kernel.
+    // Choose kernel.
     void* func = 0;
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "filtered_lrelu_act_xpu", [&]
     {
