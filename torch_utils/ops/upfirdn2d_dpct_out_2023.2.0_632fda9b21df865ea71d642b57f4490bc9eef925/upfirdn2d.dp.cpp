@@ -189,12 +189,8 @@ upfirdn2d_kernel_small(upfirdn2d_kernel_params p,
             int tileMidY = tileOutY * downy + upy - 1 - p.pad0.y();
             int tileInX = floor_div(tileMidX, upx);
             int tileInY = floor_div(tileMidY, upy);
-            /*
-            DPCT1065:3: Consider replacing sycl::nd_item::barrier() with
-            sycl::nd_item::barrier(sycl::access::fence_space::local_space) for
-            better performance if there is no access to global memory.
-            */
-            item_ct1.barrier();
+
+            item_ct1.barrier(sycl::access::fence_space::local_space);
             for (int inIdx = item_ct1.get_local_id(0);
                  inIdx < tileInH * tileInW * loopMinor;
                  inIdx += item_ct1.get_local_range(0))
@@ -218,12 +214,7 @@ upfirdn2d_kernel_small(upfirdn2d_kernel_params p,
             }
 
             // Loop over output pixels.
-            /*
-            DPCT1065:4: Consider replacing sycl::nd_item::barrier() with
-            sycl::nd_item::barrier(sycl::access::fence_space::local_space) for
-            better performance if there is no access to global memory.
-            */
-            item_ct1.barrier();
+            item_ct1.barrier(sycl::access::fence_space::local_space);
             for (int outIdx = item_ct1.get_local_id(0);
                  outIdx < tileOutH * tileOutW * loopMinor;
                  outIdx += item_ct1.get_local_range(0))

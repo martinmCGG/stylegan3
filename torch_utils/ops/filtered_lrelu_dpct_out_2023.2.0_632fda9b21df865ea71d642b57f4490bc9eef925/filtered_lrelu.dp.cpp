@@ -319,12 +319,7 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
 
         // Extra sync if input and output buffers are the same and we are not on first tile.
         if (enableXrep && tileIdx > 0 && (filterMode == MODE_FUSD || (filterMode == MODE_SUFD && !downInline) || (filterMode == MODE_FUFD && downInline)))
-            /*
-            DPCT1065:4: Consider replacing sycl::nd_item::barrier() with
-            sycl::nd_item::barrier(sycl::access::fence_space::local_space) for
-            better performance if there is no access to global memory.
-            */
-            item_ct1.barrier();
+            item_ct1.barrier(sycl::access::fence_space::local_space);
 
         // Load input tile & apply bias. Unrolled.
         scalar_t b = (scalar_t)*(const T*)((const char*)p.b + (channelIdx * get_stride<index_t>(p.bStride)));
@@ -359,12 +354,7 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
         if (filterMode == MODE_SUSD || filterMode == MODE_SUFD) // Separable upsampling filter.
         {
             // Horizontal upsampling.
-            /*
-            DPCT1065:5: Consider replacing sycl::nd_item::barrier() with
-            sycl::nd_item::barrier(sycl::access::fence_space::local_space) for
-            better performance if there is no access to global memory.
-            */
-            item_ct1.barrier();
+            item_ct1.barrier(sycl::access::fence_space::local_space);
             if (up == 4)
             {
                 for (int idx = item_ct1.get_local_id(2) * up;
@@ -473,12 +463,7 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
 
             // Vertical upsampling & nonlinearity.
 
-            /*
-            DPCT1065:6: Consider replacing sycl::nd_item::barrier() with
-            sycl::nd_item::barrier(sycl::access::fence_space::local_space) for
-            better performance if there is no access to global memory.
-            */
-            item_ct1.barrier();
+            item_ct1.barrier(sycl::access::fence_space::local_space);
             int groupMask = 15 << ((item_ct1.get_local_id(2) & 31) & ~3);
             int minY = tileOutY ? (tileOutY - tileOutH) * down + tileUpH : 0; // Skip already written signs.
             int sShapeMaxY = MIN(p.sShape.y(),
@@ -1067,12 +1052,7 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
             if (up == 2)
             {
                 // 2 x 2-wide.
-                /*
-                DPCT1065:15: Consider replacing sycl::nd_item::barrier() with
-                sycl::nd_item::barrier(sycl::access::fence_space::local_space)
-                for better performance if there is no access to global memory.
-                */
-                item_ct1.barrier();
+                item_ct1.barrier(sycl::access::fence_space::local_space);
                 int minY = tileOutY ? (tileOutY - tileOutH) * down + tileUpH +
                                           p.sOfs.y()
                                     : 0; // Skip already written signs.
@@ -1274,12 +1254,7 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
             }
             else if (up == 1)
             {
-                /*
-                DPCT1065:16: Consider replacing sycl::nd_item::barrier() with
-                sycl::nd_item::barrier(sycl::access::fence_space::local_space)
-                for better performance if there is no access to global memory.
-                */
-                item_ct1.barrier();
+                item_ct1.barrier(sycl::access::fence_space::local_space);
                 uint32_t groupMask = 15
                                      << ((item_ct1.get_local_id(2) & 31) & ~3);
                 int minY = tileOutY ? (tileOutY - tileOutH) * down + tileUpH : 0; // Skip already written signs.
@@ -1473,12 +1448,7 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
         if (filterMode == MODE_SUSD || filterMode == MODE_FUSD)
         {
             // Horizontal downsampling.
-            /*
-            DPCT1065:21: Consider replacing sycl::nd_item::barrier() with
-            sycl::nd_item::barrier(sycl::access::fence_space::local_space) for
-            better performance if there is no access to global memory.
-            */
-            item_ct1.barrier();
+            item_ct1.barrier(sycl::access::fence_space::local_space);
             if (down == 4 && tileOutW % 4 == 0)
             {
                 // Calculate 4 pixels at a time.
@@ -1553,12 +1523,7 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
             }
 
             // Vertical downsampling & store output tile.
-            /*
-            DPCT1065:22: Consider replacing sycl::nd_item::barrier() with
-            sycl::nd_item::barrier(sycl::access::fence_space::local_space) for
-            better performance if there is no access to global memory.
-            */
-            item_ct1.barrier();
+            item_ct1.barrier(sycl::access::fence_space::local_space);
             for (int idx = item_ct1.get_local_id(2); idx < tileOutW * tileOutH;
                  idx += item_ct1.get_local_range(2))
             {
@@ -1587,12 +1552,7 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
             if (down == 2)
             {
                 // 2-wide.
-                /*
-                DPCT1065:23: Consider replacing sycl::nd_item::barrier() with
-                sycl::nd_item::barrier(sycl::access::fence_space::local_space)
-                for better performance if there is no access to global memory.
-                */
-                item_ct1.barrier();
+                item_ct1.barrier(sycl::access::fence_space::local_space);
                 for (int idx = item_ct1.get_local_id(2) * 2;
                      idx < tileOutW * tileOutH;
                      idx += item_ct1.get_local_range(2) * 2)
@@ -1634,12 +1594,7 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
             else if (down == 1 && !downInline)
             {
                 // Thread per pixel.
-                /*
-                DPCT1065:24: Consider replacing sycl::nd_item::barrier() with
-                sycl::nd_item::barrier(sycl::access::fence_space::local_space)
-                for better performance if there is no access to global memory.
-                */
-                item_ct1.barrier();
+                item_ct1.barrier(sycl::access::fence_space::local_space);
                 for (int idx = item_ct1.get_local_id(2);
                      idx < tileOutW * tileOutH;
                      idx += item_ct1.get_local_range(2))
