@@ -119,7 +119,6 @@ template <class T> static void upfirdn2d_kernel_large(upfirdn2d_kernel_params p,
             v *= p.gain;
             ((T *)p.y)[outX * p.outStride.x() + outY * p.outStride.y() +
                        c * p.outStride.z() + n * p.outStride.w()] = 
-                       //1;
                        (T)v;
         }
     }
@@ -290,9 +289,6 @@ void run_upfirdn2d_kernel_small(upfirdn2d_kernel_params p) {
     const int tileInW = ((tileOutW - 1) * downx + filterW - 1) / upx + 1;
     const int tileInH = ((tileOutH - 1) * downy + filterH - 1) / upy + 1;
 
-    /*dpct::has_capability_or_fail(
-        ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))->get_device(),
-        {sycl::aspect::fp64});*/
     sycl::queue queue = dpct::get_current_device().default_queue();
     //queue.wait();
     queue.submit([&](sycl::handler &cgh) {

@@ -41,7 +41,7 @@ struct upfirdn2d_kernel_params
 };
 
 //------------------------------------------------------------------------
-// CUDA kernel selection.
+// kernel selection.
 
 template <class T>
 void run_upfirdn2d_kernel_large(upfirdn2d_kernel_params p, int tileOutW, int tileOutH, int loopMinor, int loopX);

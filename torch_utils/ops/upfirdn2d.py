@@ -28,7 +28,7 @@ def _init():
             _plugin = custom_ops.get_plugin(
                 module_name='upfirdn2d_plugin',
                 sources=[plugin_dir + 'upfirdn2d.cpp.dp.cpp', plugin_dir + 'upfirdn2d.dp.cpp'],
-                headers=['upfirdn2d.h'],
+                headers=[plugin_dir + 'upfirdn2d.h'],
                 source_dir=os.path.dirname(__file__),
                 #extra_cflags=['-ffast-math'], # takes ~3min 10s to compile
                 extra_cflags=['-ffast-math', '-cl-fast-relaxed-math', '-O3'], # takes ~3.5 min to compile; TODO 
