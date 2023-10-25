@@ -87,7 +87,7 @@ def gen_interp_video(G, mp4: str, seeds, shuffle_seed=None, w_frames=60*4, kind=
 
     # Render video.
     video_out = imageio.get_writer(mp4, mode='I', fps=60, codec='libx264', **video_kwargs)
-    for frame_idx in tqdm(range(num_keyframes * w_frames)):
+    for frame_idx in tqdm(range(num_keyframes * w_frames), bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_noinv_fmt}]"):
         imgs = []
         for yi in range(grid_h):
             for xi in range(grid_w):
