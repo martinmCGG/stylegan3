@@ -1858,7 +1858,7 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
     Adjust the work-group size if needed.
     */
    sycl::queue queue = dpct::get_current_device().default_queue();
-   queue.submit([&](sycl::handler &cgh) {
+   auto task = queue.submit([&](sycl::handler &cgh) {
         g_fbuf.init(queue);
 
         auto g_fbuf_ptr_ct1 = g_fbuf.get_ptr();
@@ -1869,12 +1869,7 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
                            setup_filters_kernel(p, item_ct1,
                                                 g_fbuf_ptr_ct1);
                          });
-      }).wait();
-
-    // Copy kernels to constant memory.
-    if      ( signWrite && !signRead) (copy_filters<true,  false>(queue));
-    else if (!signWrite &&  signRead) (copy_filters<false, true >(queue));
-    else if (!signWrite && !signRead) (copy_filters<false, false>(queue));
+      });
 
     // Static definitions. - partially copied from inside the .cu (needed to compute e.g. the buffer sizes)
     typedef typename InternalType<T>::scalar_t scalar_t;
@@ -1911,6 +1906,13 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
     // Ensure U128 alignment.
     const int s_buf0_size = (s_buf0_size_base + 3) & ~3;
     const int s_buf1_size = (s_buf1_size_base + 3) & ~3;
+
+    task.wait();
+    
+    // Copy kernels to constant memory.
+    if      ( signWrite && !signRead) (copy_filters<true,  false>(queue));
+    else if (!signWrite &&  signRead) (copy_filters<false, true >(queue));
+    else if (!signWrite && !signRead) (copy_filters<false, false>(queue));
 
     // Launch main kernel.
     const int maxSubGz = 65535; // CUDA maximum for block z dimension.
