@@ -1830,6 +1830,10 @@ template <class T, class index_t, bool signWrite, bool signRead,
                   // specializations would need to be avoided)
 void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
     //std::cout << "run_filtered_lrelu_kernel" << std::endl;
+    sycl::queue queue = dpct::get_current_device().default_queue();
+    c_fbuf.init(queue);
+    auto c_fbuf_ptr_ct1 = c_fbuf.get_ptr();
+
     // Launch XPU kernel.
     int bx = W * 32;
     int gx = (p.yShape.x() - 1) / TW + 1;
@@ -1857,7 +1861,6 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
     limit. To get the device limit, query info::device::max_work_group_size.
     Adjust the work-group size if needed.
     */
-   sycl::queue queue = dpct::get_current_device().default_queue();
    auto task = queue.submit([&](sycl::handler &cgh) {
         g_fbuf.init(queue);
 
@@ -1926,9 +1929,6 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
         Adjust the work-group size if needed.
         */
     queue.submit([&](sycl::handler &cgh) {
-          c_fbuf.init(queue);
-
-          auto c_fbuf_ptr_ct1 = c_fbuf.get_ptr();
 
           sycl::local_accessor<scalar_t, 1> s_buf0_st_acc_ct1(
               s_buf0_size + s_buf1_size,
