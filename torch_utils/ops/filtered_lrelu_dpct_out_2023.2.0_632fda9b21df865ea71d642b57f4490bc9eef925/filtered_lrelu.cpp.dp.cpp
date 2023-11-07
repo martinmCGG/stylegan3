@@ -160,6 +160,8 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     // Populate rest of kernel parameters.
     p.x         = x.data_ptr();
     p.y         = y.data_ptr();
+    p.y_nbytes   = y.storage().nbytes();
+    //std::cout << "p.y_nbytes: " << p.y_nbytes << std::endl;
     p.b         = b.data_ptr();
     p.s         = (readSigns || writeSigns) ? s.data_ptr<unsigned char>() : 0;
     p.fu        = fu.data_ptr<float>();

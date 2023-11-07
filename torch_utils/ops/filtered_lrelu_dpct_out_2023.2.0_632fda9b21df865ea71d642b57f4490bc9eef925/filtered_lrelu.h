@@ -29,6 +29,7 @@ struct filtered_lrelu_kernel_params
     // Rest of the parameters.
     const void*     x;          // Input tensor.
     void*           y;          // Output tensor.
+    int64_t         y_nbytes;
     const void*     b;          // Bias tensor.
     unsigned char*  s;          // Sign tensor in/out. NULL if unused.
     const float*    fu;         // Upsampling filter.

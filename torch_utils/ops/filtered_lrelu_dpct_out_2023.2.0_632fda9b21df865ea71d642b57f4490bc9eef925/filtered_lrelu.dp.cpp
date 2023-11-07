@@ -7,6 +7,7 @@
 // license agreement from NVIDIA CORPORATION is strictly prohibited.
 
 #include <sycl/sycl.hpp>
+#include <sycl/accessor.hpp>
 #include <dpct/dpct.hpp>
 #include <torch/extension.h>
 #include <c10/util/Half.h>
@@ -181,7 +182,8 @@ catch (sycl::exception const &exc) {
 template <class T, class index_t, bool signWrite, bool signRead,
           int filterMode, int up, int fuSize, int down, int fdSize,
           int tileOutW, int tileOutH, int threadsPerBlock, bool enableXrep,
-          bool enableWriteSkip>
+          bool enableWriteSkip, class AccessorT
+          >
 /*
 DPCT1110:3: The total declared local variable size in device function
 filtered_lrelu_kernel exceeds 128 bytes and may cause high register pressure.
@@ -191,8 +193,12 @@ adjust the code, or use smaller sub-group size to avoid high register pressure.
 static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                   const sycl::nd_item<3> &item_ct1,
                                   float *c_fbuf,
-                                  typename InternalType<T>::scalar_t *s_buf0_st)
+                                  typename InternalType<T>::scalar_t *s_buf0_st,
+                                  AccessorT yacc
+                                  )
 {
+
+    //char* yacc = (char*)p.y; // for debugging (access the same indices through yacc[], but actually use a pointer instead of an accessor ... the accessor can be removed from the function parameters or just renamed)
     // Check that we don't try to support non-existing filter modes.
     static_assert(up   == 1 || up   == 2 || up   == 4, "only up=1, up=2, up=4 scales supported");
     static_assert(down == 1 || down == 2 || down == 4, "only down=1, down=2, down=4 scales supported");
@@ -1033,13 +1039,10 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                 x * get_stride<index_t>(p.yStride.x()) +
                                 y * get_stride<index_t>(p.yStride.y()) +
                                 mapOfsOut;
-                            if ((uint32_t)y + 0 < p.yShape.y()) *
-                                ((T *)((char *)p.y + ofs)) =
-                                (T)(v.x() * (scalar_t)c_fd[0]);
-                            if ((uint32_t)y + 1 < ymax) *
-                                ((T *)((char *)p.y + ofs +
-                                       get_stride<index_t>(p.yStride.y()))) =
-                                (T)(v.y() * (scalar_t)c_fd[0]);
+                            if ((uint32_t)y + 0 < p.yShape.y())
+                                (T&)(yacc[ofs]) = (T)(v.x() * (scalar_t)c_fd[0]);
+                            if ((uint32_t)y + 1 < ymax)
+                                (T&)(yacc[ofs + get_stride<index_t>(p.yStride.y())]) = (T)(v.y() * (scalar_t)c_fd[0]);
                         }
                     }
                 }
@@ -1436,10 +1439,9 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                              (uint32_t)y <
                                  p.yShape
                                      .y()) // Write directly into output buffer
-                        *((T *)((char *)p.y +
-                                (x * get_stride<index_t>(p.yStride.x()) +
-                                 y * get_stride<index_t>(p.yStride.y()) +
-                                 mapOfsOut))) = (T)(v * (scalar_t)c_fd[0]);
+                        (T&)(yacc[x * get_stride<index_t>(p.yStride.x()) +
+                             y * get_stride<index_t>(p.yStride.y()) +
+                             mapOfsOut]) = (T)(v * (scalar_t)c_fd[0]);
                 }
             }
         }
@@ -1540,10 +1542,9 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                 int outY = tileOutY + relOutY0;
 
                 if (outX < p.yShape.x() & outY < p.yShape.y())
-                    *((T *)((char *)p.y +
-                            (outX * get_stride<index_t>(p.yStride.x()) +
-                             outY * get_stride<index_t>(p.yStride.y()) +
-                             mapOfsOut))) = (T)v;
+                    (T&)(yacc[outX * get_stride<index_t>(p.yStride.x()) +
+                         outY * get_stride<index_t>(p.yStride.y()) +
+                         mapOfsOut]) = (T)v;
             }
         }
         else if (filterMode == MODE_SUFD || filterMode == MODE_FUFD)
@@ -1582,12 +1583,10 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                             outX * get_stride<index_t>(p.yStride.x()) +
                             outY * get_stride<index_t>(p.yStride.y()) +
                             mapOfsOut;
-                        if (outX + 0 < p.yShape.x()) *
-                            ((T *)((char *)p.y + ofs)) = (T)v.x();
-                        if (outX + 1 < p.yShape.x()) *
-                            ((T *)((char *)p.y + ofs +
-                                   get_stride<index_t>(p.yStride.x()))) =
-                            (T)v.y();
+                        if (outX + 0 < p.yShape.x())
+                            (T&)(yacc[ofs]) = (T)v.x();
+                        if (outX + 1 < p.yShape.x())
+                            (T&)(yacc[ofs + get_stride<index_t>(p.yStride.x())]) = (T)v.y();
                     }
                 }
             }
@@ -1607,10 +1606,9 @@ static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                     int outY = tileOutY + relOutY0;
                     if ((uint32_t)outX < p.yShape.x() &&
                         (uint32_t)outY < p.yShape.y())
-                        *((T *)((char *)p.y +
-                                (outX * get_stride<index_t>(p.yStride.x()) +
-                                 outY * get_stride<index_t>(p.yStride.y()) +
-                                 mapOfsOut))) = (T)v;
+                        (T&)(yacc[outX * get_stride<index_t>(p.yStride.x()) +
+                             outY * get_stride<index_t>(p.yStride.y()) +
+                             mapOfsOut]) = (T)v;
                 }
             }
         }
@@ -1923,12 +1921,19 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
     {
         p.blockZofs = zofs;
         int subGz = std::min(maxSubGz, gz - zofs);
+
+        sycl::buffer<char> yBuf((char*)p.y, p.y_nbytes);
         /*
         DPCT1049:1: The work-group size passed to the SYCL kernel may exceed the
         limit. To get the device limit, query info::device::max_work_group_size.
         Adjust the work-group size if needed.
         */
     queue.submit([&](sycl::handler &cgh) {
+
+          sycl::accessor yAccessor(yBuf, cgh, sycl::write_only, sycl::no_init);
+          //sycl::accessor yAccessor(yBuf, cgh, sycl::write_only);
+          //sycl::accessor yAccessor(yBuf, cgh);
+//          T * ptr = yAccessor.get_pointer();
 
           sycl::local_accessor<scalar_t, 1> s_buf0_st_acc_ct1(
               s_buf0_size + s_buf1_size,
@@ -1943,7 +1948,8 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
                 filtered_lrelu_kernel<T, index_t, signWrite, signRead, MODE,
                                       U, FU, D, FD, TW, TH, W * 32, !!XR, !!WS>(
                     p, item_ct1, c_fbuf_ptr_ct1,
-                    s_buf0_st_acc_ct1.get_pointer());
+                    s_buf0_st_acc_ct1.get_pointer(), yAccessor
+                    );
               });
         }).wait();
     }
