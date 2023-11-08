@@ -14,7 +14,9 @@ git clone https://github.com/martinmCGG/stylegan3 && cd stylegan3
 
 # install dependencies (run only the first time)
 conda env create -f environment_intel.yml
-# In case you encounter "Could not find a version that satisfies the requirement torch==2.0.1a0", try environment_intel_fullurl.yml instead (https://github.com/intel/intel-extension-for-pytorch/issues/412)
+# In case you encounter "Could not find a version that satisfies the requirement torch==2.0.1a0",
+#  - clean up the failed environemnt creation with `conda env remove --name stylegan3`
+#  - re-try the installation with "environment_intel_fullurl.yml" instead (https://github.com/intel/intel-extension-for-pytorch/issues/412)
 
 # if running on Intel Developer Cloud, switch to a node with a GPU
 srun --pty bash
@@ -32,6 +34,9 @@ python gen_images.py --outdir=out --trunc=1 --seeds=1-10 --network=https://api.n
 python gen_video.py --output=stylegan3-r-afhqv2_512_1-2.mp4 --trunc=1 --seeds=1-2 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl
 python gen_video.py --output=stylegan3-t-ffhqu-1024_1-5.mp4 --trunc=1 --seeds=1-5 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-ffhqu-1024x1024.pkl
 # or choose other pre-trained models listed in the readme below
+
+# In case of multiple GPUs (e.g. if you also have an integrated GPU), you may want to explicitly tell SYCL to use only the dedicated GPU - find ONEAPI_DEVICE_SELECTOR that matches the correct device
+ONEAPI_DEVICE_SELECTOR='ext_oneapi_level_zero:0' sycl-ls  # this prints the detected device for a given selector
 
 # training is not recommended: runs out of memory on Arc (16GB VRAM); runs on Max 1100 GPU (but very slowly: ~1.25h per 1000 images)
 python train.py --outdir=~/training-runs --cfg=stylegan3-t --data=$HOME/afhq_v2.zip --gpus=1 --batch=4 --gamma=8.2 --mirror=1 --metrics=none --snap=1 --tick=1

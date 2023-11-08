@@ -13,10 +13,10 @@ import re
 from typing import List, Optional, Tuple, Union
 
 import click
-import dnnlib
 import numpy as np
 import PIL.Image
 import torch
+import dnnlib
 try:
     import intel_extension_for_pytorch as ipex
     try_ipex_optimize = ipex.optimize

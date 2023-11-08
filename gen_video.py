@@ -14,8 +14,8 @@ import re
 from typing import List, Optional, Tuple, Union
 
 import click
-import dnnlib
 import torch
+import dnnlib
 try:
     import intel_extension_for_pytorch as ipex
     try_ipex_optimize = ipex.optimize
