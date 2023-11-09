@@ -2,9 +2,8 @@
 
  - StyleGAN3 codebase running on SYCL instead of CUDA
  - tested on Intel Arc A770 GPU (locally) and Data Center GPU Max 1100 at [Intel Developer Cloud](https://devcloud.intel.com/oneapi/home/)
- - ported the kernels `bias_act` and `upfirdn2d` from CUDA to SYCL
- - `filtered_lrelu` porting in progress ('ref' implementation using pure PyTorch is used temporarily)
- - performance tuning will follow
+ - ported the kernels `bias_act`, `upfirdn2d` and `filtered_lrelu` from CUDA to SYCL
+ - performance tuning in progress
 
 ## Usage
 ```
