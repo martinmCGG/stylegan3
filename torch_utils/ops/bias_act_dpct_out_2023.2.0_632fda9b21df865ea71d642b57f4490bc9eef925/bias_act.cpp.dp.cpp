@@ -90,6 +90,7 @@ static torch::Tensor bias_act(torch::Tensor x, torch::Tensor b, torch::Tensor xr
     //std::cout << "mean2 " << new_mean << " " << y.dtype() << std::endl;
     //std::cout << "means " << ori_mean << " " << new_mean << std::endl;
     //TORCH_CHECK(ori_mean != new_mean, "y must change");
+    //float touch = y.flatten()[0].item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel output seems unchanged since the initialization/allocation (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run)
 
     return y;
 }

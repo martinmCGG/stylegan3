@@ -32,6 +32,7 @@ the code, or use smaller sub-group size to avoid high register pressure.
 */
 void bias_act_kernel(bias_act_kernel_params p, const sycl::nd_item<3> &item_ct1)
 {
+    //item_ct1.barrier();
     typedef typename InternalType<T>::scalar_t scalar_t;
     int G                 = p.grad;
     scalar_t alpha        = (scalar_t)p.alpha;
@@ -165,6 +166,7 @@ void bias_act_kernel(bias_act_kernel_params p, const sycl::nd_item<3> &item_ct1)
         // Store.
         ((T*)p.y)[xi] = (T)y;
     }
+    //item_ct1.barrier();
 }
 
 template <class T>
