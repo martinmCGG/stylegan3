@@ -11,6 +11,14 @@
 #include <torch/extension.h>
 #include "filtered_lrelu.h"
 
+//#include <iostream>
+//#include <memory>
+//#include <torch/script.h>
+#include <ipex.h>
+//#include <CL/sycl.hpp>
+
+using namespace sycl;
+using namespace xpu::dpcpp;
 
 template <class T, class index_t, bool signWrite, bool signRead>
 void choose_and_run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p)
@@ -117,7 +125,17 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     int64_t yh = (ch - fdt_h + (down - 1)) / down;
     TORCH_CHECK(yw > 0 && yh > 0, "output must be at least 1x1");
     TORCH_CHECK(yw <= INT_MAX && yh <= INT_MAX, "output is too large");
-    torch::Tensor y = torch::empty({x.size(0), x.size(1), yh, yw}, x.options(), x.suggest_memory_format());
+    //torch::Tensor y = torch::empty({x.size(0), x.size(1), yh, yw}, x.options(), x.suggest_memory_format());
+
+
+    /*auto device_type = c10::DeviceType::XPU;
+    c10::impl::VirtualGuardImpl impl(device_type);
+    c10::Stream xpu_stream = impl.getStream(c10::Device(device_type));
+    auto& sycl_queue = xpu::get_queue_from_stream(xpu_stream);*/
+    auto& sycl_queue = dpct::get_current_device().default_queue();
+    float *y_ptr = malloc_device<float>(x.size(0) * x.size(1) * yh * yw, sycl_queue);
+    auto y = fromUSM(y_ptr, at::ScalarType::Float, {x.size(0), x.size(1), yh, yw}, c10::nullopt, -1).to(at::kXPU);
+
 
     // Initialize to 0 or 1 (only for debugging)
     //y *= 0;
