@@ -1965,7 +1965,8 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
     //std::cout << "run_filtered_lrelu_act_kernel" << std::endl;
     // Launch kernel.
     void* args[] = {&p};
-    int bx = 128; // 4 warps per block.
+    //int bx = 128; // 4 warps per block.
+    int bx = 1; // 4 warps per block.
 
     // Logical size of launch = writeSigns ? p.s : p.x
     uint32_t gx = signWrite ? p.sShape.x() : p.xShape.x();
