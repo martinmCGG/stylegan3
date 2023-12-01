@@ -263,7 +263,7 @@ static torch::Tensor filtered_lrelu_act(torch::Tensor x, torch::Tensor si, int s
         sw = (sw + 15) & ~15; // Round to a multiple of 16 for coalescing.
         s = so = torch::empty({x.size(0), x.size(1), x.size(2), sw >> 2}, x.options().dtype(torch::kUInt8), at::MemoryFormat::Contiguous);
         {
-            float touch = so.flatten()[0].item<float>(); // workaround: touch the signs if writeSigns - TODO: is this needed?
+            //float touch = so.flatten()[0].item<float>(); // workaround: touch the signs if writeSigns - TODO: is this needed?
         }
     }
 

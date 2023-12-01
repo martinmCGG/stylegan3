@@ -79,7 +79,7 @@ static torch::Tensor bias_act(torch::Tensor x, torch::Tensor b, torch::Tensor xr
     p.loopX = 4;
 
     //float ori_mean = torch::mean(y.flatten()).item<float>(); 
-    float touch = y.flatten()[0].item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel output seems unchanged since the initialization/allocation (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run)
+    //float touch = y.flatten()[0].item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel output seems unchanged since the initialization/allocation (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run)
     //std::cout << "mean1 " << ori_mean << " " << y.dtype() << std::endl;
     //std::cout << "y.options().device_opt().has_value() " << y.options().device_opt().has_value() << " y.options().device_opt().has_value() " << y.options().device_opt().has_value() <<" y.is_contiguous() " << y.is_contiguous() << " y.is_lazy() " << y.is_lazy() <<  "y.is_non_overlapping_and_dense() " << y.is_non_overlapping_and_dense() << " y.is_sparse() " << y.is_sparse() << " y.is_xpu() " << y.is_xpu() << " y.is_meta() " << y.is_meta() << std::endl;
     //std::cout << "x.device().str " << x.device().str() << " y.device().str " << y.device().str() << std::endl;

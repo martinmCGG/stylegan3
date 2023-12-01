@@ -1829,11 +1829,12 @@ template <class T, class index_t, bool signWrite, bool signRead,
                   // specializations would need to be avoided)
 void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
     //std::cout << "run_filtered_lrelu_kernel" << std::endl;
+    
     auto device_type = c10::DeviceType::XPU;
     c10::impl::VirtualGuardImpl impl(device_type);
     c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
     auto& queue = xpu::get_queue_from_stream(c10_stream);
-    //sycl::queue queue = dpct::get_current_device().default_queue();
+
     c_fbuf.init(queue);
     auto c_fbuf_ptr_ct1 = c_fbuf.get_ptr();
 
@@ -1992,7 +1993,11 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
     Adjust the work-group size if needed.
     */
   {
-    sycl::queue queue = dpct::get_current_device().default_queue();
+    auto device_type = c10::DeviceType::XPU;
+    c10::impl::VirtualGuardImpl impl(device_type);
+    c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
+    auto& queue = xpu::get_queue_from_stream(c10_stream);
+
     dpct::has_capability_or_fail(
         queue.get_device(),
         {sycl::aspect::fp64});
