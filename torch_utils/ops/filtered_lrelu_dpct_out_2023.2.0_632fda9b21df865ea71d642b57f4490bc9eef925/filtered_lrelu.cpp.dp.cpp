@@ -133,16 +133,26 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     c10::Stream xpu_stream = impl.getStream(c10::Device(device_type));
     auto& sycl_queue = xpu::get_queue_from_stream(xpu_stream);*/
     auto& sycl_queue = dpct::get_current_device().default_queue();
-    float *y_ptr = malloc_device<float>(x.size(0) * x.size(1) * yh * yw, sycl_queue);
-    auto y = fromUSM(y_ptr, at::ScalarType::Float, {x.size(0), x.size(1), yh, yw}, c10::nullopt, -1).to(at::kXPU);
+    auto y_nbytes = x.size(0) * x.size(1) * yh * yw;
+    float *y_ptr = malloc_device<float>(y_nbytes, sycl_queue);
+    const auto y_size = {x.size(0), x.size(1), yh, yw};
+    const auto y_sizes = std::vector(y_size); // using a vector is an overkill here
 
+    //std::cout << "yptr after malloc " << y_ptr << std::endl; 
+
+    /*float *y_ptr_dummy = malloc_device<float>(y_nbytes, sycl_queue);
+    auto y_dummy = fromUSM(y_ptr_dummy, at::ScalarType::Float, y_sizes, c10::nullopt, -1).to(at::kXPU);
+    {
+        float touch = y_dummy.flatten()[0].item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel output seems unchanged since the initialization/allocation (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run)
+    }*/
 
     // Initialize to 0 or 1 (only for debugging)
     //y *= 0;
     //y += 1;
 
     {
-        float touch = y.flatten()[0].item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel output seems unchanged since the initialization/allocation (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run)
+        //float touch = y.flatten()[0].item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel output seems unchanged since the initialization/allocation (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run)
+        //float touch = y_ptr[0]; // not enough
     }
     
     // Allocate sign tensor.
@@ -177,8 +187,10 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
 
     // Populate rest of kernel parameters.
     p.x         = x.data_ptr();
-    p.y         = y.data_ptr();
-    p.y_nbytes   = y.storage().nbytes();
+    p.y         = y_ptr;//y.data_ptr();
+    //std::cout << "yptr passed to kernel " << p.y << std::endl; 
+
+    p.y_nbytes   = y_nbytes;//y.storage().nbytes();
     //std::cout << "p.y_nbytes: " << p.y_nbytes << std::endl;
     p.b         = b.data_ptr();
     p.s         = (readSigns || writeSigns) ? s.data_ptr<unsigned char>() : 0;
@@ -191,8 +203,8 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     p.flip      = (flip_filters) ? 1 : 0;
     p.xShape = sycl::int4((int)x.size(3), (int)x.size(2), (int)x.size(1),
                           (int)x.size(0));
-    p.yShape = sycl::int4((int)y.size(3), (int)y.size(2), (int)y.size(1),
-                          (int)y.size(0));
+    p.yShape = sycl::int4((int)y_sizes[3], (int)y_sizes[2], (int)y_sizes[1],
+                          (int)y_sizes[0]);
     p.sShape = (readSigns || writeSigns)
                    ? sycl::int2((int)s.size(3), (int)s.size(2))
                    : sycl::int2(0, 0); // Width is in bytes. Contiguous.
@@ -202,8 +214,16 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     // x, y, b strides are in bytes.
     p.xStride = sycl::longlong4(sz * x.stride(3), sz * x.stride(2),
                             sz * x.stride(1), sz * x.stride(0));
-    p.yStride = sycl::longlong4(sz * y.stride(3), sz * y.stride(2),
-                            sz * y.stride(1), sz * y.stride(0));
+    
+    //std::cout << "x strides" << x.stride(0) << " " << x.stride(1) << " " << x.stride(2) << " " << x.stride(3) << std::endl;
+    /*TORCH_CHECK(x.stride(0) == 1 &&
+                x.stride(1) == 1 && 
+                x.stride(2) == 1 && 
+                x.stride(3) == 1 , "debug: stride is expected to be 1");*/
+
+    //p.yStride = p.xStride; // !!! may be different?
+                //sycl::longlong4(sz * y.stride(3), sz * y.stride(2),
+                //            sz * y.stride(1), sz * y.stride(0));
     p.bStride   = sz * b.stride(0);
 
     // fu, fd strides are in elements.
@@ -225,17 +245,25 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
             std::max(x.size(2) * p.xStride.y(), 0ll) +
             std::max(x.size(3) * p.xStride.x(), 0ll) >
         INT_MAX) index64b = true;
-    if (std::min(y.size(0) * p.yStride.w(), 0ll) +
-            std::min(y.size(1) * p.yStride.z(), 0ll) +
-            std::min(y.size(2) * p.yStride.y(), 0ll) +
-            std::min(y.size(3) * p.yStride.x(), 0ll) <
+    if (std::min(y_sizes[0] * p.yStride.w(), 0ll) +
+            std::min(y_sizes[1] * p.yStride.z(), 0ll) +
+            std::min(y_sizes[2] * p.yStride.y(), 0ll) +
+            std::min(y_sizes[3] * p.yStride.x(), 0ll) <
         -INT_MAX) index64b = true;
-    if (std::max(y.size(0) * p.yStride.w(), 0ll) +
-            std::max(y.size(1) * p.yStride.z(), 0ll) +
-            std::max(y.size(2) * p.yStride.y(), 0ll) +
-            std::max(y.size(3) * p.yStride.x(), 0ll) >
+    if (std::max(y_sizes[0] * p.yStride.w(), 0ll) +
+            std::max(y_sizes[1] * p.yStride.z(), 0ll) +
+            std::max(y_sizes[2] * p.yStride.y(), 0ll) +
+            std::max(y_sizes[3] * p.yStride.x(), 0ll) >
         INT_MAX) index64b = true;
     if (s.numel() > INT_MAX) index64b = true;
+
+    auto y = fromUSM(y_ptr, at::ScalarType::Float, y_sizes, c10::nullopt, -1).to(at::kXPU);
+    {
+        float touch = y.flatten()[0].item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel output seems unchanged since the initialization/allocation (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run)
+    }
+    p.yStride = sycl::longlong4(sz * y.stride(3), sz * y.stride(2),
+                            sz * y.stride(1), sz * y.stride(0));
+
 
     // Choose and run the kernel.
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "filtered_lrelu_xpu", [&]
@@ -252,6 +280,7 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
             else TORCH_CHECK(false, "internal error - XPU kernel not found") // This should not happen because we tested earlier that kernel exists.
         } else TORCH_CHECK(false, "internal error - XPU kernel not found") // This should not happen because we tested earlier that kernel exists. - maybe not necessary to check?
     });
+
 
     // Done.
     return std::make_tuple(y, so, 0);
