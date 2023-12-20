@@ -9,6 +9,7 @@
 #include <sycl/sycl.hpp>
 #include <sycl/accessor.hpp>
 #include <dpct/dpct.hpp>
+#include <ipex.h>
 #include <torch/extension.h>
 #include <c10/util/Half.h>
 #include "filtered_lrelu.h"
@@ -1828,7 +1829,12 @@ template <class T, class index_t, bool signWrite, bool signRead,
                   // specializations would need to be avoided)
 void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
     //std::cout << "run_filtered_lrelu_kernel" << std::endl;
-    sycl::queue queue = dpct::get_current_device().default_queue();
+    
+    auto device_type = c10::DeviceType::XPU;
+    c10::impl::VirtualGuardImpl impl(device_type);
+    c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
+    auto& queue = xpu::get_queue_from_stream(c10_stream);
+
     c_fbuf.init(queue);
     auto c_fbuf_ptr_ct1 = c_fbuf.get_ptr();
 
@@ -1965,7 +1971,8 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
     //std::cout << "run_filtered_lrelu_act_kernel" << std::endl;
     // Launch kernel.
     void* args[] = {&p};
-    int bx = 128; // 4 warps per block.
+    //int bx = 128; // 4 warps per block.
+    int bx = 1; // 4 warps per block.
 
     // Logical size of launch = writeSigns ? p.s : p.x
     uint32_t gx = signWrite ? p.sShape.x() : p.xShape.x();
@@ -1986,7 +1993,11 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
     Adjust the work-group size if needed.
     */
   {
-    sycl::queue queue = dpct::get_current_device().default_queue();
+    auto device_type = c10::DeviceType::XPU;
+    c10::impl::VirtualGuardImpl impl(device_type);
+    c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
+    auto& queue = xpu::get_queue_from_stream(c10_stream);
+
     dpct::has_capability_or_fail(
         queue.get_device(),
         {sycl::aspect::fp64});

@@ -8,6 +8,7 @@
 
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
+#include <ipex.h>
 #include <c10/util/Half.h>
 #include "upfirdn2d.h"
 
@@ -280,8 +281,11 @@ void run_upfirdn2d_kernel_small(upfirdn2d_kernel_params p) {
     const int tileInW = ((tileOutW - 1) * downx + filterW - 1) / upx + 1;
     const int tileInH = ((tileOutH - 1) * downy + filterH - 1) / upy + 1;
 
-    sycl::queue queue = dpct::get_current_device().default_queue();
-    //queue.wait();
+    auto device_type = c10::DeviceType::XPU;
+    c10::impl::VirtualGuardImpl impl(device_type);
+    c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
+    auto& queue = xpu::get_queue_from_stream(c10_stream);
+    
     queue.submit([&](sycl::handler &cgh) {
           sycl::local_accessor<T, 2> sf_acc_ct1(
               sycl::range<2>(filterH, filterW), cgh);
@@ -316,11 +320,12 @@ void run_upfirdn2d_kernel_large(upfirdn2d_kernel_params p, int tileOutW, int til
     Adjust the work-group size if needed.
     */
   {
-    /*dpct::has_capability_or_fail(
-        ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))->get_device(),
-        {sycl::aspect::fp64});*/
-    sycl::queue queue = dpct::get_current_device().default_queue();
-    //queue.wait();
+
+    auto device_type = c10::DeviceType::XPU;
+    c10::impl::VirtualGuardImpl impl(device_type);
+    c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
+    auto& queue = xpu::get_queue_from_stream(c10_stream);
+
     queue.submit([&](sycl::handler &cgh) {
 
           cgh.parallel_for(sycl::nd_range<3>(gridSize * blockSize, blockSize),

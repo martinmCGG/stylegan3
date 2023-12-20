@@ -269,7 +269,7 @@ static torch::Tensor upfirdn2d(torch::Tensor x, torch::Tensor f, int upx, int up
     p.sizeMinor = (p.inStride.z() == 1) ? p.inSize.z() : 1;
 
     //float ori_mean = torch::mean(y.flatten()).item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel was not changing the output from the value it was initialized to (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run); TODO investigate the root cause
-    float touch = y.flatten()[0].item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel output seems unchanged since the initialization/allocation (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run)
+    //float touch = y.flatten()[0].item<float>(); // workaround for an issue when running this plugin inside a larger network (not when running separately): the kernel output seems unchanged since the initialization/allocation (guess: maybe the output initialization is delayed, overwriting the kernel's results; touching the memory forces it to happen now before the kernel is run)
 
     // Choose CUDA kernel.
     AT_DISPATCH_FLOATING_TYPES_AND_HALF(x.scalar_type(), "upfirdn2d_xpu", [&]
