@@ -71,28 +71,57 @@ RUN apt-get update && \
     intel-oneapi-runtime-mkl=${MKL_VER} \
     intel-oneapi-runtime-ccl=${CCL_VER}
 
-#FROM intel/intel-extension-for-pytorch:2.1.10-xpu
-#USER root
+ARG PYTHON
+RUN apt-get update && apt install -y software-properties-common 
+RUN add-apt-repository -y ppa:deadsnakes/ppa 
 
-# TODO _VERSION arguments for dnnl etc. - use the same version as previously installed runtime libs
-RUN apt-get update && apt-get install -y ninja-build intel-oneapi-dpcpp-cpp-2024.0 intel-oneapi-dnnl-devel-2024.0 intel-oneapi-mkl-devel-2024.0 python3-dev
+RUN apt-cache policy $PYTHON && apt-get update && apt-get install -y \
+    --no-install-recommends --fix-missing $PYTHON 
 
-# conda post-installation taken from https://github.com/ContinuumIO/docker-images/tree/main/miniconda3 (3-clause BSD license, "(c) 2012 Continuum Analytics, Inc. / http://continuum.io", see the link for the full license)
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
-    bash miniconda.sh -b -p /opt/conda && \
-    rm -rf ~/miniconda3/miniconda.sh && \
-    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
-    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
-    echo "conda activate base" >> ~/.bashrc && \
-    find /opt/conda/ -follow -type f -name '*.a' -delete && \
-    find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
-    /opt/conda/bin/conda clean -afy
+RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
+    ${PYTHON} lib${PYTHON} python3-pip ${PYTHON}-distutils && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
 
-ENV PATH /opt/conda/bin:$PATH
+RUN pip --no-cache-dir install --upgrade \
+    pip \
+    setuptools
 
-COPY environment_intel.yml /environment_intel.yml
-RUN conda env create -f environment_intel.yml && rm environment_intel.yml
-RUN echo "conda activate stylegan3" >> ~/.bashrc
-RUN echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bashrc
+RUN ln -sf $(which ${PYTHON}) /usr/local/bin/python && \
+    ln -sf $(which ${PYTHON}) /usr/local/bin/python3 && \
+    ln -sf $(which ${PYTHON}) /usr/bin/python && \
+    ln -sf $(which ${PYTHON}) /usr/bin/python3
 
-RUN apt-get update && apt-get install -y intel-oneapi-dpcpp-ct-2024.0
+ARG TORCH_VERSION
+ARG TORCHVISION_VERSION
+ARG TORCHAUDIO_VERSION
+ARG IPEX_VERSION
+ARG ONECCL_BIND_PT_VERSION
+ARG TORCH_WHL_URL
+ARG IPEX_WHL_URL
+ARG TORCHVISION_WHL_URL
+ARG TORCHAUDIO_WHL_URL
+ARG ONECCL_BIND_PT_WHL_URL
+
+RUN python -m pip install numpy
+
+RUN python -m pip install torch==${TORCH_VERSION} --extra-index-url ${TORCH_WHL_URL} && \
+    python -m pip install intel_extension_for_pytorch==${IPEX_VERSION} --extra-index-url ${IPEX_WHL_URL} && \
+    python -m pip install torchvision==${TORCHVISION_VERSION} --extra-index-url ${TORCHVISION_WHL_URL} && \
+    python -m pip install torchaudio==${TORCHAUDIO_VERSION} --extra-index-url ${TORCHAUDIO_WHL_URL} && \
+    python -m pip install oneccl_bind_pt==${ONECCL_BIND_PT_VERSION} --extra-index-url ${ONECCL_BIND_PT_WHL_URL} 
+
+ENV LD_LIBRARY_PATH=/opt/intel/oneapi/lib:/opt/intel/oneapi/lib/intel64:$LD_LIBRARY_PATH
+
+ARG UNAME
+ARG GID
+ARG GNAME=render
+ARG VNAME=video
+
+RUN useradd -m -s /bin/bash $UNAME
+
+RUN groupadd -g $GID $GNAME
+
+RUN usermod -a -G $VNAME,$GNAME $UNAME
+
+USER $UNAME

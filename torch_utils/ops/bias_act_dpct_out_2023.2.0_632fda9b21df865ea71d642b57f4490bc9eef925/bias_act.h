@@ -1,5 +1,8 @@
+#include <fstream>
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
+#include <torch/extension.h>
+
 // Copyright (c) 2021, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
 //
 // NVIDIA CORPORATION and its licensors retain all intellectual property
@@ -9,7 +12,7 @@
 // license agreement from NVIDIA CORPORATION is strictly prohibited.
 
 //------------------------------------------------------------------------
-// CUDA kernel parameters.
+// XPU kernel parameters.
 
 struct bias_act_kernel_params
 {

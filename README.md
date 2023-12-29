@@ -8,7 +8,23 @@
 ## Usage
 ```
 git clone https://github.com/martinmCGG/stylegan3 && cd stylegan3
+```
 
+### In Docker
+```
+./Dockerfile_generate.sh && sudo IMAGE_NAME=stylegan3_ipex ./build.sh && sudo docker run --rm -it -v /home/user/.cache/dnnlib/downloads:/root/.cache/dnnlib/downloads:ro -v /home/user/stylegan3:/app -w /app stylegan3_ipex bash
+
+or directly
+
+./Dockerfile_generate.sh && sudo IMAGE_NAME=stylegan3_ipex ./build.sh && sudo docker run --rm -it --device=/dev/dri --ipc=host -v /home/user/.cache/dnnlib/downloads:/root/.cache/dnnlib/downloads:ro -v /home/user/stylegan3:/app -w /app stylegan3_ipex bash -i -c 'python gen_video.py --output=benchmark.mp4 --trunc=1 --seeds=2,5 --w-frames=32 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl'
+
+or (with caching of the built module)
+
+./Dockerfile_generate.sh && sudo IMAGE_NAME=stylegan3_ipex ./build.sh && sudo docker run --rm -it --device=/dev/dri --ipc=host -v cache:/root/.cache -v /home/user/.cache/dnnlib/downloads:/root/.cache/dnnlib/downloads:ro -v /home/user/stylegan3:/app -w /app stylegan3_ipex bash -i -c 'python gen_video.py --output=benchmark.mp4 --trunc=1 --seeds=2,5 --w-frames=32 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl'
+```
+
+### Native
+```
 # install conda if not installed yet (https://docs.conda.io/projects/miniconda/en/latest/miniconda-install.html)
 
 # install dependencies (run only the first time)

@@ -6,12 +6,9 @@
 // distribution of this software and related documentation without an express
 // license agreement from NVIDIA CORPORATION is strictly prohibited.
 
-#include <sycl/sycl.hpp>
-#include <dpct/dpct.hpp>
-#include <ipex.h>
-#include <torch/extension.h>
-#include <c10/util/Half.h>
 #include "bias_act.h"
+#include <ipex.h>
+#include <c10/util/Half.h>
 
 //------------------------------------------------------------------------
 // Helpers.

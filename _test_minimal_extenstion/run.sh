@@ -1,0 +1,1 @@
+docker run --rm -it --privileged --device=/dev/dri --ipc=host intel/intel-extension-for-pytorch:2.1.10-xpu python go.py
