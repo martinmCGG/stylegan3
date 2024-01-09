@@ -11,6 +11,7 @@
 
 #include <sycl/sycl.hpp>
 #include <iostream>
+#include <fstream>
 #include <limits.h>
 #include <math.h>
 

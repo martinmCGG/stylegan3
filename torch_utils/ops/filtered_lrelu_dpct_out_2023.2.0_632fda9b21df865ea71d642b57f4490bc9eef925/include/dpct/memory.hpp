@@ -1157,7 +1157,7 @@ public:
   /// Constructor with range
   device_memory(const sycl::range<Dimension> &range_in)
       : _size(range_in.size() * sizeof(T)), _range(range_in), _reference(false),
-        _host_ptr(nullptr), _device_ptr(nullptr) {
+        _host_ptr(nullptr), _device_ptr(nullptr), _queue(nullptr) {
     static_assert(
         (Memory == global) || (Memory == constant) || (Memory == shared),
         "device memory region should be global, constant or shared");
@@ -1174,7 +1174,12 @@ public:
 
   ~device_memory() {
     if (_device_ptr && !_reference)
-      dpct::dpct_free(_device_ptr);
+      std::cout << "free device_memory within queue " << _queue << std::endl;
+      if (_queue) {
+        dpct::dpct_free(_device_ptr, *_queue);
+      } else {
+        dpct::dpct_free(_device_ptr);
+      }
     if (_host_ptr)
       std::free(_host_ptr);
   }
@@ -1251,6 +1256,7 @@ private:
         _device_ptr(memory_ptr) {}
 
   void allocate_device(sycl::queue &q) {
+    _queue = &q;
 #ifndef DPCT_USM_LEVEL_NONE
     if (Memory == shared) {
       _device_ptr = (value_t *)sycl::malloc_shared(
@@ -1266,6 +1272,7 @@ private:
   bool _reference;
   value_t *_host_ptr;
   value_t *_device_ptr;
+  sycl::queue *_queue;
 };
 template <class T, memory_region Memory>
 class device_memory<T, Memory, 0> : public device_memory<T, Memory, 1> {
