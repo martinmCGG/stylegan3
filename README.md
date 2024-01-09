@@ -12,15 +12,19 @@ git clone https://github.com/martinmCGG/stylegan3 && cd stylegan3
 
 ### In Docker
 ```
-./Dockerfile_generate.sh && sudo IMAGE_NAME=stylegan3_ipex ./build.sh && sudo docker run --rm -it -v /home/user/.cache/dnnlib/downloads:/root/.cache/dnnlib/downloads:ro -v /home/user/stylegan3:/app -w /app stylegan3_ipex bash
+./Dockerfile_generate.sh && sudo IMAGE_NAME=stylegan3_ipex ./build.sh && sudo docker run --rm -it -v $HOME/.cache/dnnlib/downloads:/root/.cache/dnnlib/downloads:ro -v $HOME/stylegan3:/app -w /app stylegan3_ipex bash
 
 or directly
 
-./Dockerfile_generate.sh && sudo IMAGE_NAME=stylegan3_ipex ./build.sh && sudo docker run --rm -it --device=/dev/dri --ipc=host -v /home/user/.cache/dnnlib/downloads:/root/.cache/dnnlib/downloads:ro -v /home/user/stylegan3:/app -w /app stylegan3_ipex bash -i -c 'python gen_video.py --output=benchmark.mp4 --trunc=1 --seeds=2,5 --w-frames=32 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl'
+./Dockerfile_generate.sh && sudo IMAGE_NAME=stylegan3_ipex ./build.sh && sudo docker run --rm -it --device=/dev/dri --ipc=host -v $HOME/.cache/dnnlib/downloads:/root/.cache/dnnlib/downloads:ro -v $HOME/stylegan3:/app -w /app stylegan3_ipex bash -i -c 'python gen_video.py --output=benchmark.mp4 --trunc=1 --seeds=2,5 --w-frames=32 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl'
 
 or (with caching of the built module)
 
-./Dockerfile_generate.sh && sudo IMAGE_NAME=stylegan3_ipex ./build.sh && sudo docker run --rm -it --device=/dev/dri --ipc=host -v cache:/root/.cache -v /home/user/.cache/dnnlib/downloads:/root/.cache/dnnlib/downloads:ro -v /home/user/stylegan3:/app -w /app stylegan3_ipex bash -i -c 'python gen_video.py --output=benchmark.mp4 --trunc=1 --seeds=2,5 --w-frames=32 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl'
+./Dockerfile_generate.sh && sudo IMAGE_NAME=stylegan3_ipex ./build.sh && sudo docker run --rm -it --device=/dev/dri --ipc=host -v cache:/root/.cache -v $HOME/.cache/dnnlib/downloads:/root/.cache/dnnlib/downloads:ro -v $HOME/stylegan3:/app -w /app stylegan3_ipex bash -i -c 'python gen_video.py --output=benchmark.mp4 --trunc=1 --seeds=2,5 --w-frames=32 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl'
+
+or run via script
+
+./Dockerfile_generate.sh && sudo IMAGE_NAME=stylegan3_ipex ./build.sh && sudo docker run --rm -it --device=/dev/dri --ipc=host -v cache:/root/.cache -v $HOME/.cache/dnnlib/downloads:/root/.cache/dnnlib/downloads:ro -v $HOME/stylegan3:/app -w /app stylegan3_ipex bash -i ./bench3.sh --skip-conda
 ```
 
 ### Native
@@ -49,6 +53,8 @@ python gen_images.py --outdir=out --trunc=1 --seeds=1-10 --network=https://api.n
 python gen_video.py --output=stylegan3-r-afhqv2_512_1-2.mp4 --trunc=1 --seeds=1-2 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl
 python gen_video.py --output=stylegan3-t-ffhqu-1024_1-5.mp4 --trunc=1 --seeds=1-5 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-ffhqu-1024x1024.pkl
 # or choose other pre-trained models listed in the readme below
+
+conda activate stylegan3 && source /opt/intel/oneapi/setvars.sh && python gen_video.py --output=benchmark.mp4 --trunc=1 --seeds=2,5 --w-frames=32 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl
 
 # In case of multiple GPUs (e.g. if you also have an integrated GPU), you may want to explicitly tell SYCL to use only the dedicated GPU - find ONEAPI_DEVICE_SELECTOR that matches the correct device
 ONEAPI_DEVICE_SELECTOR='ext_oneapi_level_zero:0' sycl-ls  # this prints the detected device for a given selector

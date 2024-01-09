@@ -23,3 +23,4 @@ RUN echo "conda activate stylegan3" >> ~/.bashrc
 RUN echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bashrc
 
 RUN apt-get update && apt-get install -y intel-oneapi-dpcpp-ct-2024.0
+#RUN apt-get update && apt-get install -y intel-oneapi-vtune
