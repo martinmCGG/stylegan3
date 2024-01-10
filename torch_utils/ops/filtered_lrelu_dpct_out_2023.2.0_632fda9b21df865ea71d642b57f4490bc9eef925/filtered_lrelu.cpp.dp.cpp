@@ -6,11 +6,8 @@
 // distribution of this software and related documentation without an express
 // license agreement from NVIDIA CORPORATION is strictly prohibited.
 
-#include <sycl/sycl.hpp>
-#include <dpct/dpct.hpp>
-#include <torch/extension.h>
 #include "filtered_lrelu.h"
-
+#include <torch/extension.h>
 
 template <class T, class index_t, bool signWrite, bool signRead>
 void choose_and_run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p)

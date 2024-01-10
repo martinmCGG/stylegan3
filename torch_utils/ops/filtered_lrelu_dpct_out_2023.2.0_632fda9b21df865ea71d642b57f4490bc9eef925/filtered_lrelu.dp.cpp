@@ -6,13 +6,11 @@
 // distribution of this software and related documentation without an express
 // license agreement from NVIDIA CORPORATION is strictly prohibited.
 
-#include <sycl/sycl.hpp>
+#include "filtered_lrelu.h"
 #include <sycl/accessor.hpp>
-#include "dpct/dpct.hpp"
 #include <ipex.h>
 #include <torch/extension.h>
 #include <c10/util/Half.h>
-#include "filtered_lrelu.h"
 #include <cstdint>
 #include <cmath>
 

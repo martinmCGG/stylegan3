@@ -1,4 +1,4 @@
-// helper macro for template specializations
+// helper macro for template specializations; can be included multiple times
 #define SPECIALIZE_CASE(T, index_t, signWrite, signRead, U, FU, D, FD, MODE, TW, TH, W, XR, WS) \
     template void run_filtered_lrelu_kernel<T, index_t, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W, XR, WS>(filtered_lrelu_kernel_params& p);
 

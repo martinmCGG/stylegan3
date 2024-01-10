@@ -30,8 +30,8 @@ def _init():
                 sources=[plugin_dir + 'upfirdn2d.cpp.dp.cpp', plugin_dir + 'upfirdn2d.dp.cpp'],
                 headers=[plugin_dir + 'upfirdn2d.h'],
                 source_dir=os.path.dirname(__file__),
-                #extra_cflags=['-ffast-math'], # takes ~3min 10s to compile
-                extra_cflags=['-ffast-math', '-cl-fast-relaxed-math', '-O3'], # takes ~3.5 min to compile; TODO 
+                #extra_cflags=['-ffast-math', '-I'+str(custom_ops.get_ops_include_path())], # takes ~3min 10s to compile
+                extra_cflags=['-ffast-math', '-cl-fast-relaxed-math', '-O3', '-I'+str(custom_ops.get_ops_include_path())], # takes ~3.5 min to compile
                 # the compiled kernel is ~186MB large -> TODO consider/try optimizing for size (might not help much, because many of the large-ish symbols are mkl_*; our kernels are <100kB each)
             )
         else:
