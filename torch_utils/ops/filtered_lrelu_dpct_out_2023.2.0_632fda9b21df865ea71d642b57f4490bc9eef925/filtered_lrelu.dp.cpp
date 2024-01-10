@@ -89,14 +89,6 @@ template <class T> __dpct_inline__ T get_stride(const int64_t &x)
 
 #define MAX_FILTER_SIZE 32
 
-// Combined up/down filter buffers so that transfer can be done with one copy.
-static dpct::global_memory<float, 1> g_fbuf(
-    2 * MAX_FILTER_SIZE *
-    MAX_FILTER_SIZE); // Filters in global memory, written by setup kernel.
-static dpct::constant_memory<float, 1>
-    c_fbuf(2 * MAX_FILTER_SIZE *
-           MAX_FILTER_SIZE); // Filters in constant memory, read by main kernel.
-
 // Accessors to combined buffers to index up/down filters individually.
 #define c_fu (c_fbuf)
 #define c_fd (c_fbuf + MAX_FILTER_SIZE * MAX_FILTER_SIZE)
@@ -142,7 +134,7 @@ static void setup_filters_kernel(filtered_lrelu_kernel_params p,
 
 // Host function to copy filters written by setup kernel into constant buffer for main kernel.
 template <bool, bool>
-static dpct::err0 copy_filters(sycl::queue& stream) try {
+static dpct::err0 copy_filters(sycl::queue& stream, dpct::global_memory<float, 1>& g_fbuf, dpct::constant_memory<float, 1>& c_fbuf) try {
     void* src = 0;
     dpct::err0 err = DPCT_CHECK_ERROR(*(&src) = g_fbuf.get_ptr());
     /*
@@ -1835,6 +1827,10 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
     c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
     auto& queue = xpu::get_queue_from_stream(c10_stream);
 
+    // Combined up/down filter buffers so that transfer can be done with one copy.
+    dpct::global_memory<float, 1> g_fbuf(2 * MAX_FILTER_SIZE * MAX_FILTER_SIZE); // Filters in global memory, written by setup kernel.
+    dpct::constant_memory<float, 1> c_fbuf(2 * MAX_FILTER_SIZE * MAX_FILTER_SIZE); // Filters in constant memory, read by main kernel.
+
     c_fbuf.init(queue);
     auto c_fbuf_ptr_ct1 = c_fbuf.get_ptr();
 
@@ -1865,7 +1861,7 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
     limit. To get the device limit, query info::device::max_work_group_size.
     Adjust the work-group size if needed.
     */
-   auto task = queue.submit([&](sycl::handler &cgh) {
+    auto task = queue.submit([&](sycl::handler &cgh) {
         g_fbuf.init(queue);
 
         auto g_fbuf_ptr_ct1 = g_fbuf.get_ptr();
@@ -1873,10 +1869,9 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
         cgh.parallel_for(sycl::nd_range<3>(sycl::range<3>(1, 1, 1024),
                                            sycl::range<3>(1, 1, 1024)),
                          [=](sycl::nd_item<3> item_ct1) {
-                           setup_filters_kernel(p, item_ct1,
-                                                g_fbuf_ptr_ct1);
+                            setup_filters_kernel(p, item_ct1, g_fbuf_ptr_ct1);
                          });
-      });
+    });
 
     // Static definitions. - partially copied from inside the .cu (needed to compute e.g. the buffer sizes)
     typedef typename InternalType<T>::scalar_t scalar_t;
@@ -1917,9 +1912,9 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
     task.wait();
     
     // Copy kernels to constant memory.
-    if      ( signWrite && !signRead) (copy_filters<true,  false>(queue));
-    else if (!signWrite &&  signRead) (copy_filters<false, true >(queue));
-    else if (!signWrite && !signRead) (copy_filters<false, false>(queue));
+    if      ( signWrite && !signRead) (copy_filters<true,  false>(queue, g_fbuf, c_fbuf));
+    else if (!signWrite &&  signRead) (copy_filters<false, true >(queue, g_fbuf, c_fbuf));
+    else if (!signWrite && !signRead) (copy_filters<false, false>(queue, g_fbuf, c_fbuf));
 
     // Launch main kernel.
     const int maxSubGz = 65535; // CUDA maximum for block z dimension.
@@ -1955,10 +1950,15 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
                                       U, FU, D, FD, TW, TH, W * 32, !!XR, !!WS>(
                     p, item_ct1, c_fbuf_ptr_ct1,
                     s_buf0_st_acc_ct1.get_pointer(), yAccessor
+                    //s_buf0_st_acc_ct1.get_multi_ptr(), yAccessor
                     );
               });
         }).wait();
     }
+    //std::cout << "run_filtered_lrelu_kernel ending" << std::endl;
+    //c_fbuf.~device_memory();
+    //g_fbuf.~device_memory();
+    //std::cout << "run_filtered_lrelu_kernel end" << std::endl;
 }
 catch (sycl::exception const &exc) {
   std::cerr << exc.what() << "Exception caught at file:" << __FILE__
