@@ -29,6 +29,8 @@ fi
 #FRAME_COUNT=8
 FRAME_COUNT=32
 
+#export DNNL_VERBOSE=1
+
 # stylegan3-r (uses `bias_act` and `filtered_lrelu`): 
 python gen_video.py --output=benchmark3r.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl --preheat=True
 

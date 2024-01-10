@@ -30,7 +30,7 @@ def _init():
                 sources=[plugin_dir+'filtered_lrelu.cpp.dp.cpp', plugin_dir+'filtered_lrelu.dp.cpp', plugin_dir+'filtered_lrelu_wr.dp.cpp', plugin_dir+'filtered_lrelu_rd.dp.cpp', plugin_dir+'filtered_lrelu_ns.dp.cpp'],
                 headers=[plugin_dir+'filtered_lrelu.h', plugin_dir+'filtered_lrelu_cases.h', plugin_dir+'filtered_lrelu.cpp.dp.cpp'],
                 source_dir=os.path.dirname(__file__),
-                extra_cflags=['-ffast-math', '-cl-fast-relaxed-math', '-O3', '-Iinclude'],
+                extra_cflags=['-ffast-math', '-cl-fast-relaxed-math', '-O3', '-I'+str(custom_ops.get_ops_include_path())],
             )
         else:
             _plugin = custom_ops.get_plugin(

@@ -10,6 +10,7 @@ import glob
 import hashlib
 import importlib
 import os
+import pathlib
 import re
 import shutil
 import subprocess
@@ -175,3 +176,6 @@ def get_plugin(module_name, sources, headers=None, source_dir=None, **build_kwar
     return module
 
 #----------------------------------------------------------------------------
+
+def get_ops_include_path():
+    return pathlib.Path(__file__).parent.resolve().joinpath('ops').joinpath('include')

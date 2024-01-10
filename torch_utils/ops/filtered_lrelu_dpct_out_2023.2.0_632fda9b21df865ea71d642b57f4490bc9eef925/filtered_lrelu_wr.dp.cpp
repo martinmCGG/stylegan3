@@ -6,11 +6,10 @@
 // distribution of this software and related documentation without an express
 // license agreement from NVIDIA CORPORATION is strictly prohibited.
 
-#include <sycl/sycl.hpp>
-#include <dpct/dpct.hpp>
 #include "filtered_lrelu.dp.cpp"
 
 // Template/kernel specializations for sign write mode.
+
 // Full op, 32-bit indexing.
 #define CASE(...) \
     SPECIALIZE_CASE(c10::Half, int32_t, true, false, __VA_ARGS__) \

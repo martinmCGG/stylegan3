@@ -8,7 +8,7 @@
 
 #include <sycl/sycl.hpp>
 #include <sycl/accessor.hpp>
-#include <dpct/dpct.hpp>
+#include "dpct/dpct.hpp"
 #include <ipex.h>
 #include <torch/extension.h>
 #include <c10/util/Half.h>

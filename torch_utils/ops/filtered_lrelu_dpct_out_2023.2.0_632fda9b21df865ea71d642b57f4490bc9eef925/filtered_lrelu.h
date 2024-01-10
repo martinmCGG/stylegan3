@@ -8,7 +8,7 @@
 
 //#define SYCL2020_DISABLE_DEPRECATION_WARNINGS // clean up the compile output related to longlong type - unused
 #include <sycl/sycl.hpp>
-#include <dpct/dpct.hpp>
+#include "dpct/dpct.hpp"
 // SYCL2020 defines longlong3 and longlong4 as deprecated. SYCLomatic converts cuda longlong3/4 to just long3/4, but both should be int64 so it shouldn't matter. However, the std::min/max after "Determine if indices don't fit in int32" in filtered_lrelu.cpp.dp.cpp complains that incompatible long vs. long long are being compared, so let's just define them here
 using longlong3 = sycl::vec<long long, 3>;
 using longlong4 = sycl::vec<long long, 4>;
