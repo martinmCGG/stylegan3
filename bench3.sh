@@ -2,8 +2,11 @@
 
 # run directly
 #   ./bench3.sh
-# or profile with `-collect gpu-offload` or `gpu-hotspots`
-#   sudo --preserve-env HOME=$HOME LD_LIBRARY_PATH="$LD_LIBRARY_PATH" PATH="$PATH" /opt/intel/oneapi/vtune/2024.0/bin64/vtune -collect gpu-offload --app-working-dir=/home/user/stylegan3 -- ./bench3.sh
+# or profile with VTune's `-collect gpu-offload` or `gpu-hotspots`
+# note that the profiling takes very long ("bias_act_plugin" build takes >27 minutes on i5-13500) and can get stuck/freeze (e.g. when compiling the "filtered_lrelu" plugin or earlier)
+#   old command:
+#       sudo --preserve-env HOME=$HOME LD_LIBRARY_PATH="$LD_LIBRARY_PATH" PATH="$PATH" /opt/intel/oneapi/vtune/2024.0/bin64/vtune -collect gpu-hotspots --app-working-dir=/home/user/stylegan3 -- ./bench3.sh
+#   currently, just running vtune-gui under normal user account (enabling profiling access by setting requiested values in /proc/sys...), and just launching this script ('bench3.sh') as the profiled application (including child processes) is enough
 
 set -ex
 
@@ -22,9 +25,14 @@ if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
     export DNNLIB_CACHE_DIR=/home/user/.cache/dnnlib
     export IMAGEIO_FFMPEG_EXE=/home/user/miniconda3/envs/$ENVNAME/lib/python3.9/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux64-v4.2.2
 
-    $IMAGEIO_FFMPEG_EXE -version
+    #$IMAGEIO_FFMPEG_EXE -version
 
 fi
+
+python test_kernels.py
+#python test_kernels.py upfirdn2d
+#python test_inference_simple.py
+exit
 
 #FRAME_COUNT=8
 FRAME_COUNT=32

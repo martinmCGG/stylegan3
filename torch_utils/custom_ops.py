@@ -24,6 +24,12 @@ from torch.utils.file_baton import FileBaton
 allow_module_rebuild = True
 #allow_module_rebuild = False  # useful for profiling
 
+if allow_module_rebuild:
+    print('allow_module_rebuild =', allow_module_rebuild, '-> this would significantly slow down or freeze profiling!')
+else:
+    print('allow_module_rebuild =', allow_module_rebuild, '-> if not profiling, re-enable it!')
+
+
 try:
     import intel_extension_for_pytorch as ipex
     using_xpu = True
