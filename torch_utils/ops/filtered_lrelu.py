@@ -30,7 +30,7 @@ def _init():
                 sources=[plugin_dir+'filtered_lrelu.cpp.dp.cpp', plugin_dir+'filtered_lrelu.dp.cpp', plugin_dir+'filtered_lrelu_wr.dp.cpp', plugin_dir+'filtered_lrelu_rd.dp.cpp', plugin_dir+'filtered_lrelu_ns.dp.cpp'],
                 headers=[plugin_dir+'filtered_lrelu.h', plugin_dir+'filtered_lrelu_cases.h', plugin_dir+'filtered_lrelu.cpp.dp.cpp'],
                 source_dir=os.path.dirname(__file__),
-                extra_cflags=['-ffast-math', '-cl-fast-relaxed-math', '-O3', '-I'+str(custom_ops.get_ops_include_path())],
+                extra_cflags=custom_ops.get_xpu_cflags(),
             )
         else:
             _plugin = custom_ops.get_plugin(
@@ -121,7 +121,8 @@ def filtered_lrelu(x, fu=None, fd=None, b=None, up=1, down=1, padding=0, gain=np
     """
     assert isinstance(x, torch.Tensor)
     assert impl in ['ref', 'xpu']
-    if impl == 'xpu' and _init(): # and x.device.type == 'xpu'
+    if impl == 'xpu' and _init() and x.device.type == 'xpu':
+        print('_filtered_lrelu_xpu(up=',up,', down=',down,', padding=',padding,', gain=',gain,', slope=',slope,', clamp=',clamp,', flip_filter=',flip_filter,').apply(x=',x.shape,', fu=',fu.shape if fu is not None else None,', fd=',fd.shape if fd is not None else None,', b=',b.shape if b is not None else None,', None, 0, 0)')
         return _filtered_lrelu_xpu(up=up, down=down, padding=padding, gain=gain, slope=slope, clamp=clamp, flip_filter=flip_filter).apply(x, fu, fd, b, None, 0, 0)
     return _filtered_lrelu_ref(x, fu=fu, fd=fd, b=b, up=up, down=down, padding=padding, gain=gain, slope=slope, clamp=clamp, flip_filter=flip_filter)
 
