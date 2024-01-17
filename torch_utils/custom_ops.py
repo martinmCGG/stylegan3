@@ -21,17 +21,28 @@ import torch
 import torch.utils.cpp_extension
 from torch.utils.file_baton import FileBaton
 
+allow_module_rebuild = True
+#allow_module_rebuild = False  # useful for profiling
+
 try:
     import intel_extension_for_pytorch as ipex
     using_xpu = True
     cpp_extension = torch.xpu.cpp_extension
     torch_device_specific = ipex.xpu
+
+    def build_and_load_module(name, build_directory,  *args, **kwargs):
+        if allow_module_rebuild:
+            cpp_extension.load(name=name, build_directory=build_directory, *args, **kwargs)
+        else:
+            print('allow_module_rebuild == False: only loading a module that was built previously')
+            ipex.xpu.cpp_extension._import_module_from_library(module_name=name, path=build_directory, is_python_module=True)
+
 except:
     print('Warning: intel_extension_for_pytorch not loaded')
     using_xpu = False
     cpp_extension = torch.utils.cpp_extension
     torch_device_specific = torch.cuda
-
+    build_and_load_module = cpp_extension.load
 
 #----------------------------------------------------------------------------
 # Global options.
@@ -154,10 +165,10 @@ def get_plugin(module_name, sources, headers=None, source_dir=None, **build_kwar
             cached_sources = [os.path.join(cached_build_dir, os.path.basename(fname)) for fname in sources]
 
             #subprocess.run(command, stdout=stdout_fileno if verbose else subprocess.PIPE, stderr=subprocess.STDOUT, cwd=build_directory, check=True, env=env)
-            cpp_extension.load(name=module_name, build_directory=cached_build_dir,
+            build_and_load_module(name=module_name, build_directory=cached_build_dir,
                 verbose=verbose_build, sources=cached_sources, **build_kwargs)
         else:
-            cpp_extension.load(name=module_name, verbose=verbose_build, sources=sources, **build_kwargs)
+            build_and_load_module(name=module_name, verbose=verbose_build, sources=sources, **build_kwargs)
 
         # Load.
         module = importlib.import_module(module_name)
