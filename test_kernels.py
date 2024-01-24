@@ -6,7 +6,7 @@ import time
 
 kernels_to_test = sys.argv[1:]
 if len(kernels_to_test) == 0:
-    kernels_to_test = ['bias_act', 'filtered_lrelu', 'upfirdn2d']
+    kernels_to_test = ['bias_act', 'upfirdn2d', 'filtered_lrelu']
 
 d='xpu'
 
@@ -19,19 +19,16 @@ for k in kernels_to_test:
 
         length = 100000000 # 100M
 
-        for i in range(10):
+        for i in range(10): # trying larger input and repeated runs for experiments with "source analysis" profiling (all seems to work fine with this kernel); TODO use the input sizes taken from the actual stylegan3 execution
             print(bias_act.bias_act(x=torch.ones([1,length], device=d), b=torch.ones([length], device=d), act='sigmoid'))
 
     elif k == 'upfirdn2d':
         from torch_utils.ops import upfirdn2d
         print(upfirdn2d.upfirdn2d(x=torch.ones([1,1,1,1], device=d), f=torch.ones([1,1], device=d)))
 
-        #raise NotImplementedError('TODO')
-
-#        """
     elif k == 'filtered_lrelu':
         from torch_utils.ops import filtered_lrelu
-        print(filtered_lrelu.filtered_lrelu(x=torch.zeros([1,1,1,1]).to('xpu')))
+        print(filtered_lrelu.filtered_lrelu(x=torch.zeros([1,1,1,1]).to('xpu'))) # first run of filtered_lrelu seems to crash the profiler with "GTPin ERROR: Create Context failed - context already exists" followed by "at: CreateContext : 898", probably regardless of inputs size
         '''
 The actual sizes ran during stylegan3-r 512x512 inference:
 _filtered_lrelu_xpu(up= 2 , down= 2 , padding= [11, 10, 11, 10] , gain= 1.4142135623730951 , slope= 0.2 , clamp= 256 , flip_filter= False ).apply(x= torch.Size([1, 1024, 36, 36]) , fu= torch.Size([12]) , fd= torch.Size([12, 12]) , b= torch.Size([1024]) , None, 0, 0)
@@ -50,12 +47,12 @@ _filtered_lrelu_xpu(up= 2 , down= 2 , padding= [11, 10, 11, 10] , gain= 1.414213
 _filtered_lrelu_xpu(up= 2 , down= 2 , padding= [-9, -10, -9, -10], gain= 1.4142135623730951, slope= 0.2 , clamp= 256 , flip_filter= False ).apply(x= torch.Size([1, 128, 532, 532]), fu= torch.Size([12]) , fd= torch.Size([12]) , b= torch.Size([128]) , None, 0, 0)
 _filtered_lrelu_xpu(up= 1 , down= 1 , padding= [0, 0, 0, 0] ,     gain= 1 ,                  slope= 1 ,   clamp= 256 , flip_filter= False ).apply(x= torch.Size([1, 3, 512, 512]) ,  fu= None ,             fd= None ,             b= torch.Size([3]) , None, 0, 0)
         '''
-        print(filtered_lrelu.filtered_lrelu(up= 2 , down= 2 , padding= [-9, -10, -9, -10], gain= 1.4142135623730951, slope= 0.2 , clamp= 256 , flip_filter= False, x= torch.ones([1, 128, 532, 532],device=d), fu= torch.ones([12],device=d) , fd= torch.ones([12],device=d) , b= torch.ones([128],device=d)))
-#"""
+        #print(filtered_lrelu.filtered_lrelu(up= 2 , down= 2 , padding= [-9, -10, -9, -10], gain= 1.4142135623730951, slope= 0.2 , clamp= 256 , flip_filter= False, x= torch.ones([1, 128, 532, 532],device=d), fu= torch.ones([12],device=d) , fd= torch.ones([12],device=d) , b= torch.ones([128],device=d)))
+
     else:
         print('unknown kernel', k)
         exit(1)
     
-    time.sleep(1)
+    time.sleep(1) # pause before execution of the next kernel (if any)
 
 print('done')
