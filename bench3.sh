@@ -29,10 +29,10 @@ if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
 
 fi
 
-python test_kernels.py
+#python test_kernels.py
 #python test_kernels.py upfirdn2d
 #python test_inference_simple.py
-exit
+#exit
 
 #FRAME_COUNT=8
 FRAME_COUNT=32
@@ -41,9 +41,12 @@ FRAME_COUNT=32
 
 # stylegan3-r (uses `bias_act` and `filtered_lrelu`): 
 python gen_video.py --output=benchmark3r.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl --preheat=True
+# 1.39 it/s on A770 - 1.39 it/s
 
 # stylegan3-t (also uses `bias_act` and `filtered_lrelu`, but faster - different filter sizes?): 
 #python gen_video.py --output=benchmark3t.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl --preheat=True
+# 9.87 it/s - 9.84 it/s
 
 # stylegan2 (uses `bias_act` and `upfirdn2d`)
 #python gen_video.py --output=benchmark2.mp4 --trunc=1 --seeds=2,10 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan2/versions/1/files/stylegan2-afhqv2-512x512.pkl --preheat=True
+# ~28.9 it/s - 28.37 it/s

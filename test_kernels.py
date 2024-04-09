@@ -7,6 +7,7 @@ import time
 kernels_to_test = sys.argv[1:]
 if len(kernels_to_test) == 0:
     kernels_to_test = ['bias_act', 'upfirdn2d', 'filtered_lrelu']
+#    kernels_to_test = ['bias_act', 'upfirdn2d']
 
 d='xpu'
 
