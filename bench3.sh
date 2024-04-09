@@ -33,7 +33,7 @@ fi
 python test_kernels.py
 #python test_kernels.py upfirdn2d
 #python test_inference_simple.py
-#exit
+exit
 
 #FRAME_COUNT=8
 FRAME_COUNT=32
