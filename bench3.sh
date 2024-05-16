@@ -10,24 +10,28 @@ set -ex
 echo 'BENCH3'
 
 if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
+    #CONDA_DIR="$HOME"/miniconda3
+    CONDA_DIR=/opt/conda
 
     #ENVNAME=stylegan3_intel
-    ENVNAME=stylegan3
+    #ENVNAME=stylegan3
+    ENVNAME=stylegan3_2_1_10_xpu
 
     source /opt/intel/oneapi/setvars.sh || true
 
-    . "/home/user/miniconda3/etc/profile.d/conda.sh"
+    . "$CONDA_DIR/etc/profile.d/conda.sh"
     conda activate $ENVNAME
-    cd /home/user/stylegan3
-    export DNNLIB_CACHE_DIR=/home/user/.cache/dnnlib
-    export IMAGEIO_FFMPEG_EXE=/home/user/miniconda3/envs/$ENVNAME/lib/python3.9/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux64-v4.2.2
+    cd "$HOME"/stylegan3
+    export DNNLIB_CACHE_DIR="$HOME"/.cache/dnnlib
+    export IMAGEIO_FFMPEG_EXE="$CONDA_PREFIX"/lib/python3.9/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux64-v4.2.2
 
     $IMAGEIO_FFMPEG_EXE -version
 
 fi
 
 #FRAME_COUNT=8
-FRAME_COUNT=32
+#FRAME_COUNT=32
+FRAME_COUNT=128
 
 #export DNNL_VERBOSE=1
 
