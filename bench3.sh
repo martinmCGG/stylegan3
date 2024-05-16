@@ -13,6 +13,8 @@ set -ex
 echo 'BENCH3'
 
 if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
+    #CONDA_DIR="$HOME"/miniconda3
+    CONDA_DIR=/opt/conda
 
     #ENVNAME=stylegan3_intel
     #ENVNAME=stylegan3
@@ -24,35 +26,45 @@ if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
     source /opt/intel/oneapi/compiler/2024.1/env/vars.sh
     source /opt/intel/oneapi/tbb/2021.12/env/vars.sh
 
-    . "/home/user/miniconda3/etc/profile.d/conda.sh"
+    . "$CONDA_DIR/etc/profile.d/conda.sh"
     conda activate $ENVNAME
-    cd /home/user/stylegan3
-    export DNNLIB_CACHE_DIR=/home/user/.cache/dnnlib
-    export IMAGEIO_FFMPEG_EXE=/home/user/miniconda3/envs/$ENVNAME/lib/python3.9/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux64-v4.2.2
+    cd "$HOME"/stylegan3
+    export DNNLIB_CACHE_DIR="$HOME"/.cache/dnnlib
+    export IMAGEIO_FFMPEG_EXE="$CONDA_PREFIX"/lib/python3.9/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux64-v4.2.2
 
     #$IMAGEIO_FFMPEG_EXE -version
 
 fi
 
-python test_kernels.py
+
+profile() {
+    # profile the given command using VTune
+	/opt/intel/oneapi/vtune/2024.0/bin64/vtune -collect gpu-hotspots -knob profiling-mode=source-analysis --app-working-dir="$HOME"/stylegan3 -- "$@"
+	
+    # or just run it directly
+    #"$@"
+}
+
+
+#python test_kernels.py
 #python test_kernels.py upfirdn2d
 #python test_inference_simple.py
-exit
+#exit
 
 #FRAME_COUNT=8
-FRAME_COUNT=32
+#FRAME_COUNT=32
+FRAME_COUNT=128
 
 #export DNNL_VERBOSE=1
 
 # stylegan3-r (uses `bias_act` and `filtered_lrelu`): 
-#python gen_video.py --output=benchmark3r.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl --preheat=True
+#profile python gen_video.py --output=benchmark3r.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl --preheat=True
 # 1.39 it/s on A770 - 1.39 it/s (on both Intel Base Toolkit 2024.0 + IPEX 2.1.10+xpu and 2024.1 + IPEX 2.1.20+xpu)
-# TODO fix memory leak (imgs.append)
 
 # stylegan3-t (also uses `bias_act` and `filtered_lrelu`, but faster - different filter sizes?): 
-#python gen_video.py --output=benchmark3t.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl --preheat=True
+profile python gen_video.py --output=benchmark3t.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl --preheat=True
 # 9.87 it/s - 9.84 it/s (similar in 2024.1)
 
 # stylegan2 (uses `bias_act` and `upfirdn2d`)
-python gen_video.py --output=benchmark2.mp4 --trunc=1 --seeds=2,10 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan2/versions/1/files/stylegan2-afhqv2-512x512.pkl --preheat=True
+#profile python gen_video.py --output=benchmark2.mp4 --trunc=1 --seeds=2,10 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan2/versions/1/files/stylegan2-afhqv2-512x512.pkl --preheat=True
 # ~28.9 it/s - 28.37 it/s (similar in 2024.1)
