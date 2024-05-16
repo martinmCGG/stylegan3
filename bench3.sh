@@ -39,8 +39,8 @@ fi
 
 profile() {
     # profile the given command using VTune
-	/opt/intel/oneapi/vtune/2024.0/bin64/vtune -collect gpu-hotspots -knob profiling-mode=source-analysis --app-working-dir="$HOME"/stylegan3 -- "$@"
-	
+    /opt/intel/oneapi/vtune/2024.1/bin64/vtune -collect gpu-hotspots -knob profiling-mode=source-analysis --app-working-dir="$HOME"/stylegan3 -- "$@"
+
     # or just run it directly
     #"$@"
 }
@@ -51,9 +51,9 @@ profile() {
 #python test_inference_simple.py
 #exit
 
-#FRAME_COUNT=8
+FRAME_COUNT=8
 #FRAME_COUNT=32
-FRAME_COUNT=128
+#FRAME_COUNT=128
 
 #export DNNL_VERBOSE=1
 
