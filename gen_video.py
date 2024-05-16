@@ -32,6 +32,10 @@ from tqdm import tqdm
 
 import legacy
 
+
+from torch.profiler import profile, record_function, ProfilerActivity
+
+
 #----------------------------------------------------------------------------
 
 def layout_grid(img, grid_w=None, grid_h=1, float_to_uint8=True, chw_to_hwc=True, to_numpy=True):
@@ -52,6 +56,36 @@ def layout_grid(img, grid_w=None, grid_h=1, float_to_uint8=True, chw_to_hwc=True
 
 #----------------------------------------------------------------------------
 
+import tracemalloc
+import linecache
+
+def display_top(snapshot, key_type='lineno', limit=3):
+    # from https://stackoverflow.com/a/45679009
+    snapshot = snapshot.filter_traces((
+        tracemalloc.Filter(False, "<frozen importlib._bootstrap>"),
+        tracemalloc.Filter(False, "<unknown>"),
+    ))
+    top_stats = snapshot.statistics(key_type)
+
+    print("Top %s lines" % limit)
+    for index, stat in enumerate(top_stats[:limit], 1):
+        frame = stat.traceback[0]
+        # replace "/path/to/module/file.py" with "module/file.py"
+        filename = os.sep.join(frame.filename.split(os.sep)[-2:])
+        print("#%s: %s:%s: %.1f KiB"
+              % (index, filename, frame.lineno, stat.size / 1024))
+        line = linecache.getline(frame.filename, frame.lineno).strip()
+        if line:
+            print('    %s' % line)
+
+    other = top_stats[limit:]
+    if other:
+        size = sum(stat.size for stat in other)
+        print("%s other: %.1f KiB" % (len(other), size / 1024))
+    total = sum(stat.size for stat in top_stats)
+    print("Total allocated size: %.1f KiB" % (total / 1024))
+
+#@torch.no_grad()
 def gen_interp_video(G, mp4: str, seeds, shuffle_seed=None, w_frames=60*4, kind='cubic', grid_dims=(1,1), num_keyframes=None, wraps=2, psi=1, device=torch.device(device_str), preheat=False, **video_kwargs):
     grid_w = grid_dims[0]
     grid_h = grid_dims[1]
@@ -91,18 +125,24 @@ def gen_interp_video(G, mp4: str, seeds, shuffle_seed=None, w_frames=60*4, kind=
         w = torch.from_numpy(interp(0)).to(torch.float32).to(device)
         img = G.synthesis(ws=w.unsqueeze(0), noise_mode='const')[0]
 
+    tracemalloc.start()
     # Render video.
-    #video_out = imageio.get_writer(mp4, mode='I', fps=60, codec='libx264', **video_kwargs) # when benchmarking with Intel VTune or NSight, this line (and the following ones referencing `video_out`) may need to be disabled, otherwise a "broken pipe" error may be encountered (related to passing the video frames to ffmpeg)
+    video_out = imageio.get_writer(mp4, mode='I', fps=60, codec='libx264', **video_kwargs) # when benchmarking with Intel VTune or NSight, this line (and the following ones referencing `video_out`) may need to be disabled, otherwise a "broken pipe" error may be encountered (related to passing the video frames to ffmpeg)
     for frame_idx in tqdm(range(num_keyframes * w_frames), bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_noinv_fmt}]"):
         imgs = []
         for yi in range(grid_h):
             for xi in range(grid_w):
                 interp = grid[yi][xi]
                 w = torch.from_numpy(interp(frame_idx / w_frames)).to(torch.float32).to(device)
+                #with profile(activities=[ProfilerActivity.CPU],
+                #    profile_memory=True, record_shapes=True) as prof:
                 img = G.synthesis(ws=w.unsqueeze(0), noise_mode='const')[0]
+                #print('self_cpu_memory_usage', prof.key_averages().table(sort_by="self_cpu_memory_usage", row_limit=10))
+                snapshot = tracemalloc.take_snapshot()
+                display_top(snapshot)
                 imgs.append(img)
-        #video_out.append_data(layout_grid(torch.stack(imgs), grid_w=grid_w, grid_h=grid_h))
-    #video_out.close()
+        video_out.append_data(layout_grid(torch.stack(imgs), grid_w=grid_w, grid_h=grid_h))
+    video_out.close()
 
 #----------------------------------------------------------------------------
 
@@ -188,7 +228,6 @@ def generate_images(
         G = legacy.load_network_pkl(f)['G_ema'].to(device) # type: ignore
 
     G = try_ipex_optimize(G)
-
 
     #from torch.profiler import profile, record_function, ProfilerActivity
     #print('dir(ProfilerActivity)', dir(ProfilerActivity))
