@@ -190,14 +190,14 @@ def generate_images(
     G = try_ipex_optimize(G)
 
 
-    from torch.profiler import profile, record_function, ProfilerActivity
-    print('dir(ProfilerActivity)', dir(ProfilerActivity))
+    #from torch.profiler import profile, record_function, ProfilerActivity
+    #print('dir(ProfilerActivity)', dir(ProfilerActivity))
     #with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
     #    with record_function("model_inference"):
-    with profile(activities=[
-        ProfilerActivity.CPU, ProfilerActivity.XPU], record_shapes=True) as prof:
-        with record_function("model_inference"):
-            gen_interp_video(G=G, mp4=output, bitrate='12M', grid_dims=grid, num_keyframes=num_keyframes, w_frames=w_frames, seeds=seeds, shuffle_seed=shuffle_seed, psi=truncation_psi)
+    #with profile(activities=[
+    #    ProfilerActivity.CPU, ProfilerActivity.XPU], record_shapes=True) as prof:
+    #    with record_function("model_inference"):
+    gen_interp_video(G=G, mp4=output, bitrate='12M', grid_dims=grid, num_keyframes=num_keyframes, w_frames=w_frames, seeds=seeds, shuffle_seed=shuffle_seed, psi=truncation_psi)
     #print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=10))
     print(prof.key_averages().table(sort_by="xpu_time_total", row_limit=10))
     #import time
