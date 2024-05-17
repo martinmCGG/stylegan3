@@ -39,7 +39,8 @@ fi
 
 profile() {
     # profile the given command using VTune
-    /opt/intel/oneapi/vtune/2024.1/bin64/vtune -collect gpu-hotspots -knob profiling-mode=source-analysis --app-working-dir="$HOME"/stylegan3 -- "$@"
+    #/opt/intel/oneapi/vtune/2024.1/bin64/vtune -collect gpu-hotspots -knob profiling-mode=source-analysis --app-working-dir="$HOME"/stylegan3 -- "$@"
+    "$HOME"/Intel_VTune_Profiler_2024.1.0/bin64/vtune -collect gpu-hotspots -knob profiling-mode=source-analysis --app-working-dir="$HOME"/stylegan3 -- "$@"
 
     # or just run it directly
     #"$@"
@@ -51,8 +52,8 @@ profile() {
 #python test_inference_simple.py
 #exit
 
-FRAME_COUNT=8
-#FRAME_COUNT=32
+#FRAME_COUNT=8
+FRAME_COUNT=32
 #FRAME_COUNT=128
 
 #export DNNL_VERBOSE=1
@@ -62,9 +63,9 @@ FRAME_COUNT=8
 # 1.39 it/s on A770 - 1.39 it/s (on both Intel Base Toolkit 2024.0 + IPEX 2.1.10+xpu and 2024.1 + IPEX 2.1.20+xpu)
 
 # stylegan3-t (also uses `bias_act` and `filtered_lrelu`, but faster - different filter sizes?): 
-profile python gen_video.py --output=benchmark3t.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl --preheat=True
+#profile python gen_video.py --output=benchmark3t.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl --preheat=True
 # 9.87 it/s - 9.84 it/s (similar in 2024.1)
 
 # stylegan2 (uses `bias_act` and `upfirdn2d`)
-#profile python gen_video.py --output=benchmark2.mp4 --trunc=1 --seeds=2,10 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan2/versions/1/files/stylegan2-afhqv2-512x512.pkl --preheat=True
+profile python gen_video.py --output=benchmark2.mp4 --trunc=1 --seeds=2,10 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan2/versions/1/files/stylegan2-afhqv2-512x512.pkl --preheat=True
 # ~28.9 it/s - 28.37 it/s (similar in 2024.1)
