@@ -11,6 +11,10 @@ if len(kernels_to_test) == 0:
 
 d='xpu'
 
+def dummy_tensor(shape):
+    return torch.randn(shape, dtype=torch.float32, device=d)
+    return torch.zeros(shape, dtype=torch.float32, device=d)
+
 for k in kernels_to_test:
     print('testing', k, flush=True)
     time.sleep(1)
@@ -29,7 +33,12 @@ for k in kernels_to_test:
 
     elif k == 'filtered_lrelu':
         from torch_utils.ops import filtered_lrelu
-        print(filtered_lrelu.filtered_lrelu(x=torch.zeros([1,1,1,1]).to('xpu'))) # first run of filtered_lrelu seems to crash the profiler with "GTPin ERROR: Create Context failed - context already exists" followed by "at: CreateContext : 898", probably regardless of inputs size
+        #print(filtered_lrelu.filtered_lrelu(x=torch.zeros([1,1,1,1]).to('xpu'))) # first run of filtered_lrelu seems to crash the profiler with "GTPin ERROR: Create Context failed - context already exists" followed by "at: CreateContext : 898", probably regardless of inputs size
+        print(
+            filtered_lrelu.filtered_lrelu(
+                x=dummy_tensor([1, 1024, 36, 36]), fu=dummy_tensor([12]), fd=dummy_tensor([12, 12]), b=dummy_tensor([1024]),
+                up= 2 , down= 2 , padding= [11, 10, 11, 10], gain= 1.4142135623730951 , slope= 0.2 , clamp= 256 , flip_filter= False)
+            )
         '''
 The actual sizes ran during stylegan3-r 512x512 inference:
 _filtered_lrelu_xpu(up= 2 , down= 2 , padding= [11, 10, 11, 10] , gain= 1.4142135623730951 , slope= 0.2 , clamp= 256 , flip_filter= False ).apply(x= torch.Size([1, 1024, 36, 36]) , fu= torch.Size([12]) , fd= torch.Size([12, 12]) , b= torch.Size([1024]) , None, 0, 0)

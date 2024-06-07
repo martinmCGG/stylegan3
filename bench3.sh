@@ -13,8 +13,8 @@ set -ex
 echo 'BENCH3'
 
 if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
-    #CONDA_DIR="$HOME"/miniconda3
-    CONDA_DIR=/opt/conda
+    CONDA_DIR="$HOME"/miniconda3
+    #CONDA_DIR=/opt/conda
 
     #ENVNAME=stylegan3_intel
     #ENVNAME=stylegan3
@@ -41,22 +41,22 @@ profile() {
     # profile the given command using VTune
     #VTUNE_BIN=/opt/intel/oneapi/vtune/2024.1/bin64/vtune
     VTUNE_BIN="$HOME"/Intel_VTune_Profiler_2024.1.0/bin64/vtune
-    #$VTUNE_BIN -collect gpu-hotspots -knob profiling-mode=source-analysis --app-working-dir="$HOME"/stylegan3 -- "$@"
+    $VTUNE_BIN -collect gpu-hotspots -knob profiling-mode=source-analysis --app-working-dir="$HOME"/stylegan3 -- "$@"
     #$VTUNE_BIN -collect gpu-hotspots --app-working-dir="$HOME"/stylegan3 -- "$@"
-    $VTUNE_BIN -collect gpu-offload --app-working-dir="$HOME"/stylegan3 -- "$@"
+    #$VTUNE_BIN -collect gpu-offload --app-working-dir="$HOME"/stylegan3 -- "$@"
 
     # or just run it directly
     #"$@"
 }
 
 
-#python test_kernels.py
+profile python test_kernels.py filtered_lrelu
 #python test_kernels.py upfirdn2d
 #python test_inference_simple.py
-#exit
+exit
 
-#FRAME_COUNT=8
-FRAME_COUNT=32
+FRAME_COUNT=8
+#FRAME_COUNT=32
 #FRAME_COUNT=128
 
 #export DNNL_VERBOSE=1
