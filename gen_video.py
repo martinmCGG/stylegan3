@@ -92,7 +92,7 @@ def gen_interp_video(G, mp4: str, seeds, shuffle_seed=None, w_frames=60*4, kind=
         img = G.synthesis(ws=w.unsqueeze(0), noise_mode='const')[0]
 
     # Render video.
-    #video_out = imageio.get_writer(mp4, mode='I', fps=60, codec='libx264', **video_kwargs) # when benchmarking with Intel VTune or NSight, this line (and the following ones referencing `video_out`) may need to be disabled, otherwise a "broken pipe" error may be encountered (related to passing the video frames to ffmpeg)
+    video_out = imageio.get_writer(mp4, mode='I', fps=60, codec='libx264', **video_kwargs) # when benchmarking with Intel VTune or NSight, this line (and the following ones referencing `video_out`) may need to be disabled, otherwise a "broken pipe" error may be encountered (related to passing the video frames to ffmpeg)
     for frame_idx in tqdm(range(num_keyframes * w_frames), bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_noinv_fmt}]"):
         imgs = []
         for yi in range(grid_h):
@@ -101,8 +101,8 @@ def gen_interp_video(G, mp4: str, seeds, shuffle_seed=None, w_frames=60*4, kind=
                 w = torch.from_numpy(interp(frame_idx / w_frames)).to(torch.float32).to(device)
                 img = G.synthesis(ws=w.unsqueeze(0), noise_mode='const')[0]
                 imgs.append(img)
-        #video_out.append_data(layout_grid(torch.stack(imgs), grid_w=grid_w, grid_h=grid_h))
-    #video_out.close()
+        video_out.append_data(layout_grid(torch.stack(imgs), grid_w=grid_w, grid_h=grid_h))
+    video_out.close()
 
 #----------------------------------------------------------------------------
 

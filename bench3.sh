@@ -22,7 +22,7 @@ if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
 
     #source /opt/intel/oneapi/setvars.sh || true
     source /opt/intel/oneapi/mkl/2024.1/env/vars.sh
-    source /opt/intel/oneapi/dnnl/2024.1/env/vars.sh
+    #source /opt/intel/oneapi/dnnl/2024.1/env/vars.sh
     source /opt/intel/oneapi/compiler/2024.1/env/vars.sh
     source /opt/intel/oneapi/tbb/2021.12/env/vars.sh
 
@@ -41,22 +41,22 @@ profile() {
     # profile the given command using VTune
     #VTUNE_BIN=/opt/intel/oneapi/vtune/2024.1/bin64/vtune
     VTUNE_BIN="$HOME"/Intel_VTune_Profiler_2024.1.0/bin64/vtune
-    $VTUNE_BIN -collect gpu-hotspots -knob profiling-mode=source-analysis --app-working-dir="$HOME"/stylegan3 -- "$@"
+    #$VTUNE_BIN -collect gpu-hotspots -knob profiling-mode=source-analysis --app-working-dir="$HOME"/stylegan3 -- "$@"
     #$VTUNE_BIN -collect gpu-hotspots --app-working-dir="$HOME"/stylegan3 -- "$@"
     #$VTUNE_BIN -collect gpu-offload --app-working-dir="$HOME"/stylegan3 -- "$@"
 
     # or just run it directly
-    #"$@"
+    "$@"
 }
 
 
-profile python test_kernels.py filtered_lrelu
+#profile python test_kernels.py filtered_lrelu
 #python test_kernels.py upfirdn2d
 #python test_inference_simple.py
-exit
+#exit
 
-FRAME_COUNT=8
-#FRAME_COUNT=32
+#FRAME_COUNT=8
+FRAME_COUNT=32
 #FRAME_COUNT=128
 
 #export DNNL_VERBOSE=1
