@@ -18,13 +18,17 @@ if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
 
     #ENVNAME=stylegan3_intel
     #ENVNAME=stylegan3
-    ENVNAME=stylegan3_2_1_30_xpu
+    #ENVNAME=stylegan3_2_1_30_xpu
+    ENVNAME=stylegan3_2_1_40_xpu
 
     #source /opt/intel/oneapi/setvars.sh || true
-    source /opt/intel/oneapi/mkl/2024.1/env/vars.sh
+    #source /opt/intel/oneapi/mkl/2024.1/env/vars.sh
+    source /opt/intel/oneapi/mkl/2024.2/env/vars.sh
     #source /opt/intel/oneapi/dnnl/2024.1/env/vars.sh
-    source /opt/intel/oneapi/compiler/2024.1/env/vars.sh
-    source /opt/intel/oneapi/tbb/2021.12/env/vars.sh
+    #source /opt/intel/oneapi/compiler/2024.1/env/vars.sh
+    source /opt/intel/oneapi/compiler/2024.2/env/vars.sh
+    #source /opt/intel/oneapi/tbb/2021.12/env/vars.sh
+    source /opt/intel/oneapi/tbb/2021.13/env/vars.sh
 
     . "$CONDA_DIR/etc/profile.d/conda.sh"
     conda activate $ENVNAME
