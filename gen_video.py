@@ -28,9 +28,21 @@ except:
 import imageio
 import numpy as np
 import scipy.interpolate
-from tqdm import tqdm
+from tqdm import tqdm as std_tqdm
 
 import legacy
+
+# saving the "it/s" rate to compute statistics later
+rates = []
+def external_callback(*args, **kwargs):
+    rates.append(kwargs['rate'])
+
+class tqdm(std_tqdm):
+    def update(self, n=1):
+        displayed = super().update(n)
+        if displayed:
+            external_callback(**self.format_dict)
+        return displayed
 
 #----------------------------------------------------------------------------
 
@@ -203,6 +215,9 @@ def generate_images(
     #import time
     #print('sleeping')
     #time.sleep(3)
+    global rates
+    rates = np.array(rates)
+    print('min/mean/median/max rate:', np.min(rates), np.mean(rates), np.median(rates), np.max(rates))
     #print('end')
 
 #----------------------------------------------------------------------------
