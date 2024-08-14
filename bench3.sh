@@ -50,7 +50,11 @@ profile() {
     #$VTUNE_BIN -collect gpu-offload --app-working-dir="$HOME"/stylegan3 -- "$@"
 
     # or just run it directly
-    "$@"
+    #"$@"
+    # log the run ...
+    { { date --iso-8601=seconds; hostname; git describe --all --long --dirty; } | tr '\n' ' '; } >> runs.log
+    # ... saving the stats to a logfile
+    "$@" | tee >(fgrep 'min/mean/median/max rate' >> runs.log)
 }
 
 

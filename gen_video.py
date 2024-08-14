@@ -33,16 +33,22 @@ from tqdm import tqdm as std_tqdm
 import legacy
 
 # saving the "it/s" rate to compute statistics later
-rates = []
-def external_callback(*args, **kwargs):
-    rates.append(kwargs['rate'])
-
 class tqdm(std_tqdm):
+    def __init__(self, *args, **kwargs):
+        kwargs['smoothing'] = 1 # current/instantaneous speed updates (effectively disables exponential moving average)
+        super().__init__(*args, **kwargs)
+        self.rates = []
+
     def update(self, n=1):
         displayed = super().update(n)
-        if displayed:
-            external_callback(**self.format_dict)
+        rate = self.format_dict['rate']
+        if displayed and rate is not None:
+            self.rates.append(rate)
         return displayed
+    
+    def __del__(self):
+        r = np.array(self.rates)
+        print(f'{self.desc} min/mean/median/max rate: {np.min(r):.2f} {np.mean(r):.2f} {np.median(r):.2f} {np.max(r):.2f} it/s')
 
 #----------------------------------------------------------------------------
 
@@ -64,7 +70,7 @@ def layout_grid(img, grid_w=None, grid_h=1, float_to_uint8=True, chw_to_hwc=True
 
 #----------------------------------------------------------------------------
 
-def gen_interp_video(G, mp4: str, seeds, shuffle_seed=None, w_frames=60*4, kind='cubic', grid_dims=(1,1), num_keyframes=None, wraps=2, psi=1, device=torch.device(device_str), preheat=False, **video_kwargs):
+def gen_interp_video(G, mp4: str, seeds, shuffle_seed=None, w_frames=60*4, kind='cubic', grid_dims=(1,1), num_keyframes=None, wraps=2, psi=1, device=torch.device(device_str), preheat=False, desc=None, **video_kwargs):
     grid_w = grid_dims[0]
     grid_h = grid_dims[1]
 
@@ -105,7 +111,7 @@ def gen_interp_video(G, mp4: str, seeds, shuffle_seed=None, w_frames=60*4, kind=
 
     # Render video.
     video_out = imageio.get_writer(mp4, mode='I', fps=60, codec='libx264', **video_kwargs) # when benchmarking with Intel VTune or NSight, this line (and the following ones referencing `video_out`) may need to be disabled, otherwise a "broken pipe" error may be encountered (related to passing the video frames to ffmpeg)
-    for frame_idx in tqdm(range(num_keyframes * w_frames), bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_noinv_fmt}]"):
+    for frame_idx in tqdm(range(num_keyframes * w_frames), bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_noinv_fmt}]", desc=desc):
         imgs = []
         for yi in range(grid_h):
             for xi in range(grid_w):
@@ -209,15 +215,14 @@ def generate_images(
     #with profile(activities=[
     #    ProfilerActivity.CPU, ProfilerActivity.XPU], record_shapes=True) as prof:
     #    with record_function("model_inference"):
-    gen_interp_video(G=G, mp4=output, bitrate='12M', grid_dims=grid, num_keyframes=num_keyframes, w_frames=w_frames, seeds=seeds, shuffle_seed=shuffle_seed, psi=truncation_psi)
+    network_pkl_file = network_pkl.split('/')[-1]
+    #architecture_name = '-'.join(network_pkl_file.split('-')[:-2])
+    gen_interp_video(G=G, mp4=output, bitrate='12M', grid_dims=grid, num_keyframes=num_keyframes, w_frames=w_frames, seeds=seeds, shuffle_seed=shuffle_seed, psi=truncation_psi, preheat=preheat, desc=network_pkl_file)
     #print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=10))
     #print(prof.key_averages().table(sort_by="xpu_time_total", row_limit=10))
     #import time
     #print('sleeping')
     #time.sleep(3)
-    global rates
-    rates = np.array(rates)
-    print('min/mean/median/max rate:', np.min(rates), np.mean(rates), np.median(rates), np.max(rates))
     #print('end')
 
 #----------------------------------------------------------------------------
