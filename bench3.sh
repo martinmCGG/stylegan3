@@ -43,11 +43,11 @@ fi
 
 profile() {
     # profile the given command using VTune
-    VTUNE_BIN=/opt/intel/oneapi/vtune/2024.2/bin64/vtune
+    VTUNE_BIN=/opt/intel/oneapi/vtune/2024.3/bin64/vtune
     #VTUNE_BIN="$HOME"/Intel_VTune_Profiler_2024.1.0/bin64/vtune
-    #$VTUNE_BIN -collect gpu-hotspots -knob profiling-mode=source-analysis --app-working-dir="$HOME"/stylegan3 -- "$@"
+    $VTUNE_BIN -collect gpu-hotspots -knob profiling-mode=source-analysis --app-working-dir="$HOME"/stylegan3 -- "$@"
     #$VTUNE_BIN -collect gpu-hotspots --app-working-dir="$HOME"/stylegan3 -- "$@"
-    $VTUNE_BIN -collect gpu-offload --app-working-dir="$HOME"/stylegan3 -- "$@"
+    #$VTUNE_BIN -collect gpu-offload --app-working-dir="$HOME"/stylegan3 -- "$@"
     return
 
     # or just run it directly
@@ -72,12 +72,9 @@ FRAME_COUNT=32
 
 # stylegan3-r (uses `bias_act` and `filtered_lrelu`): 
 #profile python gen_video.py --output=benchmark3r.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl --preheat=True
-# 1.39 it/s on A770 - 1.39 it/s (on both Intel Base Toolkit 2024.0 + IPEX 2.1.10+xpu and 2024.1 + IPEX 2.1.20+xpu)
 
 # stylegan3-t (also uses `bias_act` and `filtered_lrelu`, but faster - different filter sizes?): 
 #profile python gen_video.py --output=benchmark3t.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl --preheat=True
-# 9.87 it/s - 9.84 it/s (similar in 2024.1)
 
 # stylegan2 (uses `bias_act` and `upfirdn2d`)
 profile python gen_video.py --output=benchmark2.mp4 --trunc=1 --seeds=2,10 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan2/versions/1/files/stylegan2-afhqv2-512x512.pkl --preheat=True
-# ~28.9 it/s - 28.37 it/s (similar in 2024.1)
