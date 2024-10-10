@@ -4,13 +4,16 @@
 # It uses `c2s` a.k.a. `dpct` (DPC++ Compatibility Tool) and compilation database files (compile_commands.json in the build directory of each extension) - these must be generated before running this script.
 
 # Usage:
-# enter the environment with StyleGAN dependencies
+# 0. Enter the environment with StyleGAN dependencies
 #   conda activate stylegan3
-# generate compilation database for each module by running train.py (in the project root directory)
+# 1. Generate compilation database for each module by running train.py (in the project root directory)
 #   python train.py --outdir=~/training-runs --cfg=stylegan3-t --data=/projects/ImageDatasets/Other/AFHQv2/afhq_v2.zip --gpus=1 --batch=4 --gamma=8.2 --metrics=none --kimg=0 | sed -n 's/.*CHECK THE BUILD DIR FOR compile_commands.json: //p' > CUDA2SYCL/cuda_builddirs.txt
 #   # Note: --gamma should be different for single-GPU training, but we just want to compile the modules, then no training is run
-# cuda_builddirs.txt now says where the modules and their compilation databases are located (each directory on one line)
-# Finally run this script. Use one of the following commands (depending on wheter c2s from Base Toolkit or SYCLomatic should be used) in the current directory:
+#   # or just run inference: python gen_images.py --outdir=out --trunc=1 --seeds=2 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl | sed -n 's/.*CHECK THE BUILD DIR FOR compile_commands.json: //p' > CUDA2SYCL/cuda_builddirs.txt
+# When this runs, cuda_builddirs.txt now says where the modules and their compilation databases are located (each directory on one line).
+# If not, re-run it without the '| sed ...' part to see any errors.
+# note: if you see the compile error "error: parameter packs not expanded with ‘...’", install gcc-10 and g++-10, and prepend "CC=$(which gcc-10) CXX=$(which g++-10)" to the "python gen_images.py ..." command.
+# 2. Finally run this script. Use one of the following commands (depending on whether c2s from Base Toolkit or SYCLomatic should be used) in the current directory:
 #   ( . /opt/intel/oneapi/setvars.sh && ./migrate.sh )
 #   ( export PATH=~/intel_hackathon/SYCLomatic_2023-09-13/bin:"$PATH" && ./migrate.sh )
 # The migrated source code will appear in torch_utils/ops as individual directories named as the module + c2s version.
@@ -40,7 +43,7 @@ if ! which c2s; then
     exit 1
 fi
 
-c2s_version=$(c2s --version | sed -n 's/.*version //;s/. Codebase:(/_/;s/)$//p')
+c2s_version=$(c2s --version | sed -n 's/.*Tool version //;s/. Codebase:(/_/;s/).*//p')
 
 set -x
 set -e
