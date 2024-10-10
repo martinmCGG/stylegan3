@@ -21,8 +21,8 @@ import torch
 import torch.utils.cpp_extension
 from torch.utils.file_baton import FileBaton
 
-#allow_module_rebuild = True
-allow_module_rebuild = False  # useful for profiling
+allow_module_rebuild = True
+#allow_module_rebuild = False  # useful for profiling
 
 if allow_module_rebuild:
     print('allow_module_rebuild =', allow_module_rebuild, '-> this would significantly slow down or freeze profiling!')
@@ -35,6 +35,7 @@ try:
     using_xpu = True
     cpp_extension = torch.xpu.cpp_extension
     torch_device_specific = ipex.xpu
+    device_str = 'xpu'
 
     def build_and_load_module(name, build_directory,  *args, **kwargs):
         if allow_module_rebuild:
@@ -48,6 +49,7 @@ except:
     using_xpu = False
     cpp_extension = torch.utils.cpp_extension
     torch_device_specific = torch.cuda
+    device_str = 'cuda'
     build_and_load_module = cpp_extension.load
 
 #----------------------------------------------------------------------------

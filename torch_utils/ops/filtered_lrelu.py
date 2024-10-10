@@ -121,8 +121,8 @@ def filtered_lrelu(x, fu=None, fd=None, b=None, up=1, down=1, padding=0, gain=np
     """
     assert isinstance(x, torch.Tensor)
     assert impl in ['ref', 'xpu']
-    if impl == 'xpu' and _init() and x.device.type == 'xpu':
-        print('_filtered_lrelu_xpu(up=',up,', down=',down,', padding=',padding,', gain=',gain,', slope=',slope,', clamp=',clamp,', flip_filter=',flip_filter,').apply(x=',x.shape,', fu=',fu.shape if fu is not None else None,', fd=',fd.shape if fd is not None else None,', b=',b.shape if b is not None else None,', None, 0, 0)')
+    if impl == 'xpu' and _init() and x.device.type == custom_ops.device_str:
+        #print('_filtered_lrelu_xpu(up=',up,', down=',down,', padding=',padding,', gain=',gain,', slope=',slope,', clamp=',clamp,', flip_filter=',flip_filter,').apply(x=',x.shape,', fu=',fu.shape if fu is not None else None,', fd=',fd.shape if fd is not None else None,', b=',b.shape if b is not None else None,', None, 0, 0)')
         return _filtered_lrelu_xpu(up=up, down=down, padding=padding, gain=gain, slope=slope, clamp=clamp, flip_filter=flip_filter).apply(x, fu, fd, b, None, 0, 0)
     return _filtered_lrelu_ref(x, fu=fu, fd=fd, b=b, up=up, down=down, padding=padding, gain=gain, slope=slope, clamp=clamp, flip_filter=flip_filter)
 

@@ -13,7 +13,7 @@ import numpy as np
 import scipy.signal
 import scipy.optimize
 import torch
-from torch_utils import misc
+from torch_utils import custom_ops, misc
 from torch_utils import persistence
 
 impl='xpu'
@@ -349,7 +349,7 @@ class SynthesisLayer(torch.nn.Module):
             styles = styles * weight_gain
 
         # Execute modulated conv2d.
-        dtype = torch.float16 if (self.use_fp16 and not force_fp32 and x.device.type == 'cuda') else torch.float32
+        dtype = torch.float16 if (self.use_fp16 and not force_fp32 and x.device.type == custom_ops.device_str) else torch.float32
         x = modulated_conv2d(x=x.to(dtype), w=self.weight, s=styles,
             padding=self.conv_kernel-1, demodulate=(not self.is_torgb), input_gain=input_gain)
 

@@ -13,6 +13,8 @@ import contextlib
 import torch
 from pkg_resources import parse_version
 
+from torch_utils import custom_ops
+
 # pylint: disable=redefined-builtin
 # pylint: disable=arguments-differ
 # pylint: disable=protected-access
@@ -53,7 +55,7 @@ def _should_use_custom_op(input):
     if _use_pytorch_1_11_api:
         # The work-around code doesn't work on PyTorch 1.11.0 onwards
         return False
-    if input.device.type != 'cuda':
+    if input.device.type != custom_ops.device_str:
         return False
     return True
 

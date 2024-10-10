@@ -91,7 +91,7 @@ def bias_act(x, b=None, dim=1, act='linear', alpha=None, gain=None, clamp=None, 
     """
     assert isinstance(x, torch.Tensor)
     assert impl in ['ref', 'xpu']
-    if impl == 'xpu' and _init(): # and x.device.type == 'xpu'
+    if impl == 'xpu' and _init() and x.device.type == custom_ops.device_str:
         return _bias_act_xpu(dim=dim, act=act, alpha=alpha, gain=gain, clamp=clamp).apply(x, b)
     return _bias_act_ref(x=x, b=b, dim=dim, act=act, alpha=alpha, gain=gain, clamp=clamp)
 

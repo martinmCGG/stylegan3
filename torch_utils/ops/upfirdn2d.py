@@ -169,7 +169,7 @@ def upfirdn2d(x, f, up=1, down=1, padding=0, flip_filter=False, gain=1, impl='xp
     """
     assert isinstance(x, torch.Tensor)
     assert impl in ['ref', 'xpu']
-    if impl == 'xpu' and _init(): # and x.device.type == 'xpu'
+    if impl == 'xpu' and _init() and x.device.type == custom_ops.device_str:
         return _upfirdn2d_xpu(up=up, down=down, padding=padding, flip_filter=flip_filter, gain=gain).apply(x, f)
     return _upfirdn2d_ref(x, f, up=up, down=down, padding=padding, flip_filter=flip_filter, gain=gain)
 
