@@ -1,0 +1,16 @@
+Parsing: /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu
+Parsing: /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_rd.cu
+Parsing: /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cpp
+Parsing: /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_wr.cu
+Analyzing: /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu
+Analyzing: /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_rd.cu
+Analyzing: /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cpp
+Analyzing: /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_wr.cu
+Migrating: /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu
+Migrating: /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_rd.cu
+Migrating: /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cpp
+Migrating: /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_wr.cu
+Processed 6 file(s) in -in-root folder "/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti"
+
+See Diagnostics Reference to resolve warnings and complete the migration:
+https://www.intel.com/content/www/us/en/docs/dpcpp-compatibility-tool/developer-guide-reference/current/diagnostics-reference.html

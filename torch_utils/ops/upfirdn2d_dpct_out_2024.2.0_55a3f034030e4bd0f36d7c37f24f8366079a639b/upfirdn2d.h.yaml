@@ -1,0 +1,163 @@
+---
+MainSourceFile:  '/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/torch_utils/ops/upfirdn2d_dpct_out_2024.2.0_55a3f034030e4bd0f36d7c37f24f8366079a639b/upfirdn2d.h'
+Replacements:
+  - FilePath:        '/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.h'
+    Offset:          447
+    Length:          26
+    ReplacementText: "#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.h'
+    Offset:          684
+    Length:          4
+    ReplacementText: 'sycl::int2'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.h'
+    Offset:          708
+    Length:          4
+    ReplacementText: 'sycl::int2'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.h'
+    Offset:          734
+    Length:          4
+    ReplacementText: 'sycl::int2'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.h'
+    Offset:          813
+    Length:          4
+    ReplacementText: 'sycl::int4'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.h'
+    Offset:          884
+    Length:          4
+    ReplacementText: 'sycl::int4'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.h'
+    Offset:          914
+    Length:          4
+    ReplacementText: 'sycl::int2'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.h'
+    Offset:          969
+    Length:          4
+    ReplacementText: 'sycl::int2'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.h'
+    Offset:          1003
+    Length:          4
+    ReplacementText: 'sycl::int4'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.h'
+    Offset:          1074
+    Length:          4
+    ReplacementText: 'sycl::int4'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+MainSourceFilesDigest:
+  - MainSourceFile:  '/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.h'
+    Digest:          5853ea67ae61d1d21d1053963c7f2991
+DpctVersion:     2024.2.0
+MainHelperFileName: ''
+USMLevel:        ''
+FeatureMap:      {}
+CompileTargets:  {}
+OptionMap:
+  AnalysisScopePath:
+    Value:           '/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti'
+    Specified:       false
+  AsyncHandler:
+    Value:           'false'
+    Specified:       false
+  BuildScript:
+    Value:           '0'
+    Specified:       false
+  CodePinEnabled:
+    Value:           'false'
+    Specified:       false
+  CommentsEnabled:
+    Value:           'false'
+    Specified:       false
+  CompilationsDir:
+    Value:           '/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti'
+    Specified:       true
+  CtadEnabled:
+    Value:           'false'
+    Specified:       false
+  EnablepProfiling:
+    Value:           'false'
+    Specified:       false
+  ExperimentalFlag:
+    Value:           '0'
+    Specified:       false
+  ExplicitNamespace:
+    Value:           '20'
+    Specified:       false
+  ExtensionDDFlag:
+    Value:           '0'
+    Specified:       false
+  ExtensionDEFlag:
+    Value:           '4294967295'
+    Specified:       false
+  HelperFuncPreferenceFlag:
+    Value:           '0'
+    Specified:       false
+  NDRangeDim:
+    Value:           '3'
+    Specified:       false
+  NoDRYPattern:
+    Value:           'false'
+    Specified:       false
+  OptimizeMigration:
+    Value:           'false'
+    Specified:       false
+  ProcessAll:
+    Value:           'false'
+    Specified:       false
+  RuleFile:
+    Value:           ''
+    Specified:       false
+  SyclNamedLambda:
+    Value:           'false'
+    Specified:       false
+  UsmLevel:
+    Value:           '1'
+    Specified:       false
+...

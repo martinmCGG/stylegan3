@@ -1,0 +1,575 @@
+warning: /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.o: 'linker' input unused [-Wunused-command-line-argument]
+warning: filtered_lrelu_wr.cuda.o: 'linker' input unused [-Wunused-command-line-argument]
+warning: filtered_lrelu_rd.cuda.o: 'linker' input unused [-Wunused-command-line-argument]
+warning: filtered_lrelu_ns.cuda.o: 'linker' input unused [-Wunused-command-line-argument]
+warning: -lc10: 'linker' input unused [-Wunused-command-line-argument]
+warning: -lc10_cuda: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch_cpu: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch_cuda_cu: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch_cuda_cpp: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch_python: 'linker' input unused [-Wunused-command-line-argument]
+warning: -lcudart: 'linker' input unused [-Wunused-command-line-argument]
+warning: argument unused during migration: '-Wno-c++11-narrowing' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-Xclang -fcuda-allow-variadic-functions' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-D __CUDA_DOT_H_FILE_PATH__="/usr/local/cuda-12.6/targets/x86_64-linux/include/cuda.h"' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-nocudalib' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-shared' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-L/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/lib' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-L/usr/local/cuda/lib64' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-I /usr/local/cuda-12.6/targets/x86_64-linux/include' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-fno-delayed-template-parsing' [-Wunused-command-line-argument]
+error: unable to handle migration, expected exactly one migration job in ''
+error: unknown argument: '--expt-relaxed-constexpr'
+error: unknown argument: '-gencode=arch=compute_61,code=compute_61'
+error: unknown argument: '-gencode=arch=compute_61,code=sm_61'
+error: unknown argument: '--compiler-options'
+error: unknown argument: '--use_fast_math'
+error: unknown argument: '--allow-unsupported-compiler'
+warning: CUDA version is newer than the latest supported version 12.4 [-Wunknown-cuda-version]
+error: unknown argument: '--expt-relaxed-constexpr'
+error: unknown argument: '-gencode=arch=compute_61,code=compute_61'
+error: unknown argument: '-gencode=arch=compute_61,code=sm_61'
+error: unknown argument: '--compiler-options'
+error: unknown argument: '--use_fast_math'
+error: unknown argument: '--allow-unsupported-compiler'
+warning: CUDA version is newer than the latest supported version 12.4 [-Wunknown-cuda-version]
+error: unknown argument: '--expt-relaxed-constexpr'
+error: unknown argument: '-gencode=arch=compute_61,code=compute_61'
+error: unknown argument: '-gencode=arch=compute_61,code=sm_61'
+error: unknown argument: '--compiler-options'
+error: unknown argument: '--use_fast_math'
+error: unknown argument: '--allow-unsupported-compiler'
+warning: CUDA version is newer than the latest supported version 12.4 [-Wunknown-cuda-version]
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1236:5: warning: DPCT1049:0: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.
+ 1236 |     AT_CUDA_CHECK(cudaLaunchKernel((void*)&setup_filters_kernel, 1, 1024, args, 0, at::cuda::getCurrentCUDAStream()));
+      |     ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1257:9: warning: DPCT1049:1: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.
+ 1257 |         AT_CUDA_CHECK(cudaLaunchKernel((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, dim3(gx, gy, subGz), bx, args, dynamicSharedKB << 10, at::cuda::getCurrentCUDAStream()));
+      |         ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1279:5: warning: DPCT1049:2: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.
+ 1279 |     AT_CUDA_CHECK(cudaLaunchKernel((void*)&filtered_lrelu_act_kernel<T, signWrite, signRead>, dim3(gx, gy, gz), bx, args, 0, at::cuda::getCurrentCUDAStream()));
+      |     ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:134:1: warning: DPCT1110:3: The total declared local variable size in device function filtered_lrelu_kernel exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.
+  134 | static __global__ void filtered_lrelu_kernel(filtered_lrelu_kernel_params p)
+      | ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:267:13: warning: DPCT1118:4: SYCL group functions and algorithms must be encountered in converged control flow. You may need to adjust the code.
+  267 |             __syncthreads();
+      |             ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:296:13: warning: DPCT1118:5: SYCL group functions and algorithms must be encountered in converged control flow. You may need to adjust the code.
+  296 |             __syncthreads();
+      |             ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:401:13: warning: DPCT1118:6: SYCL group functions and algorithms must be encountered in converged control flow. You may need to adjust the code.
+  401 |             __syncthreads();
+      |             ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:506:38: warning: DPCT1023:7: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+  506 |                                 s |= __shfl_xor_sync(groupMask, s, 1);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:507:38: warning: DPCT1023:8: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+  507 |                                 s |= __shfl_xor_sync(groupMask, s, 2);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:537:38: warning: DPCT1023:9: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+  537 |                                 s |= __shfl_xor_sync(groupMask, s, 1);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:538:38: warning: DPCT1023:10: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+  538 |                                 s |= __shfl_xor_sync(groupMask, s, 2);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:644:38: warning: DPCT1023:11: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+  644 |                                 s |= __shfl_xor_sync(groupMask, s, 1);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:645:38: warning: DPCT1023:12: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+  645 |                                 s |= __shfl_xor_sync(groupMask, s, 2);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:667:38: warning: DPCT1023:13: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+  667 |                                 s |= __shfl_xor_sync(groupMask, s, 1);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:668:38: warning: DPCT1023:14: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+  668 |                                 s |= __shfl_xor_sync(groupMask, s, 2);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:724:17: warning: DPCT1118:15: SYCL group functions and algorithms must be encountered in converged control flow. You may need to adjust the code.
+  724 |                 __syncthreads();
+      |                 ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:856:17: warning: DPCT1118:16: SYCL group functions and algorithms must be encountered in converged control flow. You may need to adjust the code.
+  856 |                 __syncthreads();
+      |                 ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:893:38: warning: DPCT1023:17: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+  893 |                                 s += __shfl_xor_sync(groupMask, s, 1);  // Coalesce.
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:894:38: warning: DPCT1023:18: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+  894 |                                 s += __shfl_xor_sync(groupMask, s, 2);  // Coalesce.
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:915:38: warning: DPCT1023:19: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+  915 |                                 s += __shfl_xor_sync(groupMask, s, 1);  // Coalesce.
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:916:38: warning: DPCT1023:20: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+  916 |                                 s += __shfl_xor_sync(groupMask, s, 2);  // Coalesce.
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:956:13: warning: DPCT1118:21: SYCL group functions and algorithms must be encountered in converged control flow. You may need to adjust the code.
+  956 |             __syncthreads();
+      |             ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1019:13: warning: DPCT1118:22: SYCL group functions and algorithms must be encountered in converged control flow. You may need to adjust the code.
+ 1019 |             __syncthreads();
+      |             ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1044:17: warning: DPCT1118:23: SYCL group functions and algorithms must be encountered in converged control flow. You may need to adjust the code.
+ 1044 |                 __syncthreads();
+      |                 ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1075:17: warning: DPCT1118:24: SYCL group functions and algorithms must be encountered in converged control flow. You may need to adjust the code.
+ 1075 |                 __syncthreads();
+      |                 ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1147:18: warning: DPCT1023:25: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+ 1147 |             s |= __shfl_xor_sync(m, s, 1); // Distribute.
+      |                  ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1148:18: warning: DPCT1023:26: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+ 1148 |             s |= __shfl_xor_sync(m, s, 2);
+      |                  ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1149:18: warning: DPCT1023:27: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+ 1149 |             s |= __shfl_xor_sync(m, s, 4);
+      |                  ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1150:18: warning: DPCT1023:28: The SYCL sub-group does not support mask options for dpct::permute_sub_group_by_xor. You can specify "--use-experimental-features=masked-sub-group-operation" to use the experimental helper function to migrate __shfl_xor_sync.
+ 1150 |             s |= __shfl_xor_sync(m, s, 8);
+      |                  ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1100:1: warning: DPCT1110:29: The total declared local variable size in device function filtered_lrelu_act_kernel exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.
+ 1100 | static __global__ void filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params p)
+      | ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1236:5: warning: DPCT1001:30: The statement could not be removed.
+ 1236 |     AT_CUDA_CHECK(cudaLaunchKernel((void*)&setup_filters_kernel, 1, 1024, args, 0, at::cuda::getCurrentCUDAStream()));
+      |     ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+   42 |       throw c10::CUDAError(                                         \
+      |       ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1236:5: warning: DPCT1000:31: Error handling if-stmt was detected but could not be rewritten.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+   39 |     if (__err != cudaSuccess) {                                     \
+      |     ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1236:5: warning: DPCT1010:32: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+   40 |       auto error_unused C10_UNUSED = cudaGetLastError();            \
+      |                                      ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1236:5: warning: DPCT1009:33: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced by a placeholder string. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+   48 |               cudaGetErrorString(__err),                            \
+      |               ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1239:39: warning: DPCT1001:34: The statement could not be removed.
+ 1239 |     if      ( signWrite && !signRead) AT_CUDA_CHECK((copy_filters<true,  false>(at::cuda::getCurrentCUDAStream())));
+      |                                       ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+   42 |       throw c10::CUDAError(                                         \
+      |       ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1239:39: warning: DPCT1000:35: Error handling if-stmt was detected but could not be rewritten.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+   39 |     if (__err != cudaSuccess) {                                     \
+      |     ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1239:39: warning: DPCT1010:36: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+   40 |       auto error_unused C10_UNUSED = cudaGetLastError();            \
+      |                                      ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1239:39: warning: DPCT1009:37: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced by a placeholder string. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+   48 |               cudaGetErrorString(__err),                            \
+      |               ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1240:39: warning: DPCT1001:38: The statement could not be removed.
+ 1240 |     else if (!signWrite &&  signRead) AT_CUDA_CHECK((copy_filters<false, true >(at::cuda::getCurrentCUDAStream())));
+      |                                       ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+   42 |       throw c10::CUDAError(                                         \
+      |       ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1240:39: warning: DPCT1000:39: Error handling if-stmt was detected but could not be rewritten.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+   39 |     if (__err != cudaSuccess) {                                     \
+      |     ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1240:39: warning: DPCT1010:40: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+   40 |       auto error_unused C10_UNUSED = cudaGetLastError();            \
+      |                                      ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1240:39: warning: DPCT1009:41: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced by a placeholder string. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+   48 |               cudaGetErrorString(__err),                            \
+      |               ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1241:39: warning: DPCT1001:42: The statement could not be removed.
+ 1241 |     else if (!signWrite && !signRead) AT_CUDA_CHECK((copy_filters<false, false>(at::cuda::getCurrentCUDAStream())));
+      |                                       ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+   42 |       throw c10::CUDAError(                                         \
+      |       ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1241:39: warning: DPCT1000:43: Error handling if-stmt was detected but could not be rewritten.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+   39 |     if (__err != cudaSuccess) {                                     \
+      |     ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1241:39: warning: DPCT1010:44: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+   40 |       auto error_unused C10_UNUSED = cudaGetLastError();            \
+      |                                      ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1241:39: warning: DPCT1009:45: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced by a placeholder string. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+   48 |               cudaGetErrorString(__err),                            \
+      |               ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1244:5: warning: DPCT1001:46: The statement could not be removed.
+ 1244 |     AT_CUDA_CHECK(cudaFuncSetCacheConfig((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, cudaFuncCachePreferShared));
+      |     ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+   42 |       throw c10::CUDAError(                                         \
+      |       ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1244:5: warning: DPCT1000:47: Error handling if-stmt was detected but could not be rewritten.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+   39 |     if (__err != cudaSuccess) {                                     \
+      |     ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1244:19: warning: DPCT1027:48: The call to cudaFuncSetCacheConfig was replaced with 0 because SYCL currently does not support configuring shared memory on devices.
+ 1244 |     AT_CUDA_CHECK(cudaFuncSetCacheConfig((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, cudaFuncCachePreferShared));
+      |                   ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1244:5: warning: DPCT1010:49: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+ 1244 |     AT_CUDA_CHECK(cudaFuncSetCacheConfig((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, cudaFuncCachePreferShared));
+      |     ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+   40 |       auto error_unused C10_UNUSED = cudaGetLastError();            \
+      |                                      ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1244:5: warning: DPCT1009:50: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced by a placeholder string. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+   48 |               cudaGetErrorString(__err),                            \
+      |               ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1248:9: warning: DPCT1001:51: The statement could not be removed.
+ 1248 |         AT_CUDA_CHECK(cudaFuncSetAttribute((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, cudaFuncAttributeMaxDynamicSharedMemorySize, dynamicSharedKB << 10));
+      |         ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+   42 |       throw c10::CUDAError(                                         \
+      |       ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1248:9: warning: DPCT1000:52: Error handling if-stmt was detected but could not be rewritten.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+   39 |     if (__err != cudaSuccess) {                                     \
+      |     ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1248:23: warning: DPCT1027:53: The call to cudaFuncSetAttribute was replaced with 0 because SYCL currently does not support corresponding setting.
+ 1248 |         AT_CUDA_CHECK(cudaFuncSetAttribute((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, cudaFuncAttributeMaxDynamicSharedMemorySize, dynamicSharedKB << 10));
+      |                       ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1248:9: warning: DPCT1010:54: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+ 1248 |         AT_CUDA_CHECK(cudaFuncSetAttribute((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, cudaFuncAttributeMaxDynamicSharedMemorySize, dynamicSharedKB << 10));
+      |         ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+   40 |       auto error_unused C10_UNUSED = cudaGetLastError();            \
+      |                                      ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1248:9: warning: DPCT1009:55: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced by a placeholder string. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+   48 |               cudaGetErrorString(__err),                            \
+      |               ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1249:5: warning: DPCT1001:56: The statement could not be removed.
+ 1249 |     AT_CUDA_CHECK(cudaFuncSetSharedMemConfig((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, cudaSharedMemBankSizeFourByte));
+      |     ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+   42 |       throw c10::CUDAError(                                         \
+      |       ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1249:5: warning: DPCT1000:57: Error handling if-stmt was detected but could not be rewritten.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+   39 |     if (__err != cudaSuccess) {                                     \
+      |     ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1249:19: warning: DPCT1027:58: The call to cudaFuncSetSharedMemConfig was replaced with 0 because SYCL currently does not support configuring shared memory on devices.
+ 1249 |     AT_CUDA_CHECK(cudaFuncSetSharedMemConfig((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, cudaSharedMemBankSizeFourByte));
+      |                   ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1249:5: warning: DPCT1010:59: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+ 1249 |     AT_CUDA_CHECK(cudaFuncSetSharedMemConfig((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, cudaSharedMemBankSizeFourByte));
+      |     ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+   40 |       auto error_unused C10_UNUSED = cudaGetLastError();            \
+      |                                      ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1249:5: warning: DPCT1009:60: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced by a placeholder string. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+   48 |               cudaGetErrorString(__err),                            \
+      |               ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1257:9: warning: DPCT1001:61: The statement could not be removed.
+ 1257 |         AT_CUDA_CHECK(cudaLaunchKernel((void*)&filtered_lrelu_kernel<T, index_t, SH, signWrite, signRead, MODE, U, FU, D, FD, TW, TH, W*32, !!XR, !!WS>, dim3(gx, gy, subGz), bx, args, dynamicSharedKB << 10, at::cuda::getCurrentCUDAStream()));
+      |         ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+   42 |       throw c10::CUDAError(                                         \
+      |       ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1257:9: warning: DPCT1000:62: Error handling if-stmt was detected but could not be rewritten.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+   39 |     if (__err != cudaSuccess) {                                     \
+      |     ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1257:9: warning: DPCT1010:63: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+   40 |       auto error_unused C10_UNUSED = cudaGetLastError();            \
+      |                                      ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1257:9: warning: DPCT1009:64: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced by a placeholder string. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+   48 |               cudaGetErrorString(__err),                            \
+      |               ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1279:5: warning: DPCT1001:65: The statement could not be removed.
+ 1279 |     AT_CUDA_CHECK(cudaLaunchKernel((void*)&filtered_lrelu_act_kernel<T, signWrite, signRead>, dim3(gx, gy, gz), bx, args, 0, at::cuda::getCurrentCUDAStream()));
+      |     ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+   42 |       throw c10::CUDAError(                                         \
+      |       ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1279:5: warning: DPCT1000:66: Error handling if-stmt was detected but could not be rewritten.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+   39 |     if (__err != cudaSuccess) {                                     \
+      |     ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1279:5: warning: DPCT1010:67: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+   40 |       auto error_unused C10_UNUSED = cudaGetLastError();            \
+      |                                      ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1279:5: warning: DPCT1009:68: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced by a placeholder string. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+   48 |               cudaGetErrorString(__err),                            \
+      |               ^
+In file included from /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu_ns.cu:9:
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:109:14: warning: DPCT1001:69: The statement could not be removed.
+  109 |     if (err) return err;
+      |              ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:109:5: warning: DPCT1000:70: Error handling if-stmt was detected but could not be rewritten.
+  109 |     if (err) return err;
+      |     ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:267:13: warning: DPCT1065:71: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+  267 |             __syncthreads();
+      |             ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:296:13: warning: DPCT1065:72: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+  296 |             __syncthreads();
+      |             ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:401:13: warning: DPCT1065:73: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+  401 |             __syncthreads();
+      |             ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:724:17: warning: DPCT1065:74: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+  724 |                 __syncthreads();
+      |                 ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:856:17: warning: DPCT1065:75: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+  856 |                 __syncthreads();
+      |                 ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:956:13: warning: DPCT1065:76: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+  956 |             __syncthreads();
+      |             ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1019:13: warning: DPCT1065:77: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+ 1019 |             __syncthreads();
+      |             ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1044:17: warning: DPCT1065:78: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+ 1044 |                 __syncthreads();
+      |                 ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1075:17: warning: DPCT1065:79: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+ 1075 |                 __syncthreads();
+      |                 ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1135:21: warning: DPCT1064:80: Migrated fabsf call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.
+ 1135 |                 if (fabsf(v) > p.clamp)
+      |                     ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1199:21: warning: DPCT1064:81: Migrated fabsf call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.
+ 1199 |                 if (fabsf(v) > p.clamp)
+      |                     ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cpp:74:5: warning: DPCT1001:82: The statement could not be removed.
+   74 |     AT_CUDA_CHECK(cudaDeviceGetAttribute(&maxSharedBytes, cudaDevAttrMaxSharedMemoryPerBlockOptin, x.device().index()));
+      |     ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:42:7: note: expanded from macro 'C10_CUDA_CHECK'
+   42 |       throw c10::CUDAError(                                         \
+      |       ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cpp:74:5: warning: DPCT1000:83: Error handling if-stmt was detected but could not be rewritten.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:39:5: note: expanded from macro 'C10_CUDA_CHECK'
+   39 |     if (__err != cudaSuccess) {                                     \
+      |     ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cpp:74:5: warning: DPCT1010:84: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced with 0. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:40:38: note: expanded from macro 'C10_CUDA_CHECK'
+   40 |       auto error_unused C10_UNUSED = cudaGetLastError();            \
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cpp:74:5: warning: DPCT1009:85: SYCL uses exceptions to report errors and does not use the error codes. The call was replaced by a placeholder string. You need to rewrite this code.
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/ATen/cuda/Exceptions.h:85:29: note: expanded from macro 'AT_CUDA_CHECK'
+   85 | #define AT_CUDA_CHECK(EXPR) C10_CUDA_CHECK(EXPR)
+      |                             ^
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/c10/cuda/CUDAException.h:48:15: note: expanded from macro 'C10_CUDA_CHECK'
+   48 |               cudaGetErrorString(__err),                            \
+      |               ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:506:38: warning: DPCT1096:86: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+  506 |                                 s |= __shfl_xor_sync(groupMask, s, 1);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:507:38: warning: DPCT1096:87: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+  507 |                                 s |= __shfl_xor_sync(groupMask, s, 2);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:537:38: warning: DPCT1096:88: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+  537 |                                 s |= __shfl_xor_sync(groupMask, s, 1);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:538:38: warning: DPCT1096:89: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+  538 |                                 s |= __shfl_xor_sync(groupMask, s, 2);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:644:38: warning: DPCT1096:90: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+  644 |                                 s |= __shfl_xor_sync(groupMask, s, 1);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:645:38: warning: DPCT1096:91: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+  645 |                                 s |= __shfl_xor_sync(groupMask, s, 2);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:667:38: warning: DPCT1096:92: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+  667 |                                 s |= __shfl_xor_sync(groupMask, s, 1);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:668:38: warning: DPCT1096:93: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+  668 |                                 s |= __shfl_xor_sync(groupMask, s, 2);
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:893:38: warning: DPCT1096:94: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+  893 |                                 s += __shfl_xor_sync(groupMask, s, 1);  // Coalesce.
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:894:38: warning: DPCT1096:95: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+  894 |                                 s += __shfl_xor_sync(groupMask, s, 2);  // Coalesce.
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:915:38: warning: DPCT1096:96: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+  915 |                                 s += __shfl_xor_sync(groupMask, s, 1);  // Coalesce.
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:916:38: warning: DPCT1096:97: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+  916 |                                 s += __shfl_xor_sync(groupMask, s, 2);  // Coalesce.
+      |                                      ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1147:18: warning: DPCT1096:98: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+ 1147 |             s |= __shfl_xor_sync(m, s, 1); // Distribute.
+      |                  ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1148:18: warning: DPCT1096:99: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+ 1148 |             s |= __shfl_xor_sync(m, s, 2);
+      |                  ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1149:18: warning: DPCT1096:100: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+ 1149 |             s |= __shfl_xor_sync(m, s, 4);
+      |                  ^
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti/filtered_lrelu.cu:1150:18: warning: DPCT1096:101: The right-most dimension of the work-group used in the SYCL kernel that calls this function may be less than "32". The function "dpct::permute_sub_group_by_xor" may return an unexpected result on the CPU device. Modify the size of the work-group to ensure that the value of the right-most dimension is a multiple of "32".
+ 1150 |             s |= __shfl_xor_sync(m, s, 8);
+      |                  ^
+Saved new version of /media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/torch_utils/ops/filtered_lrelu_dpct_out_2024.2.0_55a3f034030e4bd0f36d7c37f24f8366079a639b/filtered_lrelu.h.yaml file
+

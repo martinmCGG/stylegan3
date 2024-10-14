@@ -1,0 +1,10 @@
+Parsing: /home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.cpp
+Parsing: /home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.cu
+Analyzing: /home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.cpp
+Analyzing: /home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.cu
+Migrating: /home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.cpp
+Migrating: /home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.cu
+Processed 3 file(s) in -in-root folder "/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti"
+
+See Diagnostics Reference to resolve warnings and complete the migration:
+https://www.intel.com/content/www/us/en/docs/dpcpp-compatibility-tool/developer-guide-reference/current/diagnostics-reference.html

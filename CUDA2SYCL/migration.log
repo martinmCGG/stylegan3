@@ -1,0 +1,299 @@
+(stylegan3) user@Z790P:~/stylegan3$ git describe --long --all
+heads/debug_profiling-0-g4de6d34
+(base) user@Z790P:~/stylegan3$ conda env create -f environment.yml
+Channels:
+ - pytorch
+ - nvidia
+ - defaults
+Platform: linux-64
+Collecting package metadata (repodata.json): done
+Solving environment: done
+
+Downloading and Extracting Packages:
+                                                                                                                                                                                                            
+Preparing transaction: done                                                                                                                                                                                 
+Verifying transaction: done                                                                                                                                                                                 
+Executing transaction: / By downloading and using the CUDA Toolkit conda packages, you accept the terms and conditions of the CUDA End User License Agreement (EULA): https://docs.nvidia.com/cuda/eula/index.html                                                                                                                                                                                                      
+                                                                                                                                                                                                            
+done                                                                                                                                                                                                        
+Installing pip dependencies: - Ran pip subprocess with arguments:                                                                                                                                           
+['/home/user/miniconda3/envs/stylegan3/bin/python', '-m', 'pip', 'install', '-U', '-r', '/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/condaenv.b7acw1u7.requirements.txt', '--exists-action=b']                                                                                                                                                                                                 
+Pip subprocess output:                                                                                                                                                                                      
+Collecting imgui==1.3.0 (from -r /media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/condaenv.b7acw1u7.requirements.txt (line 1))                                                          
+  Using cached imgui-1.3.0-cp39-cp39-manylinux1_x86_64.whl.metadata (6.8 kB)                                                                                                                                
+Collecting glfw==2.2.0 (from -r /media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/condaenv.b7acw1u7.requirements.txt (line 2))                                                           
+  Using cached glfw-2.2.0-py2.py27.py3.py30.py31.py32.py33.py34.py35.py36.py37.py38-none-manylinux2014_x86_64.whl.metadata (4.3 kB)                                                                         
+Collecting pyopengl==3.1.5 (from -r /media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/condaenv.b7acw1u7.requirements.txt (line 3))                                                       
+  Using cached PyOpenGL-3.1.5-py3-none-any.whl.metadata (3.2 kB)
+Collecting imageio-ffmpeg==0.4.3 (from -r /media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/condaenv.b7acw1u7.requirements.txt (line 4))
+  Using cached imageio_ffmpeg-0.4.3-py3-none-manylinux2010_x86_64.whl.metadata (1.6 kB)
+Collecting pyspng (from -r /media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/condaenv.b7acw1u7.requirements.txt (line 5))
+  Downloading pyspng-0.1.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (1.8 kB)
+Requirement already satisfied: numpy in /home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages (from pyspng->-r /media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/condaenv.b7acw1u7.requirements.txt (line 5)) (1.24.3)
+Using cached imgui-1.3.0-cp39-cp39-manylinux1_x86_64.whl (2.9 MB)
+Using cached glfw-2.2.0-py2.py27.py3.py30.py31.py32.py33.py34.py35.py36.py37.py38-none-manylinux2014_x86_64.whl (204 kB)
+Using cached PyOpenGL-3.1.5-py3-none-any.whl (2.4 MB)
+Using cached imageio_ffmpeg-0.4.3-py3-none-manylinux2010_x86_64.whl (26.9 MB)
+Downloading pyspng-0.1.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (192 kB)
+Installing collected packages: pyopengl, imgui, glfw, pyspng, imageio-ffmpeg
+Successfully installed glfw-2.2.0 imageio-ffmpeg-0.4.3 imgui-1.3.0 pyopengl-3.1.5 pyspng-0.1.2
+
+done
+#
+# To activate this environment, use
+#
+#     $ conda activate stylegan3
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+(base) user@Z790P:~/stylegan3$ conda activate stylegan3
+(stylegan3) user@Z790P:~/stylegan3$ python train.py --outdir=~/training-runs --cfg=stylegan3-t --data=/projects/ImageDatasets/Other/AFHQv2/afhq_v2.zip --gpus=1 --batch=4 --gamma=8.2 --metrics=none --kimg=0 | sed -n 's/.*CHECK THE BUILD DIR FOR compile_commands.json: //p' > CUDA2SYCL/cuda_builddirs.txt
+Traceback (most recent call last):
+  File "/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/train.py", line 20, in <module>
+    from training import training_loop
+  File "/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/training/training_loop.py", line 16, in <module>
+    import psutil
+ModuleNotFoundError: No module named 'psutil'
+(stylegan3) user@Z790P:~/stylegan3$ pip install psutil
+Collecting psutil
+  Using cached psutil-6.0.0-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (21 kB)
+Using cached psutil-6.0.0-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (290 kB)
+Installing collected packages: psutil
+Successfully installed psutil-6.0.0
+(stylegan3) user@Z790P:~/stylegan3$ python train.py --outdir=~/training-runs --cfg=stylegan3-t --data=/projects/ImageDatasets/Other/AFHQv2/afhq_v2.zip --gpus=1 --batch=4 --gamma=8.2 --metrics=none --kimg=0 | sed -n 's/.*CHECK THE BUILD DIR FOR compile_commands.json: //p' > CUDA2SYCL/cuda_builddirs.txt
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.16.5 and <1.23.0 is required for this version of SciPy (detected version 1.24.3
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+Error: --data: [Errno 2] No such file or directory: '/projects/ImageDatasets/Other/AFHQv2/afhq_v2.zip'
+(stylegan3) user@Z790P:~/stylegan3$ python gen_images.py --outdir=out --trunc=1 --seeds=2 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl
+Warning: intel_extension_for_pytorch not loaded
+Loading networks from "https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl"...
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.16.5 and <1.23.0 is required for this version of SciPy (detected version 1.24.3
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+allow_module_rebuild = True -> this would significantly slow down or freeze profiling!
+Warning: intel_extension_for_pytorch not loaded
+Generating image for seed 2 (0/1) ...
+Setting up PyTorch plugin "bias_act_plugin"... Failed!
+Traceback (most recent call last):
+  File "/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/gen_images.py", line 154, in <module>
+    generate_images() # pylint: disable=no-value-for-parameter
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+  File "/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/gen_images.py", line 146, in generate_images
+    img = G(z, label, truncation_psi=truncation_psi, noise_mode=noise_mode)
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1051, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "<string>", line 503, in forward
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1051, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "<string>", line 143, in forward
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1051, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "<string>", line 92, in forward
+  File "/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/torch_utils/ops/bias_act.py", line 94, in bias_act
+    if impl == 'xpu' and _init(): # and x.device.type == 'xpu'
+  File "/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/torch_utils/ops/bias_act.py", line 51, in _init
+    _plugin = custom_ops.get_plugin(
+  File "/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/torch_utils/custom_ops.py", line 174, in get_plugin
+    build_and_load_module(name=module_name, build_directory=cached_build_dir,
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 1080, in load
+    return _jit_compile(
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 1293, in _jit_compile
+    _write_ninja_file_and_build_library(
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 1382, in _write_ninja_file_and_build_library
+    extra_ldflags = _prepare_ldflags(
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 1490, in _prepare_ldflags
+    extra_ldflags.append(f'-L{_join_cuda_home("lib64")}')
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 1984, in _join_cuda_home
+    raise EnvironmentError('CUDA_HOME environment variable is not set. '
+OSError: CUDA_HOME environment variable is not set. Please set it to your CUDA install root.
+(stylegan3) user@Z790P:~/stylegan3$ # installed CUDA Toolkit 11.5 (causes problems)
+(stylegan3) user@Z790P:~/stylegan3$ python gen_images.py --outdir=out --trunc=1 --seeds=2 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl
+Warning: intel_extension_for_pytorch not loaded
+Loading networks from "https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl"...
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.16.5 and <1.23.0 is required for this version of SciPy (detected version 1.24.3
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+allow_module_rebuild = True -> this would significantly slow down or freeze profiling!
+Warning: intel_extension_for_pytorch not loaded
+Generating image for seed 2 (0/1) ...
+Setting up PyTorch plugin "bias_act_plugin"... CHECK THE BUILD DIR FOR compile_commands.json: /home/user/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-geforce-gtx-1080-ti
+Failed!
+Traceback (most recent call last):
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 1666, in _run_ninja_build
+    subprocess.run(
+  File "/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/torch_utils/custom_ops.py", line 93, in hooked_subprocess_run
+    return ori_subprocess_run(command, **kwargs)
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/subprocess.py", line 528, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['ninja', '-v']' returned non-zero exit status 1.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/gen_images.py", line 154, in <module>
+    generate_images() # pylint: disable=no-value-for-parameter
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+  File "/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/gen_images.py", line 146, in generate_images
+    img = G(z, label, truncation_psi=truncation_psi, noise_mode=noise_mode)
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1051, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "<string>", line 503, in forward
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1051, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "<string>", line 143, in forward
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1051, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "<string>", line 92, in forward
+  File "/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/torch_utils/ops/bias_act.py", line 94, in bias_act
+    if impl == 'xpu' and _init(): # and x.device.type == 'xpu'
+  File "/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/torch_utils/ops/bias_act.py", line 51, in _init
+    _plugin = custom_ops.get_plugin(
+  File "/media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/torch_utils/custom_ops.py", line 174, in get_plugin
+    build_and_load_module(name=module_name, build_directory=cached_build_dir,
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 1080, in load
+    return _jit_compile(
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 1293, in _jit_compile
+    _write_ninja_file_and_build_library(
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 1405, in _write_ninja_file_and_build_library
+    _run_ninja_build(
+  File "/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 1682, in _run_ninja_build
+    raise RuntimeError(message) from e
+RuntimeError: Error building extension 'bias_act_plugin': [1/3] /usr/bin/nvcc  -DTORCH_EXTENSION_NAME=bias_act_plugin -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\"_gcc\" -DPYBIND11_STDLIB=\"_libstdcpp\" -DPYBIND11_BUILD_ABI=\"_cxxabi1011\" -isystem /home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include -isystem /home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/torch/csrc/api/include -isystem /home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/TH -isystem /home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/THC -isystem /home/user/miniconda3/envs/stylegan3/include/python3.9 -D_GLIBCXX_USE_CXX11_ABI=0 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_61,code=compute_61 -gencode=arch=compute_61,code=sm_61 --compiler-options '-fPIC' --use_fast_math --allow-unsupported-compiler -std=c++14 -c /home/user/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-geforce-gtx-1080-ti/bias_act.cu -o bias_act.cuda.o 
+FAILED: bias_act.cuda.o 
+/usr/bin/nvcc  -DTORCH_EXTENSION_NAME=bias_act_plugin -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\"_gcc\" -DPYBIND11_STDLIB=\"_libstdcpp\" -DPYBIND11_BUILD_ABI=\"_cxxabi1011\" -isystem /home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include -isystem /home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/torch/csrc/api/include -isystem /home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/TH -isystem /home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/THC -isystem /home/user/miniconda3/envs/stylegan3/include/python3.9 -D_GLIBCXX_USE_CXX11_ABI=0 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_61,code=compute_61 -gencode=arch=compute_61,code=sm_61 --compiler-options '-fPIC' --use_fast_math --allow-unsupported-compiler -std=c++14 -c /home/user/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-geforce-gtx-1080-ti/bias_act.cu -o bias_act.cuda.o 
+/usr/include/c++/11/bits/std_function.h:435:145: error: parameter packs not expanded with ‘...’:
+  435 |         function(_Functor&& __f)
+      |                                                                                                                                                 ^ 
+/usr/include/c++/11/bits/std_function.h:435:145: note:         ‘_ArgTypes’
+/usr/include/c++/11/bits/std_function.h:530:146: error: parameter packs not expanded with ‘...’:
+  530 |         operator=(_Functor&& __f)
+      |                                                                                                                                                  ^ 
+/usr/include/c++/11/bits/std_function.h:530:146: note:         ‘_ArgTypes’
+[2/3] c++ -MMD -MF bias_act.o.d -DTORCH_EXTENSION_NAME=bias_act_plugin -DTORCH_API_INCLUDE_EXTENSION_H -DPYBIND11_COMPILER_TYPE=\"_gcc\" -DPYBIND11_STDLIB=\"_libstdcpp\" -DPYBIND11_BUILD_ABI=\"_cxxabi1011\" -isystem /home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include -isystem /home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/torch/csrc/api/include -isystem /home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/TH -isystem /home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/include/THC -isystem /home/user/miniconda3/envs/stylegan3/include/python3.9 -D_GLIBCXX_USE_CXX11_ABI=0 -fPIC -std=c++14 -c /home/user/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-geforce-gtx-1080-ti/bias_act.cpp -o bias_act.o 
+ninja: build stopped: subcommand failed.
+(stylegan3) user@Z790P:~/stylegan3$ # trying to use another GCC version (works but fails during migration; c2s fails parsing - can't find c++ stdlib etc. due to incorrect INCLUDE path)
+(stylegan3) user@Z790P:~/stylegan3$ CC=gcc-10 CXX=g++-10 python gen_images.py --outdir=out --trunc=1 --seeds=2 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl
+Warning: intel_extension_for_pytorch not loaded
+Loading networks from "https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl"...
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.16.5 and <1.23.0 is required for this version of SciPy (detected version 1.24.3
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+allow_module_rebuild = True -> this would significantly slow down or freeze profiling!
+Warning: intel_extension_for_pytorch not loaded
+Generating image for seed 2 (0/1) ...
+Setting up PyTorch plugin "bias_act_plugin"... CHECK THE BUILD DIR FOR compile_commands.json: /home/user/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-geforce-gtx-1080-ti
+Done.
+Setting up PyTorch plugin "filtered_lrelu_plugin"... CHECK THE BUILD DIR FOR compile_commands.json: /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti
+Done.
+Setting up PyTorch plugin "upfirdn2d_plugin"... CHECK THE BUILD DIR FOR compile_commands.json: /home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti
+Done.
+(stylegan3) user@Z790P:~/stylegan3$ CC=$(which gcc-10) CXX=$(which g++-10) python gen_images.py --outdir=out --trunc=1 --seeds=2 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl | sed -n 's/.*CHECK THE BUILD DIR FOR compile_commands.json: //p' > CUDA2SYCL/cuda_builddirs.txt
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.16.5 and <1.23.0 is required for this version of SciPy (detected version 1.24.3
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+(stylegan3) user@Z790P:~/stylegan3$ cat CUDA2SYCL/cuda_builddirs.txt 
+/home/user/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-geforce-gtx-1080-ti
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti
+/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti
+(stylegan3) user@Z790P:~/stylegan3$ # ... still bad output
+(stylegan3) user@Z790P:~/stylegan3$ # after 'apt install cuda-toolkit' in another window (version 12.6 at the time), running the original command produces valid compile_commands that lead to successful migration (ran on stylegan3-r and stylegan2 configs to cover all 3 kernels, than removed the duplicate path of the common bias_act kernel from cuda_builddirs.txt)
+(stylegan3) user@Z790P:~/stylegan3$ python gen_video.py --output=benchmark3r.mp4 --trunc=1 --seeds=2,5 --w-frames=32 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl --preheat=True | sed -n 's/.*CHECK THE BUILD DIR FOR compile_commands.json: //p' > CUDA2SYCL/cuda_builddirs.txt
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.16.5 and <1.23.0 is required for this version of SciPy (detected version 1.24.3
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+stylegan3-r-afhqv2-512x512.pkl: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 64/64 [00:05<00:00, 12.77it/s]
+(stylegan3) user@Z790P:~/stylegan3$ python gen_video.py --output=benchmark2.mp4 --trunc=1 --seeds=2,10 --w-frames=32 --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan2/versions/1/files/stylegan2-afhqv2-512x512.pkl --preheat=True | sed -n 's/.*CHECK THE BUILD DIR FOR compile_commands.json: //p' >> CUDA2SYCL/cuda_builddirs.txt
+/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.16.5 and <1.23.0 is required for this version of SciPy (detected version 1.24.3
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+stylegan2-afhqv2-512x512.pkl: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 64/64 [00:02<00:00, 23.01it/s]
+(stylegan3) user@Z790P:~/stylegan3$ cat CUDA2SYCL/cuda_builddirs.txt 
+/home/user/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-geforce-gtx-1080-ti
+/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti
+/home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti
+(stylegan3) user@Z790P:~/stylegan3/CUDA2SYCL$ c2s --version 
+
+Intel(R) DPC++ Compatibility Tool version 2024.2.0. Codebase:(55a3f034030e4bd0f36d7c37f24f8366079a639b). clang version 19.0.0
+
+(stylegan3) user@Z790P:~/stylegan3/CUDA2SYCL$ c2s --version | sed -n 's/.*Tool version //;s/. Codebase:(/_/;s/).*//p'
+2024.2.0_55a3f034030e4bd0f36d7c37f24f8366079a639b
+(stylegan3) user@Z790P:~/stylegan3/CUDA2SYCL$ ( . /opt/intel/oneapi/setvars.sh && ./migrate.sh )
+ 
+:: initializing oneAPI environment ...
+   bash: BASH_VERSION = 5.1.16(1)-release
+   args: Using "$@" for setvars.sh arguments: 
+:: ccl -- latest
+:: compiler -- latest
+:: debugger -- latest
+:: dev-utilities -- latest
+:: dpcpp-ct -- latest
+:: mkl -- latest
+:: mpi -- latest
+:: tbb -- latest
+:: vtune -- latest
+:: oneAPI environment initialized ::
+ 
+/opt/intel/oneapi/dpcpp-ct/2024.2/bin/c2s
++ set -e
++ read builddir
++ echo 'Mirgating /home/user/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-geforce-gtx-1080-ti'
+Mirgating /home/user/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-geforce-gtx-1080-ti
++ cd /home/user/.cache/torch_extensions/bias_act_plugin/9936501c2690d15987a56ecc20fa04e5-nvidia-geforce-gtx-1080-ti
++ migrate
++ grep '"output"' compile_commands.json
+++ ls
+++ grep '.h$'
+++ tail -n 1
+++ sed 's/\.h$//'
++ module_name=bias_act
++ module_outdir=/home/user/stylegan3/CUDA2SYCL/../torch_utils/ops/bias_act_dpct_out_2024.2.0_55a3f034030e4bd0f36d7c37f24f8366079a639b
++ ret=0
++ c2s --gen-helper-function --out-root /home/user/stylegan3/CUDA2SYCL/../torch_utils/ops/bias_act_dpct_out_2024.2.0_55a3f034030e4bd0f36d7c37f24f8366079a639b -p .
++ '[' 0 -ne 0 ']'
++ mv migrate.stdout.log migrate.stderr.log /home/user/stylegan3/CUDA2SYCL/../torch_utils/ops/bias_act_dpct_out_2024.2.0_55a3f034030e4bd0f36d7c37f24f8366079a639b/
++ read builddir
++ echo 'Mirgating /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti'
+Mirgating /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti
++ cd /home/user/.cache/torch_extensions/filtered_lrelu_plugin/d723b4b3b82835d1bb4d83c21315f2aa-nvidia-geforce-gtx-1080-ti
++ migrate
++ grep '"output"' compile_commands.json
+++ ls
+++ grep '.h$'
+++ tail -n 1
+++ sed 's/\.h$//'
++ module_name=filtered_lrelu
++ module_outdir=/home/user/stylegan3/CUDA2SYCL/../torch_utils/ops/filtered_lrelu_dpct_out_2024.2.0_55a3f034030e4bd0f36d7c37f24f8366079a639b
++ ret=0
++ c2s --gen-helper-function --out-root /home/user/stylegan3/CUDA2SYCL/../torch_utils/ops/filtered_lrelu_dpct_out_2024.2.0_55a3f034030e4bd0f36d7c37f24f8366079a639b -p .
++ '[' 0 -ne 0 ']'
++ mv migrate.stdout.log migrate.stderr.log /home/user/stylegan3/CUDA2SYCL/../torch_utils/ops/filtered_lrelu_dpct_out_2024.2.0_55a3f034030e4bd0f36d7c37f24f8366079a639b/
++ read builddir
++ echo 'Mirgating /home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti'
+Mirgating /home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti
++ cd /home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti
++ migrate
++ grep '"output"' compile_commands.json
+++ ls
+++ tail -n 1
+++ grep '.h$'
+++ sed 's/\.h$//'
++ module_name=upfirdn2d
++ module_outdir=/home/user/stylegan3/CUDA2SYCL/../torch_utils/ops/upfirdn2d_dpct_out_2024.2.0_55a3f034030e4bd0f36d7c37f24f8366079a639b
++ ret=0
++ c2s --gen-helper-function --out-root /home/user/stylegan3/CUDA2SYCL/../torch_utils/ops/upfirdn2d_dpct_out_2024.2.0_55a3f034030e4bd0f36d7c37f24f8366079a639b -p .
++ '[' 0 -ne 0 ']'
++ mv migrate.stdout.log migrate.stderr.log /home/user/stylegan3/CUDA2SYCL/../torch_utils/ops/upfirdn2d_dpct_out_2024.2.0_55a3f034030e4bd0f36d7c37f24f8366079a639b/
++ read builddir
++ echo Migration done
+Migration done
+

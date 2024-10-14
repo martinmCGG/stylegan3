@@ -1,0 +1,47 @@
+error: unknown argument: '--expt-relaxed-constexpr'
+error: unknown argument: '-gencode=arch=compute_61,code=compute_61'
+error: unknown argument: '-gencode=arch=compute_61,code=sm_61'
+error: unknown argument: '--compiler-options'
+error: unknown argument: '--use_fast_math'
+error: unknown argument: '--allow-unsupported-compiler'
+warning: CUDA version is newer than the latest supported version 12.4 [-Wunknown-cuda-version]
+warning: /home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.o: 'linker' input unused [-Wunused-command-line-argument]
+warning: upfirdn2d.cuda.o: 'linker' input unused [-Wunused-command-line-argument]
+warning: -lc10: 'linker' input unused [-Wunused-command-line-argument]
+warning: -lc10_cuda: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch_cpu: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch_cuda_cu: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch_cuda_cpp: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch: 'linker' input unused [-Wunused-command-line-argument]
+warning: -ltorch_python: 'linker' input unused [-Wunused-command-line-argument]
+warning: -lcudart: 'linker' input unused [-Wunused-command-line-argument]
+warning: argument unused during migration: '-Wno-c++11-narrowing' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-Xclang -fcuda-allow-variadic-functions' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-D __CUDA_DOT_H_FILE_PATH__="/usr/local/cuda-12.6/targets/x86_64-linux/include/cuda.h"' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-nocudalib' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-shared' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-L/home/user/miniconda3/envs/stylegan3/lib/python3.9/site-packages/torch/lib' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-L/usr/local/cuda/lib64' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-I /usr/local/cuda-12.6/targets/x86_64-linux/include' [-Wunused-command-line-argument]
+warning: argument unused during migration: '-fno-delayed-template-parsing' [-Wunused-command-line-argument]
+error: unable to handle migration, expected exactly one migration job in ''
+/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.cu:242:5: warning: DPCT1049:0: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.
+  242 |     cudaLaunchKernel((void*)&upfirdn2d_kernel_large<T>, gridSize, blockSize, args, 0, at::cuda::getCurrentCUDAStream());
+      |     ^
+/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.cu:108:1: warning: DPCT1110:1: The total declared local variable size in device function upfirdn2d_kernel_small exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.
+  108 | static __global__ void upfirdn2d_kernel_small(upfirdn2d_kernel_params p)
+      | ^
+/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.cu:155:13: warning: DPCT1118:2: SYCL group functions and algorithms must be encountered in converged control flow. You may need to adjust the code.
+  155 |             __syncthreads();
+      |             ^
+/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.cu:173:13: warning: DPCT1118:3: SYCL group functions and algorithms must be encountered in converged control flow. You may need to adjust the code.
+  173 |             __syncthreads();
+      |             ^
+/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.cu:155:13: warning: DPCT1065:4: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+  155 |             __syncthreads();
+      |             ^
+/home/user/.cache/torch_extensions/upfirdn2d_plugin/28e73e58649aac49259dcf8fc7caddf0-nvidia-geforce-gtx-1080-ti/upfirdn2d.cu:173:13: warning: DPCT1065:5: Consider replacing sycl::nd_item::barrier() with sycl::nd_item::barrier(sycl::access::fence_space::local_space) for better performance if there is no access to global memory.
+  173 |             __syncthreads();
+      |             ^
+Saved new version of /media/user/a648b44d-0418-4c82-b172-8bd278c99e42/home/user/stylegan3/torch_utils/ops/upfirdn2d_dpct_out_2024.2.0_55a3f034030e4bd0f36d7c37f24f8366079a639b/upfirdn2d.h.yaml file
+
