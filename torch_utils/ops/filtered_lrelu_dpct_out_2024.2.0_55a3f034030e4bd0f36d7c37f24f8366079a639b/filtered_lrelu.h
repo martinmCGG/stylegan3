@@ -6,8 +6,10 @@
 // distribution of this software and related documentation without an express
 // license agreement from NVIDIA CORPORATION is strictly prohibited.
 
+#include <cstdint>
 #include <sycl/sycl.hpp>
-#include <dpct/dpct.hpp>
+//using longlong3 = sycl::vec<long long, 3>;
+using longlong4 = sycl::vec<long long, 4>;
 
 //------------------------------------------------------------------------
 // CUDA kernel parameters.
@@ -48,9 +50,9 @@ struct filtered_lrelu_kernel_params
         sOfs; // [ofs_x, ofs_y] - offset between upsampled data and sign tensor.
     int             swLimit;    // Active width of sign tensor in bytes.
 
-    sycl::long4 xStride; // Strides of all tensors except signs, same component
+    longlong4 xStride; // Strides of all tensors except signs, same component
                          // order as shapes.
-    sycl::long4 yStride; //
+    longlong4 yStride; //
     int64_t         bStride;    //
     sycl::long3 fuStride;       //
     sycl::long3 fdStride;       //
@@ -66,7 +68,7 @@ struct filtered_lrelu_act_kernel_params
     float           clamp;      // Clamp after nonlinearity.
 
     sycl::int4 xShape;   // [width, height, channel, batch]
-    sycl::long4 xStride; // Input/output tensor strides, same order as in shape.
+    longlong4 xStride; // Input/output tensor strides, same order as in shape.
     sycl::int2 sShape;   // [width, height] - width is in elements. Contiguous.
                          // Zeros if unused.
     sycl::int2

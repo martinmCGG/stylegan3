@@ -6,13 +6,10 @@
 // distribution of this software and related documentation without an express
 // license agreement from NVIDIA CORPORATION is strictly prohibited.
 
-#include <sycl/sycl.hpp>
-#include <dpct/dpct.hpp>
+#include <algorithm>
 #include <torch/extension.h>
-#include <ATen/cuda/CUDAContext.h>
-#include <c10/cuda/CUDAGuard.h>
+//#include <ipex.hpp>
 #include "filtered_lrelu.h"
-
 
 template <class T, class index_t, bool signWrite, bool signRead>
 void choose_and_run_filtered_lrelu_kernel(filtered_lrelu_kernel_params& p, int sharedKB)
@@ -65,8 +62,8 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
     int up, int down, int px0, int px1, int py0, int py1, int sx, int sy, float gain, float slope, float clamp, bool flip_filters, bool writeSigns)
 {
     // Set CUDA device.
-    TORCH_CHECK(x.is_cuda(), "x must reside on CUDA device");
-    const at::cuda::OptionalCUDAGuard device_guard(device_of(x));
+    TORCH_CHECK(x.is_xpu(), "x must reside on CUDA device");
+    // const at::cuda::OptionalCUDAGuard device_guard(device_of(x)); // TODO may be necessary for multi-GPU
 
     // Validate arguments.
     TORCH_CHECK(fu.device() == x.device() && fd.device() == x.device() && b.device() == x.device(), "all input tensors must reside on the same device");
@@ -251,8 +248,8 @@ static std::tuple<torch::Tensor, torch::Tensor, int> filtered_lrelu(
 static torch::Tensor filtered_lrelu_act(torch::Tensor x, torch::Tensor si, int sx, int sy, float gain, float slope, float clamp, bool writeSigns)
 {
     // Set CUDA device.
-    TORCH_CHECK(x.is_cuda(), "x must reside on CUDA device");
-    const at::cuda::OptionalCUDAGuard device_guard(device_of(x));
+    TORCH_CHECK(x.is_xpu(), "x must reside on XPU device");
+    //const at::cuda::OptionalCUDAGuard device_guard(device_of(x)); // TODO may be necessary for multi-GPU
 
     // Validate arguments.
     TORCH_CHECK(x.dim() == 4, "x must be rank 4");

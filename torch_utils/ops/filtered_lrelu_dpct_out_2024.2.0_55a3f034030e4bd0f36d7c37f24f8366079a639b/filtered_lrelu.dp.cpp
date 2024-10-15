@@ -6,14 +6,13 @@
 // distribution of this software and related documentation without an express
 // license agreement from NVIDIA CORPORATION is strictly prohibited.
 
-#include <sycl/sycl.hpp>
+#include <cstdint>
+#include <cmath>
+#include "filtered_lrelu.h"
 #include <dpct/dpct.hpp>
 #include <torch/extension.h>
 #include <c10/util/Half.h>
-#include <ATen/cuda/CUDAContext.h>
-#include "filtered_lrelu.h"
-#include <cstdint>
-#include <cmath>
+#include <ipex.h>
 
 //------------------------------------------------------------------------
 // Helpers.
@@ -193,7 +192,7 @@ adjust the code, or use smaller sub-group size to avoid high register pressure.
 static void filtered_lrelu_kernel(filtered_lrelu_kernel_params p,
                                   const sycl::nd_item<3> &item_ct1,
                                   float const *c_fbuf, char *s_buf_raw,
-                                  scalar_t *s_buf0_st)
+                                  typename InternalType<T>::scalar_t *s_buf0_st)
 {
     // Check that we don't try to support non-existing filter modes.
     static_assert(up   == 1 || up   == 2 || up   == 4, "only up=1, up=2, up=4 scales supported");
@@ -1930,6 +1929,8 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
                   // specializations would need to be avoided)
                   void run_filtered_lrelu_kernel(
                       filtered_lrelu_kernel_params &p) try {
+    typedef typename InternalType<T>::scalar_t scalar_t;
+    
     // Launch CUDA kernel.
     void* args[] = {&p};
     int bx = W * 32;
@@ -1953,6 +1954,10 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
     }
 
     // Launch filter setup kernel.
+    auto device_type = c10::DeviceType::XPU;
+    c10::impl::VirtualGuardImpl impl(device_type);
+    c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
+    auto& queue = xpu::get_queue_from_stream(c10_stream);
     /*
     DPCT1049:0: The work-group size passed to the SYCL kernel may exceed the
     limit. To get the device limit, query info::device::max_work_group_size.
@@ -1974,10 +1979,10 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
     DPCT1000:31: Error handling if-stmt was detected but could not be rewritten.
     */
   {
-    g_fbuf.init(*((sycl::queue *)(at::cuda::getCurrentCUDAStream())));
 
-    ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))
-        ->submit([&](sycl::handler &cgh) {
+    g_fbuf.init(queue);
+
+    queue.submit([&](sycl::handler &cgh) {
           auto g_fbuf_ptr_ct1 = g_fbuf.get_ptr();
 
           filtered_lrelu_kernel_params p_ct0 =
@@ -2139,15 +2144,14 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
         rewritten.
         */
     {
-      c_fbuf.init(*((sycl::queue *)(at::cuda::getCurrentCUDAStream())));
+      c_fbuf.init(queue);
 
-      ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))
-          ->submit([&](sycl::handler &cgh) {
+      queue.submit([&](sycl::handler &cgh) {
             auto c_fbuf_ptr_ct1 = c_fbuf.get_ptr();
 
             sycl::local_accessor<scalar_t, 1> s_buf0_st_acc_ct1(
                 sycl::range<1>((SH > 48) ? (1 << 24)
-                                         : (s_buf0_size + s_buf1_size)),
+                                         : (s_buf0_size + s_buf1_size)), // TODO add ", sycl::ext::oneapi::accessor_property_list{sycl::ext::oneapi::no_alias}"?
                 cgh);
             sycl::local_accessor<char, 1> s_buf_raw_acc_ct1(
                 sycl::range<1>(dynamicSharedKB << 10), cgh);
@@ -2200,6 +2204,10 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
     gz = std::min(gz, gmax);
 
     // Launch.
+    auto device_type = c10::DeviceType::XPU;
+    c10::impl::VirtualGuardImpl impl(device_type);
+    c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
+    auto& queue = xpu::get_queue_from_stream(c10_stream);
     /*
     DPCT1049:2: The work-group size passed to the SYCL kernel may exceed the
     limit. To get the device limit, query info::device::max_work_group_size.
@@ -2222,11 +2230,10 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
     */
   {
     dpct::has_capability_or_fail(
-        ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))->get_device(),
+        queue.get_device(),
         {sycl::aspect::fp64});
 
-    ((sycl::queue *)(at::cuda::getCurrentCUDAStream()))
-        ->submit([&](sycl::handler &cgh) {
+    queue.submit([&](sycl::handler &cgh) {
           filtered_lrelu_act_kernel_params p_ct0 =
               *(filtered_lrelu_act_kernel_params *)args[0];
 
