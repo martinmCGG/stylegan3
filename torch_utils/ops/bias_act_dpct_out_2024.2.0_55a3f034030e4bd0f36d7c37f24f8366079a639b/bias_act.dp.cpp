@@ -6,10 +6,8 @@
 // distribution of this software and related documentation without an express
 // license agreement from NVIDIA CORPORATION is strictly prohibited.
 
-#include <sycl/sycl.hpp>
-#include <dpct/dpct.hpp>
-#include <c10/util/Half.h>
 #include "bias_act.h"
+#include <ipex.h>
 
 //------------------------------------------------------------------------
 // Helpers.
@@ -179,19 +177,28 @@ void bias_act_kernel(bias_act_kernel_params p, const sycl::nd_item<3> &item_ct1)
     //else TODO fail
 }
 
-void bias_act_kernel_half(bias_act_kernel_params p,
-                          const sycl::nd_item<3> &item_ct1) {
-    bias_act_kernel<c10::Half>(p, item_ct1);
-}
-
-void bias_act_kernel_float(bias_act_kernel_params p,
-                           const sycl::nd_item<3> &item_ct1) {
-    bias_act_kernel<float>(p, item_ct1);
-}
-
-void bias_act_kernel_double(bias_act_kernel_params p,
-                            const sycl::nd_item<3> &item_ct1) {
-    bias_act_kernel<double>(p, item_ct1);
+void bias_act_kernel_launch(bias_act_kernel_params p) {
+    int blockSize = 4 * 32; // TODO tune, or rather remove and let the runtime choose its favorite work unit size
+    int gridSize = (p.sizeX - 1) / (p.loopX * blockSize) + 1;
+    
+    auto device_type = c10::DeviceType::XPU;
+    c10::impl::VirtualGuardImpl impl(device_type);
+    c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
+    auto& queue = xpu::get_queue_from_stream(c10_stream);
+    
+    queue.submit([&] (sycl::handler& cgh) {
+        
+        AT_DISPATCH_FLOATING_TYPES_AND_HALF(p.dtype, "bias_act_xpu", [&]
+        {
+            cgh.parallel_for(
+                    sycl::nd_range<3>(
+                        sycl::range<3>(1, 1, gridSize) * sycl::range<3>(1, 1, blockSize),
+                        sycl::range<3>(1, 1, blockSize)),
+                    [=](sycl::nd_item<3> item_ct1) {
+                        bias_act_kernel<scalar_t>(p, item_ct1);
+                    });
+        });
+    }).wait();
 }
 
 //------------------------------------------------------------------------

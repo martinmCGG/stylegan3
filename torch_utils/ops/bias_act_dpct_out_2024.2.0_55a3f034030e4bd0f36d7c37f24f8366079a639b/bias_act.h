@@ -1,5 +1,8 @@
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
+#include <torch/extension.h>
+#include <c10/util/Half.h>
+
 // Copyright (c) 2021, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
 //
 // NVIDIA CORPORATION and its licensors retain all intellectual property
@@ -13,6 +16,7 @@
 
 struct bias_act_kernel_params
 {
+    c10::ScalarType dtype = c10::ScalarType::Undefined;
     const void* x;      // [sizeX]
     const void* b;      // [sizeB] or NULL
     const void* xref;   // [sizeX] or NULL
@@ -40,11 +44,6 @@ struct bias_act_kernel_params
 //template <class T> __global__ void bias_act_kernel(bias_act_kernel_params p);
 //__global__ void bias_act_kernel(bias_act_kernel_params p);
 
-void bias_act_kernel_half(bias_act_kernel_params p,
-                          const sycl::nd_item<3> &item_ct1);
-void bias_act_kernel_float(bias_act_kernel_params p,
-                           const sycl::nd_item<3> &item_ct1);
-void bias_act_kernel_double(bias_act_kernel_params p,
-                            const sycl::nd_item<3> &item_ct1);
+void bias_act_kernel_launch(bias_act_kernel_params p);
 
 //------------------------------------------------------------------------

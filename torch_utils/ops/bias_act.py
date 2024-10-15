@@ -37,7 +37,8 @@ _null_tensor = torch.empty([0])
 
 def _init():
     global _plugin
-    plugin_dir = 'bias_act_dpct_out_2023.2.0_632fda9b21df865ea71d642b57f4490bc9eef925/'
+    #plugin_dir = 'bias_act_dpct_out_2023.2.0_632fda9b21df865ea71d642b57f4490bc9eef925/'
+    plugin_dir = 'bias_act_dpct_out_2024.2.0_55a3f034030e4bd0f36d7c37f24f8366079a639b/'
     if _plugin is None:
         if custom_ops.using_xpu:
             _plugin = custom_ops.get_plugin(

@@ -197,7 +197,8 @@ def get_plugin(module_name, sources, headers=None, source_dir=None, **build_kwar
 #----------------------------------------------------------------------------
 
 def get_ops_include_path():
-    return pathlib.Path(__file__).parent.resolve().joinpath('ops').joinpath('include_2023.2')
+    include_dir_name = 'include_2024.2'#'include_2023.2'
+    return pathlib.Path(__file__).parent.resolve().joinpath('ops').joinpath(include_dir_name)
 
 def get_xpu_cflags():
     return [
