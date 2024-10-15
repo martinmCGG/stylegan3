@@ -1932,7 +1932,10 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
         limit. To get the device limit, query info::device::max_work_group_size.
         Adjust the work-group size if needed.
         */
-    queue.submit([&](sycl::handler &cgh) {
+    queue.submit([&](sycl::handler &cgh) { // BASELINE: 1.42 it/s (stylegan3-r afhq2 512x512 inference in gen_video.py on A770)
+          //const auto props = sycl::ext::oneapi::accessor_property_list{sycl::no_init, sycl::ext::oneapi::no_alias};
+          //sycl::accessor yAccessor(yBuf, cgh, sycl::write_only, props);
+          
 
           sycl::accessor yAccessor(yBuf, cgh, sycl::write_only, sycl::no_init);
           //sycl::accessor yAccessor(yBuf, cgh, sycl::write_only);
@@ -1941,14 +1944,16 @@ void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
 
           sycl::local_accessor<scalar_t, 1> s_buf0_st_acc_ct1(
               s_buf0_size + s_buf1_size,
-              cgh);
-
+              cgh//, sycl::ext::oneapi::accessor_property_list{sycl::ext::oneapi::no_alias}
+              );
+// return; // EARLY EXIT: ~ 24 it/s
           cgh.parallel_for(
               sycl::nd_range<3>(sycl::range<3>(subGz, gy, gx) *
                                     sycl::range<3>(1, 1, bx),
                                 sycl::range<3>(1, 1, bx)),
-              [=](sycl::nd_item<3> item_ct1) [[intel::reqd_sub_group_size(
-                  32)]] {
+              [=](sycl::nd_item<3> item_ct1)
+              // [[intel::reqd_sub_group_size(8)]] // GROUP SIZE TUNUNG: omitted: 7.45 it/s, 4: not supported, 8: 7.45 it/s, 16: 2.42it/s 32 (original): 1.42, 64 not supported
+              { 
                 filtered_lrelu_kernel<T, index_t, signWrite, signRead, MODE,
                                       U, FU, D, FD, TW, TH, W * 32, !!XR, !!WS>(
                     p, item_ct1, c_fbuf_ptr_ct1,
