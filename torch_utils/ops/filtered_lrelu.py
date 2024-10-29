@@ -226,13 +226,15 @@ def _filtered_lrelu_xpu(up=1, down=1, padding=0, gain=np.sqrt(2), slope=0.2, cla
             if x.dtype in [torch.float16, torch.float32]:
                 if custom_ops.using_xpu:
                     #if torch.xpu.
-                    print('TODO check stream?')
+                    #print('TODO check stream?')
+                    pass
                 else:
                     if torch.cuda.current_stream(x.device) != torch.cuda.default_stream(x.device):
                         warnings.warn("filtered_lrelu called with non-default cuda stream but concurrent execution is not supported", RuntimeWarning)
                 y, so, return_code = _plugin.filtered_lrelu(x, fu, fd, b, si, up, down, px0, px1, py0, py1, sx, sy, gain, slope, clamp, flip_filter, write_signs)
             else:
                 return_code = -1
+                print('DTYPE', x.dtype, 'NOT SUPPORTED, FALLING BACK TO upfirdn2d')
 
             # No XPU kernel found? Fall back to generic implementation. Still more memory efficient than the reference implementation because
             # only the bit-packed sign tensor is retained for gradient computation.
