@@ -1974,7 +1974,7 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
     //std::cout << "run_filtered_lrelu_act_kernel" << std::endl;
     // Launch kernel.
     void* args[] = {&p};
-    int bx = 128; // 4 warps per block.
+    int bx = 128; //1: 7.47 it/s, 64: 7.48 it/s, 128 (original): 7.49 it/s, 256: 7.48 it/s, 1024: 7.48 it/s, 4096: 7.47 it/s // 4 warps per block.
 
     // Logical size of launch = writeSigns ? p.s : p.x
     uint32_t gx = signWrite ? p.sShape.x() : p.xShape.x();
@@ -2005,13 +2005,14 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
         {sycl::aspect::fp64});
     queue.submit([&](sycl::handler &cgh) {
           auto p_ct0 = *(filtered_lrelu_act_kernel_params *)args[0];
-
+//return; // EARLY EXIT: 7,48 it/s and correct result -> does not seem to be used in stylgan3-r inference; TODO what about training?
           cgh.parallel_for(
               sycl::nd_range<3>(sycl::range<3>(gz, gy, gx) *
                                     sycl::range<3>(1, 1, bx),
                                 sycl::range<3>(1, 1, bx)),
               [=](sycl::nd_item<3> item_ct1)
-                  [[intel::reqd_sub_group_size(32)]] {
+                  //[[intel::reqd_sub_group_size(32)]]
+                  {
                     filtered_lrelu_act_kernel<T, signWrite, signRead>(p_ct0,
                                                                       item_ct1);
                   });
