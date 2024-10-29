@@ -17,9 +17,9 @@ if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
     #CONDA_DIR=/opt/conda
 
     #ENVNAME=stylegan3_intel
-    #ENVNAME=stylegan3
+    ENVNAME=stylegan3
     #ENVNAME=stylegan3_2_1_30_xpu
-    ENVNAME=stylegan3_2_1_40_xpu
+    #ENVNAME=stylegan3_2_1_40_xpu
 
     #source /opt/intel/oneapi/setvars.sh || true
     #source /opt/intel/oneapi/mkl/2024.1/env/vars.sh
@@ -32,7 +32,7 @@ if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
 
     . "$CONDA_DIR/etc/profile.d/conda.sh"
     conda activate $ENVNAME
-    cd "$HOME"/stylegan3
+    cd "$(dirname "$(readlink -f "$0")")"  # go to this script's directory
     export DNNLIB_CACHE_DIR="$HOME"/.cache/dnnlib
     export IMAGEIO_FFMPEG_EXE="$CONDA_PREFIX"/lib/python3.9/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux64-v4.2.2
 
@@ -40,6 +40,8 @@ if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
 
 fi
 
+#OUT_DIR="$PWD"
+OUT_DIR=/tmp
 
 profile() {
     # profile the given command using VTune
@@ -53,9 +55,9 @@ profile() {
     # or just run it directly
     #"$@"
     # log the run ...
-    { { date --iso-8601=seconds; hostname; git describe --all --long --dirty; } | tr '\n' ' '; } >> runs.log
+    { { date --iso-8601=seconds; hostname; git describe --all --long --dirty; } | tr '\n' ' '; } >> "$OUT_DIR"/runs.log
     # ... saving the stats to a logfile
-    "$@" | tee >(fgrep 'min/mean/median/max rate' >> runs.log)
+    "$@" | tee >(fgrep 'min/mean/median/max rate' >> "$OUT_DIR"/runs.log)
 }
 
 
@@ -71,10 +73,10 @@ FRAME_COUNT=32
 #export DNNL_VERBOSE=1
 
 # stylegan3-r (uses `bias_act` and `filtered_lrelu`): 
-profile python gen_video.py --output=benchmark3r.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl --preheat=True
+profile python gen_video.py --output="$OUT_DIR"/benchmark3r.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl --preheat=True
 
 # stylegan3-t (also uses `bias_act` and `filtered_lrelu`, but faster - different filter sizes?): 
-profile python gen_video.py --output=benchmark3t.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl --preheat=True
+profile python gen_video.py --output="$OUT_DIR"/benchmark3t.mp4 --trunc=1 --seeds=2,5 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-t-afhqv2-512x512.pkl --preheat=True
 
 # stylegan2 (uses `bias_act` and `upfirdn2d`)
-profile python gen_video.py --output=benchmark2.mp4 --trunc=1 --seeds=2,10 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan2/versions/1/files/stylegan2-afhqv2-512x512.pkl --preheat=True
+profile python gen_video.py --output="$OUT_DIR"/benchmark2.mp4 --trunc=1 --seeds=2,10 --w-frames=$FRAME_COUNT --network=https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan2/versions/1/files/stylegan2-afhqv2-512x512.pkl --preheat=True
