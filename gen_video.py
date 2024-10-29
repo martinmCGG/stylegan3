@@ -19,7 +19,7 @@ import dnnlib
 try:
     import intel_extension_for_pytorch as ipex
     try_ipex_optimize = ipex.optimize
-    device_str = 'xpu:0'
+    device_str = 'xpu'
 except:
     print('Warning: intel_extension_for_pytorch not loaded')
     def try_ipex_optimize(module):
@@ -110,7 +110,7 @@ def gen_interp_video(G, mp4: str, seeds, shuffle_seed=None, w_frames=60*4, kind=
         img = G.synthesis(ws=w.unsqueeze(0), noise_mode='const')[0]
 
     # Render video.
-    #video_out = imageio.get_writer(mp4, mode='I', fps=60, codec='libx264', **video_kwargs) # when benchmarking with Intel VTune or NSight, this line (and the following ones referencing `video_out`) may need to be disabled, otherwise a "broken pipe" error may be encountered (related to passing the video frames to ffmpeg)
+    video_out = imageio.get_writer(mp4, mode='I', fps=60, codec='libx264', **video_kwargs) # when benchmarking with Intel VTune or NSight, this line (and the following ones referencing `video_out`) may need to be disabled, otherwise a "broken pipe" error may be encountered (related to passing the video frames to ffmpeg)
     for frame_idx in tqdm(range(num_keyframes * w_frames), bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_noinv_fmt}]", desc=desc):
         imgs = []
         for yi in range(grid_h):
@@ -119,8 +119,8 @@ def gen_interp_video(G, mp4: str, seeds, shuffle_seed=None, w_frames=60*4, kind=
                 w = torch.from_numpy(interp(frame_idx / w_frames)).to(torch.float32).to(device)
                 img = G.synthesis(ws=w.unsqueeze(0), noise_mode='const')[0]
                 imgs.append(img)
-        #video_out.append_data(layout_grid(torch.stack(imgs), grid_w=grid_w, grid_h=grid_h))
-    #video_out.close()
+        video_out.append_data(layout_grid(torch.stack(imgs), grid_w=grid_w, grid_h=grid_h))
+    video_out.close()
 
 #----------------------------------------------------------------------------
 
@@ -217,7 +217,12 @@ def generate_images(
     #    with record_function("model_inference"):
     network_pkl_file = network_pkl.split('/')[-1]
     #architecture_name = '-'.join(network_pkl_file.split('-')[:-2])
-    gen_interp_video(G=G, mp4=output, bitrate='12M', grid_dims=grid, num_keyframes=num_keyframes, w_frames=w_frames, seeds=seeds, shuffle_seed=shuffle_seed, psi=truncation_psi, preheat=preheat, desc=network_pkl_file)
+    from torch.profiler import profile, record_function, ProfilerActivity
+    with profile(activities=[
+        ProfilerActivity.CPU, ProfilerActivity.CUDA], record_shapes=True) as prof:
+        with record_function("model_inference"):
+            gen_interp_video(G=G, mp4=output, bitrate='12M', grid_dims=grid, num_keyframes=num_keyframes, w_frames=w_frames, seeds=seeds, shuffle_seed=shuffle_seed, psi=truncation_psi, preheat=preheat, desc=network_pkl_file)
+    print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))
     #print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=10))
     #print(prof.key_averages().table(sort_by="xpu_time_total", row_limit=10))
     #import time
