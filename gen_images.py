@@ -8,6 +8,9 @@
 
 """Generate images using pretrained network pickle."""
 
+import torch
+import intel_extension_for_pytorch as ipex # needs to be before dnnlib(?), otherwise to('xpu') or other XPU init causes a crash
+
 import os
 import re
 from typing import List, Optional, Tuple, Union
@@ -16,7 +19,6 @@ import click
 import dnnlib
 import numpy as np
 import PIL.Image
-import torch
 
 import legacy
 
@@ -103,7 +105,7 @@ def generate_images(
     """
 
     print('Loading networks from "%s"...' % network_pkl)
-    device = torch.device('cuda')
+    device = torch.device('xpu')
     with dnnlib.util.open_url(network_pkl) as f:
         G = legacy.load_network_pkl(f)['G_ema'].to(device) # type: ignore
 
@@ -122,7 +124,7 @@ def generate_images(
     # Generate images.
     for seed_idx, seed in enumerate(seeds):
         print('Generating image for seed %d (%d/%d) ...' % (seed, seed_idx, len(seeds)))
-        z = torch.from_numpy(np.random.RandomState(seed).randn(1, G.z_dim)).to(device)
+        z = torch.from_numpy(np.random.RandomState(seed).randn(1, G.z_dim)).to(torch.float).to(device) # converting to float, otherwise we get "RuntimeError: FP64 data type is unsupported on current platform."
 
         # Construct an inverse rotation/translation matrix and pass to the generator.  The
         # generator expects this matrix as an inverse to avoid potentially failing numerical
