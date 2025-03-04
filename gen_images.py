@@ -13,10 +13,19 @@ import re
 from typing import List, Optional, Tuple, Union
 
 import click
-import dnnlib
 import numpy as np
 import PIL.Image
 import torch
+import dnnlib
+try:
+    import intel_extension_for_pytorch as ipex
+    try_ipex_optimize = ipex.optimize
+    device_str = 'xpu'
+except:
+    print('Warning: intel_extension_for_pytorch not loaded')
+    def try_ipex_optimize(module):
+        return module
+    device_str = 'cuda'
 
 import legacy
 
@@ -103,9 +112,11 @@ def generate_images(
     """
 
     print('Loading networks from "%s"...' % network_pkl)
-    device = torch.device('cuda')
+    device = torch.device(device_str)
     with dnnlib.util.open_url(network_pkl) as f:
         G = legacy.load_network_pkl(f)['G_ema'].to(device) # type: ignore
+
+    G = try_ipex_optimize(G)
 
     os.makedirs(outdir, exist_ok=True)
 
@@ -122,7 +133,7 @@ def generate_images(
     # Generate images.
     for seed_idx, seed in enumerate(seeds):
         print('Generating image for seed %d (%d/%d) ...' % (seed, seed_idx, len(seeds)))
-        z = torch.from_numpy(np.random.RandomState(seed).randn(1, G.z_dim)).to(device)
+        z = torch.from_numpy(np.random.RandomState(seed).randn(1, G.z_dim)).to(torch.float32).to(device)
 
         # Construct an inverse rotation/translation matrix and pass to the generator.  The
         # generator expects this matrix as an inverse to avoid potentially failing numerical
