@@ -37,7 +37,7 @@ conda env create -f environment_intel.yml
 #  - clean up the failed environemnt creation with `conda env remove --name stylegan3`
 #  - re-try the installation with "environment_intel_fullurl.yml" instead (https://github.com/intel/intel-extension-for-pytorch/issues/412)
 
-# if running on Intel Developer Cloud, switch to a node with a GPU
+# switch to a node with a GPU, if running on a different computer (e.g. a head node of a cluster using a SLURM scheduler), otherwise skip
 srun --pty bash
 
 # prepare environment

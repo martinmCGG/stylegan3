@@ -17,9 +17,10 @@ if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
     #CONDA_DIR=/opt/conda
 
     #ENVNAME=stylegan3_intel
-    ENVNAME=stylegan3
+    #ENVNAME=stylegan3
+    #ENVNAME=stylegan3_pytorch_2_1
     #ENVNAME=stylegan3_2_1_30_xpu
-    #ENVNAME=stylegan3_2_1_40_xpu
+    ENVNAME=stylegan3_2_1_40_xpu
 
     #source /opt/intel/oneapi/setvars.sh || true
     #source /opt/intel/oneapi/mkl/2024.1/env/vars.sh
@@ -40,22 +41,23 @@ if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
 
 fi
 
-#OUT_DIR="$PWD"
-OUT_DIR=/tmp
+OUT_DIR="$PWD"
+#OUT_DIR=/tmp
 
 profile() {
     # profile the given command using VTune
     #VTUNE_BIN=/opt/intel/oneapi/vtune/2024.3/bin64/vtune
+    #VTUNE_BIN=/opt/intel/oneapi/vtune/2025.0/bin64/vtune
     #VTUNE_BIN="$HOME"/Intel_VTune_Profiler_2024.1.0/bin64/vtune
-    #$VTUNE_BIN -collect gpu-hotspots -knob profiling-mode=source-analysis --app-working-dir="$HOME"/stylegan3 -- "$@"
-    #$VTUNE_BIN -collect gpu-hotspots --app-working-dir="$HOME"/stylegan3 -- "$@"
-    #$VTUNE_BIN -collect gpu-offload --app-working-dir="$HOME"/stylegan3 -- "$@"
+    #$VTUNE_BIN -collect gpu-hotspots -knob profiling-mode=source-analysis -r "$OUT_DIR" -- "$@"
+    #$VTUNE_BIN -collect gpu-hotspots -r "$OUT_DIR" -- "$@"
+    #$VTUNE_BIN -collect gpu-offload -r "$OUT_DIR" -- "$@"
     #return
 
     # or just run it directly
     #"$@"
     # log the run ...
-    { { date --iso-8601=seconds; hostname; git describe --all --long --dirty; } | tr '\n' ' '; } >> "$OUT_DIR"/runs.log
+    { { date --iso-8601=seconds; hostname; echo "$ENVNAME"; git describe --all --long --dirty; } | tr '\n' ' '; } >> "$OUT_DIR"/runs.log
     # ... saving the stats to a logfile
     "$@" | tee >(fgrep 'min/mean/median/max rate' >> "$OUT_DIR"/runs.log)
 }
