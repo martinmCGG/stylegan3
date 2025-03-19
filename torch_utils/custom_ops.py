@@ -34,7 +34,7 @@ try:
     import intel_extension_for_pytorch as ipex
     using_xpu = True
     cpp_extension = torch.xpu.cpp_extension
-    torch_device_specific = ipex.xpu
+    torch_device_specific = torch.xpu
     device_str = 'xpu'
 
     def build_and_load_module(name, build_directory,  *args, **kwargs):
