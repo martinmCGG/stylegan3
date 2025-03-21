@@ -204,7 +204,7 @@ def get_xpu_cflags():
     return [
         '-ffast-math', '-cl-fast-relaxed-math', '-I'+str(get_ops_include_path()),
         #'-O3',
-        '-O1',
+        '-O2',
         '-g', # enables VTune to show the C++ kernel source and instructions spent on each code line (rather than just assembly instructions)
         #'-gline-tables-only', # seems to only give line info for non-kernel C++ code
         '-fdebug-info-for-profiling', # https://www.intel.com/content/www/us/en/docs/vtune-profiler/user-guide/2024-0/gpu-compute-media-hotspots-analysis.html

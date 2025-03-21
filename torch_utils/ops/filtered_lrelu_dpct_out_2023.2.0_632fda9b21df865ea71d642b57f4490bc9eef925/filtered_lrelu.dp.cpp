@@ -13,6 +13,10 @@
 #include <c10/util/Half.h>
 #include <cstdint>
 #include <cmath>
+#include <c10/xpu/XPUStream.h>
+
+
+
 
 //------------------------------------------------------------------------
 // Helpers.
@@ -1828,10 +1832,8 @@ template <class T, class index_t, bool signWrite, bool signRead,
 void run_filtered_lrelu_kernel(filtered_lrelu_kernel_params &p) try {
     //std::cout << "run_filtered_lrelu_kernel" << std::endl;
     
-    auto device_type = c10::DeviceType::XPU;
-    c10::impl::VirtualGuardImpl impl(device_type);
-    c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
-    auto& queue = xpu::get_queue_from_stream(c10_stream);
+    c10::xpu::XPUStream stream = c10::xpu::getCurrentXPUStream();
+    auto& queue = stream.queue();
 
     c_fbuf.init(queue);
     auto c_fbuf_ptr_ct1 = c_fbuf.get_ptr();
@@ -1995,10 +1997,8 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
     Adjust the work-group size if needed.
     */
   {
-    auto device_type = c10::DeviceType::XPU;
-    c10::impl::VirtualGuardImpl impl(device_type);
-    c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
-    auto& queue = xpu::get_queue_from_stream(c10_stream);
+    c10::xpu::XPUStream stream = c10::xpu::getCurrentXPUStream();
+    auto& queue = stream.queue();
 
     dpct::has_capability_or_fail(
         queue.get_device(),
