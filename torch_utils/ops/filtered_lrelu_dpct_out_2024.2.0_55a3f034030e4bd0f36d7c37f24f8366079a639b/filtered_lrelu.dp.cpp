@@ -13,7 +13,6 @@
 #include <torch/extension.h>
 #include <c10/util/Half.h>
 #include <ipex.h>
-#include <c10/xpu/XPUStream.h>
 
 //------------------------------------------------------------------------
 // Helpers.
@@ -1955,8 +1954,10 @@ template <class T, class index_t, bool signWrite, bool signRead, int SH,
     }
 
     // Launch filter setup kernel.
-    c10::xpu::XPUStream stream = c10::xpu::getCurrentXPUStream();
-    auto& queue = stream.queue();
+    auto device_type = c10::DeviceType::XPU;
+    c10::impl::VirtualGuardImpl impl(device_type);
+    c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
+    auto& queue = xpu::get_queue_from_stream(c10_stream);
     /*
     DPCT1049:0: The work-group size passed to the SYCL kernel may exceed the
     limit. To get the device limit, query info::device::max_work_group_size.
@@ -2203,8 +2204,10 @@ void run_filtered_lrelu_act_kernel(filtered_lrelu_act_kernel_params &p) try {
     gz = std::min(gz, gmax);
 
     // Launch.
-    c10::xpu::XPUStream stream = c10::xpu::getCurrentXPUStream();
-    auto& queue = stream.queue();
+    auto device_type = c10::DeviceType::XPU;
+    c10::impl::VirtualGuardImpl impl(device_type);
+    c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
+    auto& queue = xpu::get_queue_from_stream(c10_stream);
     /*
     DPCT1049:2: The work-group size passed to the SYCL kernel may exceed the
     limit. To get the device limit, query info::device::max_work_group_size.
