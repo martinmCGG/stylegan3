@@ -1,0 +1,16 @@
+# build with:
+#  mkdir empty && sudo docker build -t stylegan3_ipex_2_3_110 -f Dockerfile_ipex_2_3_110 ./empty/ && rmdir empty
+# then run:
+#  sudo docker run -u "$(id -u):$(id -g)" --rm -it --privileged -v /dev/dri/by-path:/dev/dri/by-path -v "$HOME/.cache/":/.cache/ -v "$PWD":/work -w /work --ipc=host stylegan3_ipex_2_3_110 bash -c '( source /opt/intel/oneapi/2024.2/oneapi-vars.sh ; ./bench3.sh --skip-conda )'
+
+
+FROM intel/intel-extension-for-pytorch:2.3.110-xpu
+
+# install Intel oneAPI Base Toolkit 2024.2.1 (only the needed compoenents)
+RUN wget --quiet https://registrationcenter-download.intel.com/akdlm/IRC_NAS/e6ff8e9c-ee28-47fb-abd7-5c524c983e1c/l_BaseKit_p_2024.2.1.100.sh && sh l_BaseKit_p_2024.2.1.100.sh -a --action install --components intel.oneapi.lin.dpcpp-cpp-compiler:intel.oneapi.lin.mkl.devel:intel.oneapi.lin.tbb.devel --silent --eula accept && rm l_BaseKit_p_2024.2.1.100.sh
+
+# install PIP dependencies for StyleGAN3
+RUN pip install click requests imageio[ffmpeg] scipy tqdm ninja
+
+# install Python development dependencies (needed for building custom plugins - PyTorch operations)
+RUN apt-get update && apt-get install -y python3-dev && apt-get clean && rm -rf /var/lib/apt/lists/
