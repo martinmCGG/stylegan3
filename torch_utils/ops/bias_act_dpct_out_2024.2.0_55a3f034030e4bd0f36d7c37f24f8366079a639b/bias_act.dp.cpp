@@ -8,6 +8,7 @@
 
 #include "bias_act.h"
 #include <ipex.h>
+#include <c10/xpu/XPUStream.h>
 
 //------------------------------------------------------------------------
 // Helpers.
@@ -181,10 +182,8 @@ void bias_act_kernel_launch(bias_act_kernel_params p) {
     int blockSize = 4 * 32; // TODO tune, or rather remove and let the runtime choose its favorite work unit size
     int gridSize = (p.sizeX - 1) / (p.loopX * blockSize) + 1;
     
-    auto device_type = c10::DeviceType::XPU;
-    c10::impl::VirtualGuardImpl impl(device_type);
-    c10::Stream c10_stream = impl.getStream(c10::Device(device_type));
-    auto& queue = xpu::get_queue_from_stream(c10_stream);
+    c10::xpu::XPUStream stream = c10::xpu::getCurrentXPUStream();
+    auto& queue = stream.queue();
     
     queue.submit([&] (sycl::handler& cgh) {
         
