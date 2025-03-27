@@ -20,16 +20,8 @@ if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
     #ENVNAME=stylegan3
     #ENVNAME=stylegan3_pytorch_2_1
     #ENVNAME=stylegan3_2_1_30_xpu
-    ENVNAME=stylegan3_2_1_40_xpu
-
-    #source /opt/intel/oneapi/setvars.sh || true
-    #source /opt/intel/oneapi/mkl/2024.1/env/vars.sh
-    source /opt/intel/oneapi/mkl/2024.2/env/vars.sh
-    #source /opt/intel/oneapi/dnnl/2024.1/env/vars.sh
-    #source /opt/intel/oneapi/compiler/2024.1/env/vars.sh
-    source /opt/intel/oneapi/compiler/2024.2/env/vars.sh
-    #source /opt/intel/oneapi/tbb/2021.12/env/vars.sh
-    source /opt/intel/oneapi/tbb/2021.13/env/vars.sh
+    #ENVNAME=stylegan3_2_1_40_xpu
+    ENVNAME=stylegan3_2_3_110_xpu
 
     . "$CONDA_DIR/etc/profile.d/conda.sh"
     conda activate $ENVNAME
@@ -40,6 +32,15 @@ if [ $# -lt 1 ] || [ "$1" != '--skip-conda' ]; then
     #$IMAGEIO_FFMPEG_EXE -version
 
 fi
+
+#source /opt/intel/oneapi/setvars.sh || true
+#source /opt/intel/oneapi/mkl/2024.1/env/vars.sh
+source /opt/intel/oneapi/mkl/2024.2/env/vars.sh
+#source /opt/intel/oneapi/dnnl/2024.1/env/vars.sh
+#source /opt/intel/oneapi/compiler/2024.1/env/vars.sh
+source /opt/intel/oneapi/compiler/2024.2/env/vars.sh
+#source /opt/intel/oneapi/tbb/2021.12/env/vars.sh
+source /opt/intel/oneapi/tbb/2021.13/env/vars.sh
 
 OUT_DIR="$PWD"
 #OUT_DIR=/tmp
@@ -55,11 +56,11 @@ profile() {
     #return
 
     # or just run it directly
-    #"$@"
+    "$@"
     # log the run ...
-    { { date --iso-8601=seconds; hostname; echo "$ENVNAME"; git describe --all --long --dirty; } | tr '\n' ' '; } >> "$OUT_DIR"/runs.log
+    #{ { date --iso-8601=seconds; hostname; echo "$ENVNAME"; git describe --all --long --dirty; } | tr '\n' ' '; } >> "$OUT_DIR"/runs.log
     # ... saving the stats to a logfile
-    "$@" | tee >(fgrep 'min/mean/median/max rate' >> "$OUT_DIR"/runs.log)
+    #"$@" | tee >(fgrep 'min/mean/median/max rate' >> "$OUT_DIR"/runs.log)
 }
 
 
