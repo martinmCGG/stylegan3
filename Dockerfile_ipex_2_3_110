@@ -6,7 +6,7 @@
 
 FROM intel/intel-extension-for-pytorch:2.3.110-xpu
 
-# install Intel oneAPI Base Toolkit 2024.2.1 (only the needed compoenents)
+# install Intel oneAPI Base Toolkit 2024.2.1 (only the needed compoenents), link from https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html?packages=oneapi-toolkit&oneapi-toolkit-os=linux&oneapi-lin=online
 RUN wget --quiet https://registrationcenter-download.intel.com/akdlm/IRC_NAS/e6ff8e9c-ee28-47fb-abd7-5c524c983e1c/l_BaseKit_p_2024.2.1.100.sh && sh l_BaseKit_p_2024.2.1.100.sh -a --action install --components intel.oneapi.lin.dpcpp-cpp-compiler:intel.oneapi.lin.mkl.devel:intel.oneapi.lin.tbb.devel --silent --eula accept && rm l_BaseKit_p_2024.2.1.100.sh
 
 # install PIP dependencies for StyleGAN3
